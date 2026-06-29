@@ -14,6 +14,17 @@
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
+
+    <!-- ── PRELOADER ── -->
+    <div class="preloader hidden" id="tikad-preloader">
+      <div class="preloader-wrapper">
+        <div class="loading">
+          <img class="loader" src="/loader.svg" alt="Loading" />
+          <p class="loading-progress" id="loading-progress">0</p>
+        </div>
+        <div style="color:rgba(255,255,255,0.55);font-size:13px;margin-top:8px;letter-spacing:0.06em;">Loading campus model…</div>
+      </div>
+    </div>
     <!-- ── NAV ── -->
     <nav>
       <a class="nav-logo" href="#">
@@ -540,110 +551,70 @@
         </div>
 
         <!-- Map Body: canvas + info panel -->
-        <div class="map-body">
-          <!-- Map canvas / image area -->
-          <div class="map-canvas-wrap">
-            <!-- Campus map background -->
-            <div class="map-placeholder-bg">
-              Campus Map Placeholder · Add your map image here
-            </div>
+        <div
+          style="
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            min-height: 0;
+          "
+        >
+          <!-- ── Three.js 3D Canvas ── -->
+          <div style="flex:1;position:relative;overflow:hidden;background:#d6d2ca;">
 
-            <!-- Building Pins -->
-            <div class="bldg-pin" data-id="0" style="top: 35%; left: 28%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">📚 Library</div>
-            </div>
-            <div class="bldg-pin" data-id="1" style="top: 48%; left: 45%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">🏛️ Admin</div>
-            </div>
-            <div class="bldg-pin" data-id="2" style="top: 40%; left: 62%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">⚙️ Engineering</div>
-            </div>
-            <div class="bldg-pin" data-id="3" style="top: 60%; left: 35%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">🎓 Student Center</div>
-            </div>
-            <div class="bldg-pin" data-id="4" style="top: 65%; left: 55%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">🏀 Gym</div>
-            </div>
-            <div class="bldg-pin" data-id="5" style="top: 52%; left: 72%">
-              <div class="pin-ring"></div>
-              <div class="pin-dot"></div>
-              <div class="pin-label">📋 Registrar</div>
-            </div>
+            <!-- WebGL canvas — Experience engine mounts here -->
+            <canvas class="experience-canvas" style="display:block;width:100%;height:100%;"></canvas>
+
+            <!-- Floating building chips (populated by JS after model loads) -->
+            <div id="map-chips-bar" style="
+              position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+              display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+              z-index:10;pointer-events:all;
+            "></div>
+
+            <!-- 3D-projected pin markers -->
+            <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
+
+            <!-- Controls hint -->
+            <div style="
+              position:absolute;bottom:16px;right:16px;
+              background:rgba(0,51,0,0.75);color:rgba(255,255,255,0.7);
+              font-size:10px;padding:6px 10px;border-radius:8px;
+              pointer-events:none;letter-spacing:0.04em;
+            ">🖱 Drag · Scroll to zoom</div>
           </div>
 
-          <!-- Info Panel -->
+          <!-- ── Building Info Panel ── -->
           <div id="info-panel">
             <div class="panel-header">
               <div class="panel-header-left">
-                <div class="panel-icon-wrap" id="panel-icon">📚</div>
+                <div class="panel-icon-wrap" id="panel-icon">🏛</div>
                 <div>
-                  <div class="panel-name" id="panel-name">CSU Main Library</div>
-                  <div class="panel-type" id="panel-type">
-                    Academic Building
-                  </div>
+                  <div class="panel-name" id="panel-name">Select a Building</div>
+                  <div class="panel-type" id="panel-type">Click a pin on the map</div>
                 </div>
               </div>
-              <button class="panel-close-btn">×</button>
+              <button class="panel-close-btn" id="panel-close-btn">×</button>
             </div>
-            <div class="panel-img" id="panel-img-bg">
-              <div class="panel-img-icon" id="panel-img-icon">📚</div>
+            <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
+              <div class="panel-img-icon" id="panel-img-icon">🏛</div>
             </div>
             <div class="panel-body">
               <div class="panel-label">Description</div>
-              <p class="panel-desc" id="panel-desc"></p>
-              <div class="panel-label">Opening Hours</div>
-              <p class="panel-hours">🕗 <span id="panel-hours"></span></p>
-              <div class="panel-label">Offices &amp; Facilities</div>
-              <ul class="panel-facilities" id="panel-facilities"></ul>
-              <button class="panel-directions-btn">📍 Get Directions</button>
+              <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details here.</p>
+              <div id="panel-depts-wrap" style="display:none;">
+                <div class="panel-label">Faculties &amp; Offices</div>
+                <ul class="panel-facilities" id="panel-depts"></ul>
+              </div>
+              <div id="panel-contact-wrap" style="display:none;">
+                <div class="panel-label">Contact</div>
+                <p id="panel-contact"></p>
+              </div>
             </div>
           </div>
         </div>
         <!-- /map body -->
-
-        <!-- Category Filter Bar -->
-        <div class="map-cat-bar">
-          <button class="cat-btn active-cat" data-cat="all">
-            ⊞ All
-          </button>
-          <button class="cat-btn" data-cat="academic">
-            🎓 Academic
-          </button>
-          <button class="cat-btn" data-cat="administrative">
-            🏢 Administrative
-          </button>
-          <button class="cat-btn" data-cat="facilities">
-            🔧 Facilities
-          </button>
-          <button class="cat-btn" data-cat="residential">
-            🏠 Residential
-          </button>
-          <button class="cat-btn" data-cat="services">
-            ⚙️ Services
-          </button>
-          <button class="cat-btn" data-cat="others">
-            ••• Others
-          </button>
-        </div>
-
-        <!-- Popular Locations -->
-        <div class="map-popular">
-          <div class="map-popular-header">
-            <div class="map-popular-title">Popular Locations</div>
-            <a href="#" class="map-popular-link">View All</a>
-          </div>
-          <div id="popular-grid"></div>
-        </div>
       </div>
       <!-- /inner -->
     </div>

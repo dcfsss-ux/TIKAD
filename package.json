@@ -9,5 +9,11 @@
   },
   "devDependencies": {
     "vite": "^5.2.0"
+  },
+  "dependencies": {
+    "events": "^3.3.0",
+    "gsap": "^3.15.0",
+    "lil-gui": "^0.21.0",
+    "three": "^0.185.0"
   }
 }
