@@ -122,14 +122,9 @@ export function filterBuildings(q) {
   dd.innerHTML = matches
     .map(
       (b) =>
-        `<div
-          onclick="window._mapShowBuilding(${b.id})"
-          style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#1a1a2e;"
-          onmouseover="this.style.background='#e6ffe6'"
-          onmouseout="this.style.background='#fff'"
-        >
+        `<div class="search-dropdown-item" data-id="${b.id}">
           ${b.icon} ${b.name}
-          <span style="margin-left:auto;font-size:11px;color:#9ca3af;">${b.type}</span>
+          <span class="search-dropdown-item-type">${b.type}</span>
         </div>`,
     )
     .join('');
@@ -146,7 +141,7 @@ function buildPopularGrid() {
   grid.innerHTML = [0, 1, 2, 3, 4]
     .map((id) => {
       const b = buildings[id];
-      return `<div class="pop-card" onclick="window._mapShowBuilding(${id})">
+      return `<div class="pop-card" data-id="${id}">
         <div class="pop-card-img" style="background:${b.imgBg}">${b.icon}</div>
         <div class="pop-card-label">${b.name}</div>
       </div>`;
@@ -157,22 +152,85 @@ function buildPopularGrid() {
 // ── Init ──────────────────────────────────────────────────────────
 
 export function initMapOverlay() {
-  // Expose functions globally for inline HTML onclick handlers
-  window.openMapOverlay = openMapOverlay;
-  window.closeMapOverlay = closeMapOverlay;
-  window.showBuilding = showBuilding;
-  window.closePanel = closePanel;
-  window.filterCat = filterCat;
-  window.filterBuildings = filterBuildings;
-
-  // Helper used in dynamically generated HTML
-  window._mapShowBuilding = (id) => {
+  // Helper to select a building from dynamic elements
+  const selectBuilding = (id) => {
     const searchInput = document.getElementById('map-search');
     const dd = document.getElementById('search-dropdown');
     if (searchInput) searchInput.value = '';
     if (dd) dd.style.display = 'none';
     showBuilding(id);
   };
+
+  // Bind launch button events
+  const launchButtons = [
+    document.getElementById('nav-launch-map'),
+    document.getElementById('hero-explore-map'),
+    document.getElementById('cta-explore-map')
+  ];
+  launchButtons.forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openMapOverlay();
+      });
+    }
+  });
+
+  // Bind close button
+  const closeBtn = document.getElementById('map-close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMapOverlay);
+  }
+
+  // Bind search input events
+  const searchInput = document.getElementById('map-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      filterBuildings(e.target.value);
+    });
+  }
+
+  // Event delegation for search dropdown items
+  const dd = document.getElementById('search-dropdown');
+  if (dd) {
+    dd.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-dropdown-item');
+      if (item) {
+        selectBuilding(+item.dataset.id);
+      }
+    });
+  }
+
+  // Event delegation for popular locations grid
+  const popularGrid = document.getElementById('popular-grid');
+  if (popularGrid) {
+    popularGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.pop-card');
+      if (card) {
+        selectBuilding(+card.dataset.id);
+      }
+    });
+  }
+
+  // Bind building pins click events
+  document.querySelectorAll('.bldg-pin').forEach((pin) => {
+    pin.addEventListener('click', () => {
+      showBuilding(+pin.dataset.id);
+    });
+  });
+
+  // Bind close info panel button
+  const panelCloseBtn = document.querySelector('.panel-close-btn');
+  if (panelCloseBtn) {
+    panelCloseBtn.addEventListener('click', closePanel);
+  }
+
+  // Bind category button clicks
+  document.querySelectorAll('.cat-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filterCat(btn, btn.dataset.cat);
+    });
+  });
 
   // Close dropdown on outside click
   document.addEventListener('click', (e) => {
@@ -193,3 +251,4 @@ export function initMapOverlay() {
 
   buildPopularGrid();
 }
+
