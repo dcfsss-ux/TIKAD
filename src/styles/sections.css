@@ -1,0 +1,241 @@
+/* ── NAME ORIGIN SECTION ── */
+.name-origin {
+  background: var(--cream);
+}
+
+.name-origin-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.word-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 48px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+  cursor: default;
+}
+
+.word-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0, 153, 0, 0.22);
+}
+
+.word-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: 88px;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+  background: linear-gradient(135deg, #009900, #f9dc07);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.word-lang {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-top: 8px;
+  display: block;
+}
+
+.word-meaning {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-top: 16px;
+  display: block;
+}
+
+.word-desc {
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.7;
+  margin-top: 12px;
+}
+
+.name-detail p {
+  font-size: 17px;
+  color: var(--text-mid);
+  line-height: 1.85;
+  margin-bottom: 18px;
+}
+
+.name-detail p span {
+  color: var(--green-main);
+  font-weight: 600;
+}
+
+/* ── FEATURES SECTION ── */
+.features {
+  background: var(--white);
+}
+
+.features-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.features-header .section-sub {
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.feat-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 32px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.feat-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 153, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.feat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transition: left 0.5s;
+}
+
+.feat-card:hover::before {
+  left: 140%;
+}
+
+.feat-icon {
+  width: 52px;
+  height: 52px;
+  background: #e6ffe6;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.feat-card:hover .feat-icon {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+.feat-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.feat-card p {
+  font-size: 14px;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+/* ── HOW IT WORKS SECTION ── */
+.how {
+  background: #003300;
+}
+
+.how-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.how .section-eyebrow {
+  color: #f9dc07;
+}
+
+.how .section-title {
+  color: #fff;
+}
+
+.how .section-sub {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+
+.step {
+  text-align: center;
+  padding: 0 16px;
+}
+
+.step-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #33bb33, #f9dc07);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.7;
+}
+
+.step-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.step h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.step p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .name-origin-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+}
