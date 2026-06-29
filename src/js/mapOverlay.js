@@ -394,6 +394,27 @@ export function initMapOverlay() {
   window.openMapOverlay  = openMapOverlay;
   window.closeMapOverlay = closeMapOverlay;
 
+  // Bind launch buttons
+  const launchIds = ['nav-launch-map', 'hero-explore-map', 'cta-explore-map'];
+  launchIds.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        openMapOverlay();
+      });
+    }
+  });
+
+  // Bind close button
+  const mapCloseBtn = document.getElementById('map-close-btn');
+  if (mapCloseBtn) {
+    mapCloseBtn.addEventListener('click', e => {
+      e.preventDefault();
+      closeMapOverlay();
+    });
+  }
+
   // Escape closes overlay
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMapOverlay(); });
 
