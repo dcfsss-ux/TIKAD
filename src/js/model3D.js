@@ -28,114 +28,40 @@ export function initModel3D() {
   // ── Render placeholder UI ──────────────────────────────────────
   container.innerHTML = `
     <!-- Window chrome bar -->
-    <div style="
-      background: rgba(0,51,0,0.45);
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    ">
-      <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></div>
-      <div style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></div>
-      <div style="width:10px;height:10px;border-radius:50%;background:#28c840;"></div>
-      <span style="margin-left:8px;font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:0.06em;">
+    <div class="viewer-bar">
+      <div class="viewer-dot red"></div>
+      <div class="viewer-dot yellow"></div>
+      <div class="viewer-dot green"></div>
+      <span class="viewer-title">
         TANAW 3D Campus Viewer
       </span>
     </div>
 
     <!-- 3D Placeholder body -->
-    <div style="
-      flex: 1;
-      background: linear-gradient(160deg, #003300 0%, #005500 50%, #009900 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      gap: 16px;
-    ">
+    <div class="viewer-body">
       <!-- Decorative rings -->
-      <div style="
-        position: absolute;
-        width: 280px; height: 280px;
-        border-radius: 50%;
-        border: 1px solid rgba(249,220,7,0.12);
-        top: 50%; left: 50%;
-        transform: translate(-50%,-50%);
-        animation: pulse-ring 3s ease infinite;
-      "></div>
-      <div style="
-        position: absolute;
-        width: 180px; height: 180px;
-        border-radius: 50%;
-        border: 1px solid rgba(249,220,7,0.18);
-        top: 50%; left: 50%;
-        transform: translate(-50%,-50%);
-        animation: pulse-ring 3s ease 0.5s infinite;
-      "></div>
+      <div class="viewer-ring-outer"></div>
+      <div class="viewer-ring-inner"></div>
 
       <!-- Icon -->
-      <div style="
-        width: 72px; height: 72px;
-        background: rgba(249,220,7,0.15);
-        border: 2px solid rgba(249,220,7,0.35);
-        border-radius: 18px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 32px;
-        position: relative; z-index: 1;
-      ">🗺️</div>
+      <div class="viewer-icon">🗺️</div>
 
       <!-- Text -->
-      <div style="text-align:center;position:relative;z-index:1;">
-        <div style="
-          font-family:'DM Serif Display',serif;
-          font-size: 18px;
-          color: #fff;
-          font-weight: 700;
-          margin-bottom: 6px;
-        ">3D Campus Model</div>
-        <div style="
-          font-size: 12px;
-          color: rgba(255,255,255,0.55);
-          letter-spacing: 0.06em;
-        ">Integration ready · Your model goes here</div>
+      <div class="viewer-text">
+        <div class="viewer-text-title">3D Campus Model</div>
+        <div class="viewer-text-sub">Integration ready · Your model goes here</div>
       </div>
 
       <!-- Loading dots -->
-      <div style="display:flex;gap:6px;position:relative;z-index:1;margin-top:4px;">
-        <div style="width:6px;height:6px;border-radius:50%;background:rgba(249,220,7,0.6);animation:dot-bounce 1.2s ease 0s infinite;"></div>
-        <div style="width:6px;height:6px;border-radius:50%;background:rgba(249,220,7,0.6);animation:dot-bounce 1.2s ease 0.2s infinite;"></div>
-        <div style="width:6px;height:6px;border-radius:50%;background:rgba(249,220,7,0.6);animation:dot-bounce 1.2s ease 0.4s infinite;"></div>
+      <div class="viewer-loading-dots">
+        <div class="viewer-loading-dot"></div>
+        <div class="viewer-loading-dot"></div>
+        <div class="viewer-loading-dot"></div>
       </div>
 
       <!-- Label badge -->
-      <div style="
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(255,255,255,0.92);
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 600;
-        color: #003300;
-        white-space: nowrap;
-        z-index: 1;
-      ">📍 Caraga State University</div>
+      <div class="viewer-badge">📍 Caraga State University</div>
     </div>
-
-    <style>
-      @keyframes pulse-ring {
-        0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
-        50%      { opacity: 1;   transform: translate(-50%,-50%) scale(1.06); }
-      }
-      @keyframes dot-bounce {
-        0%,100% { transform: translateY(0); }
-        50%      { transform: translateY(-6px); }
-      }
-    </style>
   `;
 }
+

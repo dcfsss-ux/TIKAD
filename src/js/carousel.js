@@ -20,19 +20,7 @@ export function initCarousel() {
     if (!dotsContainer) return;
     dotsContainer.innerHTML = Array.from({ length: total }, (_, i) => {
       const isActive = i === currentIndex;
-      return `<button
-        onclick="carouselGo(${i})"
-        style="
-          width:${isActive ? '24px' : '8px'};
-          height:8px;
-          border-radius:4px;
-          border:none;
-          cursor:pointer;
-          background:${isActive ? '#009900' : '#ccc'};
-          transition:all .3s;
-          padding:0;
-        "
-      ></button>`;
+      return `<button class="carousel-dot ${isActive ? 'active' : ''}" data-index="${i}"></button>`;
     }).join('');
 
     if (currentEl) currentEl.textContent = currentIndex + 1;
@@ -58,10 +46,24 @@ export function initCarousel() {
     autoTimer = setInterval(next, 4000);
   }
 
-  // Expose globally so inline onclick handlers work
-  window.carouselGo = goTo;
-  window.carouselNext = next;
-  window.carouselPrev = prev;
+  // Bind controls programmatically
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  if (prevBtn) {
+    prevBtn.addEventListener('click', prev);
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', next);
+  }
+
+  if (dotsContainer) {
+    dotsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.carousel-dot');
+      if (btn) {
+        goTo(+btn.dataset.index);
+      }
+    });
+  }
 
   // Pause on hover
   track.addEventListener('mouseenter', () => clearInterval(autoTimer));
