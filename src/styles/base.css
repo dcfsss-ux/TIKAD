@@ -1,0 +1,103 @@
+/* ── BASE: Reset, Variables, Typography ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green-dark: #003300;
+  --green-mid: #005500;
+  --green-main: #009900;
+  --green-light: #33bb33;
+  --green-pale: #e6ffe6;
+  --cream: #f9fafb;
+  --white: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-mid: #333333;
+  --text-soft: #4d4d4d;
+  --gold: #f9dc07;
+  --orange: #ff9900;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-dark);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 100px 80px;
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #009900;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+.section-sub {
+  font-size: 17px;
+  color: var(--text-soft);
+  line-height: 1.75;
+  max-width: 580px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.08), transparent);
+}
+
+.divider-animated {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #009900,
+    #f9dc07,
+    #ff9900,
+    #f9dc07,
+    #009900,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmerLine 3s linear infinite;
+}
+
+/* ── TANAW GRADIENT TEXT ── */
+.tanaw-gradient {
+  background: linear-gradient(135deg, #f9dc07 0%, #fffce6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  section {
+    padding: 64px 32px;
+  }
+}

@@ -1,0 +1,335 @@
+/* ── TEAM SECTION ── */
+.team {
+  background: var(--cream);
+}
+
+.team-stage {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 64px;
+}
+
+.team-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.team-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.team-header .section-sub {
+  margin: 0 auto;
+}
+
+.team-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
+  gap: 40px;
+  align-items: stretch;
+}
+
+.team-supervisor,
+.team-carousel {
+  min-width: 0;
+}
+
+/* ── SUPERVISOR CARD ── */
+.team-supervisor {
+  background: linear-gradient(160deg, #003300 0%, #005500 60%, #009900 100%);
+  border-radius: 28px;
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 51, 0, 0.25);
+  color: #fff;
+}
+
+.team-supervisor::before,
+.team-supervisor::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(249, 220, 7, 0.12);
+  pointer-events: none;
+}
+
+.team-supervisor::before {
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  right: -60px;
+}
+
+.team-supervisor::after {
+  width: 140px;
+  height: 140px;
+  left: -40px;
+  bottom: -40px;
+}
+
+.team-supervisor .member-role {
+  color: #f9dc07;
+}
+
+.team-supervisor .member-name {
+  color: #fff;
+}
+
+.team-supervisor .member-bio {
+  color: rgba(255, 255, 255, 0.76);
+  max-width: 300px;
+}
+
+.team-supervisor .member-meta {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.team-supervisor .team-tag {
+  background: rgba(249, 220, 7, 0.12);
+  border: 1px solid rgba(249, 220, 7, 0.25);
+  color: #f9dc07;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.team-supervisor .avatar {
+  width: 110px;
+  height: 110px;
+  font-size: 44px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(249, 220, 7, 0.35);
+}
+
+/* ── CAROUSEL ── */
+.team-carousel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.carousel-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.carousel-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #009900;
+  margin-bottom: 4px;
+}
+
+.carousel-meta {
+  font-size: 13px;
+  color: #4d4d4d;
+}
+
+.carousel-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.carousel-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #009900;
+  background: #fff;
+  color: #009900;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.carousel-btn.next {
+  background: #009900;
+  color: #fff;
+}
+
+.carousel-window {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.intern-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* ── AVATAR ── */
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.avatar-supervisor {
+  background: linear-gradient(135deg, #009900, #003300);
+}
+
+.avatar-intern {
+  background: linear-gradient(135deg, #e6ffe6, #009900);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 16px;
+}
+
+/* ── MEMBER CARD STYLES ── */
+.member-role {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green-main);
+  margin-bottom: 6px;
+}
+
+.member-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.member-bio {
+  font-size: 14px;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+/* ── INTERN CARD ── */
+.intern-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-top: 3px solid #f9dc07;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+}
+
+.intern-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 153, 0, 0.18);
+}
+
+.intern-card .member-role {
+  text-align: center;
+}
+
+.intern-card .member-name {
+  font-size: 16px;
+}
+
+.intern-card .member-bio {
+  font-size: 13px;
+}
+
+/* ── SUPERVISOR ROW ── */
+.supervisor-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.supervisor-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #009900;
+  max-width: 560px;
+  width: 100%;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.supervisor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+.interns-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .team-stage {
+    padding: 0 24px;
+  }
+
+  .team-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .team-supervisor,
+  .team-carousel {
+    min-height: auto;
+  }
+
+  .team-supervisor {
+    padding: 40px 28px;
+  }
+
+  .carousel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .interns-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .supervisor-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
