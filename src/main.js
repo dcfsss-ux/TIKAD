@@ -12,6 +12,7 @@ import './styles/sections.css';
 import './styles/team.css';
 import './styles/cta-footer.css';
 import './styles/map-overlay.css';
+import './styles/preloader.css';
 
 // ── JS Module Imports ────────────────────────────────────────────
 import { initNav }          from './js/nav.js';
