@@ -1,5 +1,5 @@
 /**
- * mapOverlay.js  –  TANAW 3D Map Integration
+ * mapOverlay.js  –  GIYA 3D Map Integration
  *
  * Boots the Three.js Experience engine into .experience-canvas when the user
  * first clicks "Launch Map". All subsequent opens just toggle visibility.
@@ -73,15 +73,15 @@ const BUILDING_DATA = {
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let experience      = null;   // Three.js Experience singleton
-let worldReady      = false;  // true once GLB is loaded & meshes indexed
+let experience = null;   // Three.js Experience singleton
+let worldReady = false;  // true once GLB is loaded & meshes indexed
 
-const meshIndex   = {};       // lowercased mesh name → THREE.Mesh
-const pinList     = [];       // { key, worldPos, el }
-const _projVec    = new THREE.Vector3();
-const _box        = new THREE.Box3();
+const meshIndex = {};       // lowercased mesh name → THREE.Mesh
+const pinList = [];       // { key, worldPos, el }
+const _projVec = new THREE.Vector3();
+const _box = new THREE.Box3();
 
-let activeKey  = null;
+let activeKey = null;
 let activeMesh = null;
 
 // ── Open / Close overlay ──────────────────────────────────────────────────────
@@ -230,11 +230,11 @@ function _openPanel(key) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  set('panel-icon',     data.emoji);
+  set('panel-icon', data.emoji);
   set('panel-img-icon', data.emoji);
-  set('panel-name',     data.name);
-  set('panel-type',     data.type);
-  set('panel-desc',     data.desc);
+  set('panel-name', data.name);
+  set('panel-type', data.type);
+  set('panel-desc', data.desc);
 
   // Departments list
   const deptsWrap = document.getElementById('panel-depts-wrap');
@@ -251,7 +251,7 @@ function _openPanel(key) {
   }
 
   // Contact
-  const contactWrap    = document.getElementById('panel-contact-wrap');
+  const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
   if (contactWrap && contactContent && data.contact) {
     contactContent.innerHTML =
@@ -323,15 +323,15 @@ function _createPins() {
 function _updatePins() {
   if (!experience || !worldReady) return;
   const cam = experience.camera.orthographicCamera;
-  const W   = experience.sizes.width;
-  const H   = experience.sizes.height;
+  const W = experience.sizes.width;
+  const H = experience.sizes.height;
 
   pinList.forEach(({ worldPos, el }) => {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
     el.style.visibility = 'visible';
-    el.style.left = ((_projVec.x *  0.5 + 0.5) * W) + 'px';
-    el.style.top  = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
+    el.style.left = ((_projVec.x * 0.5 + 0.5) * W) + 'px';
+    el.style.top = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
   });
 }
 
@@ -391,7 +391,7 @@ function _buildDropdown(query) {
 
 export function initMapOverlay() {
   // Expose for inline onclick in HTML
-  window.openMapOverlay  = openMapOverlay;
+  window.openMapOverlay = openMapOverlay;
   window.closeMapOverlay = closeMapOverlay;
 
   // Bind launch buttons
@@ -445,7 +445,7 @@ export function initMapOverlay() {
 
   // Keep old global for any stray references
   window.closePanel = _closePanel;
-  window.showBuilding = () => {};   // no-op (old static fn)
+  window.showBuilding = () => { };   // no-op (old static fn)
   window.filterBuildings = q => _buildDropdown(q);
 
   // Hide panel initially

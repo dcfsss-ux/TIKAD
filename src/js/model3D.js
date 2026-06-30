@@ -32,8 +32,8 @@ export function initModel3D() {
       <div class="viewer-dot red"></div>
       <div class="viewer-dot yellow"></div>
       <div class="viewer-dot green"></div>
-      <span class="viewer-title">
-        TANAW 3D Campus Viewer
+      <span class="viewer-title baybayin">
+        GIYA 3D Campus Viewer
       </span>
     </div>
 

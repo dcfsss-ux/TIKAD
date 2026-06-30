@@ -1,7 +1,7 @@
 {
-  "name": "tanaw-csu-smart-campus",
+  "name": "giya-csu-smart-campus",
   "version": "1.0.0",
-  "description": "TANAW – CSU Smart Campus 3D Map Landing Page",
+  "description": "GIYA – CSU Smart Campus 3D Map Landing Page",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
