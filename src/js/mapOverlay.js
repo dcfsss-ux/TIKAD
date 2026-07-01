@@ -16,6 +16,9 @@ import Experience from '../../Experience/Experience.js';
 const BUILDING_DATA = {
   "masawa_building": {
     name: "Masawa Building", type: "Academic Building", emoji: "🏫",
+    image: "/images/masawa.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(139, 69, 19, 0.75) 0%, #ffffff 100%)",
     desc: "Home to several academic departments offering undergraduate and graduate programs.",
     depts: [
       { icon: "📐", name: "College of Engineering", sub: "Floors 1–3" },
@@ -25,6 +28,9 @@ const BUILDING_DATA = {
   },
   "hinang_building": {
     name: "Hinang Building", type: "Academic Building", emoji: "🏛",
+    image: "/images/hinang.jpg",
+    logo: "/images/logo cegs.jpg",
+    gradient: "linear-gradient(135deg, rgba(128, 0, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Dedicated to the College of Arts and Sciences with modern lecture halls.",
     depts: [
       { icon: "🎨", name: "College of Arts & Sciences", sub: "All Floors" },
@@ -34,6 +40,9 @@ const BUILDING_DATA = {
   },
   "kinaadman_hall": {
     name: "Kinaadman Hall", type: "Academic Hall", emoji: "🎓",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, rgba(128, 0, 128, 0.75) 0%, #ffffff 100%)",
     desc: "Main academic hall for knowledge and learning. Houses the university library annex and research offices.",
     depts: [
       { icon: "📚", name: "Library Annex", sub: "Ground Floor" },
@@ -43,6 +52,9 @@ const BUILDING_DATA = {
   },
   "hiraya_building": {
     name: "Hiraya Building", type: "Academic Building", emoji: "🌟",
+    image: "/images/hiraya.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(255, 140, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Dedicated to creative and performing arts with studios, rehearsal rooms, and exhibition spaces.",
     depts: [
       { icon: "🎭", name: "College of Fine Arts", sub: "Floors 1–2" },
@@ -52,6 +64,9 @@ const BUILDING_DATA = {
   },
   "batok_hall": {
     name: "Batok Hall", type: "Multi-Purpose Hall", emoji: "🏟",
+    image: "/images/batok.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, rgba(255, 0, 0, 0.75) 0%, #ffffff 100%)",
     desc: "A large multi-purpose venue for convocations, university events, and assemblies.",
     depts: [
       { icon: "🏢", name: "Events & Facilities Office", sub: "Ground Floor" },
@@ -61,6 +76,9 @@ const BUILDING_DATA = {
   },
   "new_administrative_bldg": {
     name: "New Admin Building", type: "Administration", emoji: "🏢",
+    image: "/images/new admin.jpeg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(0, 128, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Central hub for all administrative services including registrar, finance, and student affairs.",
     depts: [
       { icon: "📋", name: "Registrar's Office", sub: "Ground Floor" },
@@ -276,6 +294,10 @@ function _closePanel() {
   if (panel) {
     panel.classList.add('panel-hidden');
     setTimeout(() => { panel.style.display = 'none'; }, 350);
+  }
+  const headerEl = document.querySelector('.panel-header');
+  if (headerEl) {
+    headerEl.style.background = '';
   }
   pinList.forEach(p => p.el.classList.remove('active-pin'));
   const input = document.getElementById('map-search');
