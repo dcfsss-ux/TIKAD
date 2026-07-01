@@ -1,269 +1,281 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TANAW – CSU Smart Campus</title>
-    <meta
-      name="description"
-      content="TANAW is the official 3D interactive campus map of Caraga State University — navigate every building, office, and facility right from your browser."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Main entry: Vite handles CSS + JS bundling -->
-    <script type="module" src="/src/main.js"></script>
-  </head>
-  <body>
 
-    <!-- ── PRELOADER ── -->
-    <div class="preloader hidden" id="tikad-preloader">
-      <div class="preloader-wrapper">
-        <div class="loading">
-          <img class="loader" src="/loader.svg" alt="Loading" />
-          <p class="loading-progress" id="loading-progress">0</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ᜄᜒᜌ – CSU Smart Campus</title>
+  <meta name="description"
+    content="ᜄᜒᜌ is the official 3D interactive campus map of Caraga State University — navigate every building, office, and facility right from your browser." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Main entry: Vite handles CSS + JS bundling -->
+  <script type="module" src="/src/main.js"></script>
+</head>
+
+<body>
+
+  <!-- ── PRELOADER ── -->
+  <div class="preloader hidden" id="tikad-preloader">
+    <div class="preloader-wrapper">
+      <div class="loading">
+        <img class="loader" src="/loader.svg" alt="Loading" />
+        <p class="loading-progress" id="loading-progress">0</p>
+      </div>
+      <div style="color:rgba(255,255,255,0.55);font-size:13px;margin-top:8px;letter-spacing:0.06em;">Loading campus
+        model…</div>
+    </div>
+  </div>
+  <!-- ── NAV ── -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="#009900" />
+        <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
+          stroke-width="1.5" />
+        <circle cx="16" cy="16" r="4" fill="#f9dc07" />
+        <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      <div>
+        <span class="giya-baybayin"
+          style="font-size: 20px; font-weight: 700; display: block; line-height: 1.2;">ᜄᜒᜌ</span>
+        <span>CSU Smart Campus</span>
+      </div>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+      <span class="nav-toggle-icon"></span>
+    </button>
+
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+
+    <button class="nav-cta" id="nav-launch-map">Launch Map</button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="hero-text">
+      <p class="hero-eyebrow"> Caraga State University</p>
+      <h1 class="hero-title">
+        See Your Campus in a Whole New
+        <em>Dimension</em>
+      </h1>
+      <p class="hero-desc">
+        <span class="giya-baybayin">ᜄᜒᜌ</span> is CSU's interactive 3D smart campus map — your guide to every
+        building, office, and facility on campus.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary" id="hero-explore-map">
+          🗺️ Explore the Map
+        </a>
+        <a href="#about" class="btn-outline">Learn More ↓</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num" data-count="40" data-suffix="+">0+</div>
+          <div class="stat-label">Buildings Mapped</div>
         </div>
-        <div style="color:rgba(255,255,255,0.55);font-size:13px;margin-top:8px;letter-spacing:0.06em;">Loading campus model…</div>
+        <div class="stat-item">
+          <div class="stat-num" data-count="12000" data-suffix="+">0+</div>
+          <div class="stat-label">Students Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" data-count="3">0</div>
+          <div class="stat-label">Colleges</div>
+        </div>
       </div>
     </div>
-    <!-- ── NAV ── -->
-    <nav>
-      <a class="nav-logo" href="#">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="32" rx="8" fill="#009900" />
-          <path
-            d="M16 6L26 12V20L16 26L6 20V12L16 6Z"
-            fill="rgba(255,255,255,0.15)"
-            stroke="rgba(255,255,255,0.6)"
-            stroke-width="1.5"
-          />
-          <circle cx="16" cy="16" r="4" fill="#f9dc07" />
-          <path
-            d="M16 12V16M16 16L19 18"
-            stroke="#003300"
-            stroke-width="1.5"
-            stroke-linecap="round"
-          />
-        </svg>
-        <div>
-          TANAW
-          <span>CSU Smart Campus</span>
-        </div>
-      </a>
 
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#how">How It Works</a></li>
-        <li><a href="#team">Team</a></li>
-      </ul>
+    <!-- 3D Model Viewer / Hero Visual -->
+    <div class="hero-visual">
+      <div id="model-3d-container"></div>
+      <div class="hero-badge">
+        <strong>3D</strong>
+        Interactive Campus Map
+      </div>
+    </div>
+  </section>
 
-      <button class="nav-cta" id="nav-launch-map">Launch Map</button>
-    </nav>
+  <div class="divider-animated"></div>
 
-    <!-- ── HERO ── -->
-    <section class="hero" id="home">
-      <canvas id="hero-canvas"></canvas>
-
-      <div class="hero-text">
-        <p class="hero-eyebrow">🌿 Caraga State University</p>
-        <h1 class="hero-title">
-          See Your Campus in a Whole New
-          <em>Dimension</em>
-        </h1>
-        <p class="hero-desc">
-          TANAW is CSU's interactive 3D smart campus map — your guide to every
-          building, office, and facility on campus.
+  <!-- ── NAME ORIGIN ── -->
+  <section class="name-origin" id="about">
+    <div class="name-origin-inner">
+      <div class="word-card reveal">
+        <span class="word-big giya-baybayin">ᜄᜒᜌ</span>
+        <span class="word-lang">Filipino · Bisaya</span>
+        <span class="word-meaning">"Guide" · "To Guide"</span>
+        <p class="word-desc">
+          Derived from the Filipino and Bisaya word meaning to guide or direct —
+          perfectly capturing the spirit of this smart campus navigation platform.
         </p>
-        <div class="hero-actions">
-          <a
-            href="#"
-            class="btn-primary"
-            id="hero-explore-map"
-          >
-            🗺️ Explore the Map
-          </a>
-          <a href="#about" class="btn-outline">Learn More ↓</a>
-        </div>
-        <div class="stat-row">
-          <div class="stat-item">
-            <div class="stat-num" data-count="40" data-suffix="+">0+</div>
-            <div class="stat-label">Buildings Mapped</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num" data-count="12000" data-suffix="+">0+</div>
-            <div class="stat-label">Students Served</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num" data-count="3">0</div>
-            <div class="stat-label">Colleges</div>
-          </div>
-        </div>
       </div>
-
-      <!-- 3D Model Viewer / Hero Visual -->
-      <div class="hero-visual">
-        <div id="model-3d-container"></div>
-        <div class="hero-badge">
-          <strong>3D</strong>
-          Interactive Campus Map
-        </div>
-      </div>
-    </section>
-
-    <div class="divider-animated"></div>
-
-    <!-- ── NAME ORIGIN ── -->
-    <section class="name-origin" id="about">
-      <div class="name-origin-inner">
-        <div class="word-card reveal">
-          <span class="word-big">TANAW</span>
-          <span class="word-lang">Filipino · Bisaya</span>
-          <span class="word-meaning">"To Look" · "To See"</span>
-          <p class="word-desc">
-            Derived from the Filipino and Bisaya word meaning to look, to view,
-            or to see from a distance — perfectly capturing the spirit of this
-            smart campus navigation platform.
-          </p>
-        </div>
-        <div class="name-detail reveal-right">
-          <p class="section-eyebrow">About the Project</p>
-          <h2 class="section-title">The Name Behind the Map</h2>
-          <p>
-            <span>TANAW</span> is more than a campus map. It is a vision — a
-            platform designed to help every student, faculty member, and visitor
-            navigate Caraga State University with ease and confidence.
-          </p>
-          <p>
-            Developed as an internship project by students of CSU, TANAW brings
-            the campus into the digital age with an interactive 3D map that puts
-            every building and facility at your fingertips.
-          </p>
-          <p>
-            Our goal is simple: <span>see your campus, know your campus</span>.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- ── FEATURES ── -->
-    <section class="features" id="features">
-      <div class="features-inner">
-        <div class="features-header reveal">
-          <p class="section-eyebrow">What TANAW Offers</p>
-          <h2 class="section-title">Everything You Need to Navigate CSU</h2>
-          <p class="section-sub">
-            Built with students in mind, TANAW makes it easy to find any
-            building, office, or facility on campus.
-          </p>
-        </div>
-        <div class="features-grid">
-          <div class="feat-card reveal delay-1">
-            <div class="feat-icon">🗺️</div>
-            <h3>Interactive 3D Map</h3>
-            <p>
-              Explore the campus in immersive 3D — rotate, zoom, and navigate
-              every corner of CSU.
-            </p>
-          </div>
-          <div class="feat-card reveal delay-2">
-            <div class="feat-icon">🔍</div>
-            <h3>Smart Search</h3>
-            <p>
-              Quickly find any building, office, or department with real-time
-              search and filtering.
-            </p>
-          </div>
-          <div class="feat-card reveal delay-3">
-            <div class="feat-icon">📍</div>
-            <h3>Building Info</h3>
-            <p>
-              Tap any building to see detailed information — hours, facilities,
-              and more.
-            </p>
-          </div>
-          <div class="feat-card reveal delay-4">
-            <div class="feat-icon">📱</div>
-            <h3>Mobile Friendly</h3>
-            <p>
-              Access TANAW from any device. Optimized for phones, tablets, and
-              desktops.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- ── HOW IT WORKS ── -->
-    <section class="how" id="how">
-      <div class="how-inner">
-        <p class="section-eyebrow">Simple Steps</p>
-        <h2 class="section-title reveal">How TANAW Works</h2>
-        <p class="section-sub reveal">
-          Getting started is easy. No app download required — just open your
-          browser and explore.
+      <div class="name-detail reveal-right">
+        <p class="section-eyebrow">About the Project</p>
+        <h2 class="section-title">The Name Behind the Map</h2>
+        <p>
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a campus map. It is a guide — a
+          platform designed to help every student, faculty member, and visitor
+          navigate Caraga State University with ease and confidence.
         </p>
-        <div class="steps">
-          <div class="step reveal delay-1">
-            <div class="step-num">01</div>
-            <div class="step-icon">🌐</div>
-            <h3>Open the Map</h3>
-            <p>Launch TANAW from any browser. No sign-in or download needed.</p>
-          </div>
-          <div class="step reveal delay-2">
-            <div class="step-num">02</div>
-            <div class="step-icon">🔍</div>
-            <h3>Search or Browse</h3>
-            <p>
-              Search for a specific building or browse the 3D campus map freely.
-            </p>
-          </div>
-          <div class="step reveal delay-3">
-            <div class="step-num">03</div>
-            <div class="step-icon">📍</div>
-            <h3>Get Directions</h3>
-            <p>
-              Select a building to see its info, facilities, and how to get
-              there.
-            </p>
-          </div>
-        </div>
+        <p>
+          Developed as an internship project by students of CSU, <span class="giya-baybayin">ᜄᜒᜌ</span> brings
+          the campus into the digital age with an interactive 3D map that puts
+          every building and facility at your fingertips.
+        </p>
+        <p>
+          Our goal is simple: <span>see your campus, know your campus</span>.
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <div class="divider-animated"></div>
+  <div class="divider"></div>
 
-    <!-- ── TEAM ── -->
-    <section class="team" id="team">
-      <div class="team-stage">
-        <div class="team-header reveal">
-          <p class="section-eyebrow">The Builders</p>
-          <h2 class="section-title">Meet the TANAW Team</h2>
-          <p class="section-sub">
-            TANAW is built by a dedicated team of student interns from Caraga
-            State University, guided by their faculty supervisor.
+  <!-- ── FEATURES ── -->
+  <section class="features" id="features">
+    <div class="features-inner">
+      <div class="features-header reveal">
+        <p class="section-eyebrow">What <span class="giya-baybayin">ᜄᜒᜌ</span> Offers</p>
+        <h2 class="section-title">Everything You Need to Navigate CSU</h2>
+        <p class="section-sub">
+          Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it easy to find any
+          building, office, or facility on campus.
+        </p>
+      </div>
+      <div class="features-grid">
+        <div class="feat-card reveal delay-1">
+          <div class="feat-icon">🗺️</div>
+          <h3>Interactive 3D Map</h3>
+          <p>
+            Explore the campus in immersive 3D — rotate, zoom, and navigate
+            every corner of CSU.
           </p>
         </div>
+        <div class="feat-card reveal delay-2">
+          <div class="feat-icon">🔍</div>
+          <h3>Smart Search</h3>
+          <p>
+            Quickly find any building, office, or department with real-time
+            search and filtering.
+          </p>
+        </div>
+        <div class="feat-card reveal delay-3">
+          <div class="feat-icon">📍</div>
+          <h3>Building Info</h3>
+          <p>
+            Tap any building to see detailed information — hours, facilities,
+            and more.
+          </p>
+        </div>
+        <div class="feat-card reveal delay-4">
+          <div class="feat-icon">📱</div>
+          <h3>Mobile Friendly</h3>
+          <p>
+            Access <span class="giya-baybayin">ᜄᜒᜌ</span> from any device. Optimized for phones, tablets, and
+            desktops.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="team-layout">
-          <!-- ── Supervisor Panel ── -->
-          <div class="team-supervisor reveal-left">
-            <div class="team-tag">Project Supervisor</div>
-            <div class="avatar avatar-supervisor">
-              👩‍🏫
+  <div class="divider"></div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <p class="section-eyebrow">Simple Steps</p>
+      <h2 class="section-title reveal">How <span class="giya-baybayin">ᜄᜒᜌ</span> Works</h2>
+      <p class="section-sub reveal">
+        Getting started is easy. No app download required — just open your
+        browser and explore.
+      </p>
+      <div class="steps">
+        <div class="step reveal delay-1">
+          <div class="step-num">01</div>
+          <div class="step-icon">🌐</div>
+          <h3>Open the Map</h3>
+          <p>Launch <span class="giya-baybayin">ᜄᜒᜌ</span> from any browser. No sign-in or download needed.</p>
+        </div>
+        <div class="step reveal delay-2">
+          <div class="step-num">02</div>
+          <div class="step-icon">🔍</div>
+          <h3>Search or Browse</h3>
+          <p>
+            Search for a specific building or browse the 3D campus map freely.
+          </p>
+        </div>
+        <div class="step reveal delay-3">
+          <div class="step-num">03</div>
+          <div class="step-icon">📍</div>
+          <h3>Get Directions</h3>
+          <p>
+            Select a building to see its info, facilities, and how to get
+            there.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-animated"></div>
+
+  <!-- ── TEAM ── -->
+  <section class="team" id="team">
+    <div class="team-stage">
+      <div class="team-header reveal">
+        <p class="section-eyebrow">The Builders</p>
+        <h2 class="section-title">Meet the <span class="giya-baybayin">GIYA</span> Team</h2>
+        <p class="section-sub">
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is built by a dedicated team of student interns from Caraga
+          State University, guided by their faculty supervisor.
+        </p>
+      </div>
+
+      <div class="team-layout">
+        <!-- ── Supervisor Panel ── -->
+        <div class="team-supervisor reveal-left">
+          <div class="team-tag">Project Supervisor</div>
+          <div class="avatar avatar-supervisor">
+            👩‍🏫
+          </div>
+          <div class="member-role">Faculty Supervisor</div>
+          <div class="member-name">Engr. Maria Santos</div>
+          <p class="member-bio">
+            Faculty member of the College of Engineering and Technology, CSU.
+            Oversees the <span class="giya-baybayin">ᜄᜒᜌ</span> internship project and provides technical
+            guidance to the development team.
+          </p>
+          <div class="member-meta">
+            College of Engineering &amp; Technology
+          </div>
+        </div>
+
+        <!-- ── Intern Carousel ── -->
+        <div class="team-carousel reveal-right">
+          <div class="carousel-head">
+            <div>
+              <div class="carousel-kicker">Intern Developers</div>
+              <div class="carousel-meta">
+                <span id="carousel-current">1</span> of
+                <span id="carousel-total">5</span>
+              </div>
             </div>
-            <div class="member-role">Faculty Supervisor</div>
-            <div class="member-name">Engr. Maria Santos</div>
-            <p class="member-bio">
-              Faculty member of the College of Engineering and Technology, CSU.
-              Oversees the TANAW internship project and provides technical
-              guidance to the development team.
-            </p>
-            <div class="member-meta">
-              College of Engineering &amp; Technology
+            <div class="carousel-actions">
+              <button class="carousel-btn prev">
+                ←
+              </button>
+              <button class="carousel-btn next">
+                →
+              </button>
             </div>
           </div>
 
@@ -876,33 +888,16 @@
   </div>
 </div>
               </div>
-              <!-- /carousel-track -->
             </div>
-            <!-- /carousel-window -->
-
-            <div class="carousel-dots" id="carousel-dots"></div>
+            <!-- /carousel-track -->
           </div>
-          <!-- /team-carousel -->
-        </div>
-        <!-- /team-layout -->
-      </div>
-      <!-- /team-stage -->
-    </section>
+          <!-- /carousel-window -->
 
-    <!-- ── CTA ── -->
-    <div class="cta-band">
-      <h2 class="section-title reveal">Ready to explore CSU?</h2>
-      <p>
-        Open <span class="tanaw-gradient">TANAW</span> and discover every corner
-        of Caraga State University — in 3D, right from your browser.
-      </p>
-      <a
-        href="#"
-        class="cta-btn"
-        id="cta-explore-map"
-      >
-        Open the Map →
-      </a>
+          <div class="carousel-dots" id="carousel-dots"></div>
+        </div>
+        <!-- /team-carousel -->
+      </div>
+      <!-- /team-layout -->
     </div>
 
     <!-- ── FOOTER ── -->
@@ -943,155 +938,161 @@
 </a>
           </div>
         </div>
-
-        <!-- Links columns -->
-        <div class="footer-col">
-          <div class="footer-col-title">Navigate</div>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#how">How It Works</a></li>
-            <li><a href="#team">Team</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Campus</div>
-          <ul>
-            <li><a href="#">Main Library</a></li>
-            <li><a href="#">Admin Building</a></li>
-            <li><a href="#">Engineering</a></li>
-            <li><a href="#">Student Center</a></li>
-            <li><a href="#">Gymnasium</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">University</div>
-          <ul>
-            <li>
-              <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
-            </li>
-            <li><a href="#">Registrar</a></li>
-            <li><a href="#">Library</a></li>
-            <li><a href="#">Contact Us</a></li>
-          </ul>
+        <p class="footer-desc">
+          The official interactive 3D campus navigation platform of Caraga
+          State University. Explore every building, office, and facility from
+          your browser.
+        </p>
+        <div class="footer-social">
+          <a href="#" title="Facebook">📘</a>
+          <a href="#" title="Twitter">🐦</a>
+          <a href="#" title="GitHub">🐙</a>
         </div>
       </div>
 
-      <div class="footer-bottom">
-        <div class="footer-copyright">
-          © 2024 TANAW – CSU Smart Campus. An internship project of Caraga State
-          University.
-        </div>
-        <div class="footer-badge">
-          <span></span>
-          System Online
-        </div>
+      <!-- Links columns -->
+      <div class="footer-col">
+        <div class="footer-col-title">Navigate</div>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#team">Team</a></li>
+        </ul>
       </div>
-    </footer>
 
-    <!-- ── MAP OVERLAY ── -->
-    <div id="map-overlay">
-      <!-- Inner container -->
-      <div class="map-overlay-inner">
-        <!-- Map Header -->
-        <div class="map-header">
-          <div class="map-header-left">
-            <div class="map-header-icon">
-              🗺️
-            </div>
-            <div>
-              <div class="map-header-title">TANAW Campus Map</div>
-              <div class="map-header-sub">Caraga State University</div>
-            </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Campus</div>
+        <ul>
+          <li><a href="#">Main Library</a></li>
+          <li><a href="#">Admin Building</a></li>
+          <li><a href="#">Engineering</a></li>
+          <li><a href="#">Student Center</a></li>
+          <li><a href="#">Gymnasium</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">University</div>
+        <ul>
+          <li>
+            <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
+          </li>
+          <li><a href="#">Registrar</a></li>
+          <li><a href="#">Library</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        © 2024 <span class="giya-baybayin">ᜄᜒᜌ</span> – CSU Smart Campus. An internship project of Caraga State
+        University.
+      </div>
+      <div class="footer-badge">
+        <span></span>
+        System Online
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── MAP OVERLAY ── -->
+  <div id="map-overlay">
+    <!-- Inner container -->
+    <div class="map-overlay-inner">
+      <!-- Map Header -->
+      <div class="map-header">
+        <div class="map-header-left">
+          <div class="map-header-icon">
+            🗺️
           </div>
-          <button id="map-close-btn" class="map-close-btn">
-            ×
-          </button>
+          <div>
+            <div class="map-header-title"><span class="giya-baybayin">ᜄᜒᜌ</span> Campus Map</div>
+            <div class="map-header-sub">Caraga State University</div>
+          </div>
         </div>
+        <button id="map-close-btn" class="map-close-btn">
+          ×
+        </button>
+      </div>
 
-        <!-- Search Bar -->
-        <div class="map-search-wrap">
-          <span class="map-search-icon">🔍</span>
-          <input
-            id="map-search"
-            type="text"
-            placeholder="Search buildings, offices, facilities…"
-          />
-          <div id="search-dropdown"></div>
-        </div>
+      <!-- Search Bar -->
+      <div class="map-search-wrap">
+        <span class="map-search-icon">🔍</span>
+        <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
+        <div id="search-dropdown"></div>
+      </div>
 
-        <!-- Map Body: canvas + info panel -->
-        <div
-          style="
+      <!-- Map Body: canvas + info panel -->
+      <div style="
             flex: 1;
             display: flex;
             overflow: hidden;
             position: relative;
             min-height: 0;
-          "
-        >
-          <!-- ── Three.js 3D Canvas ── -->
-          <div style="flex:1;position:relative;overflow:hidden;background:#d6d2ca;">
+          ">
+        <!-- ── Three.js 3D Canvas ── -->
+        <div style="flex:1;position:relative;overflow:hidden;background:#d6d2ca;">
 
-            <!-- WebGL canvas — Experience engine mounts here -->
-            <canvas class="experience-canvas" style="display:block;width:100%;height:100%;"></canvas>
+          <!-- WebGL canvas — Experience engine mounts here -->
+          <canvas class="experience-canvas" style="display:block;width:100%;height:100%;"></canvas>
 
-            <!-- Floating building chips (populated by JS after model loads) -->
-            <div id="map-chips-bar" style="
+          <!-- Floating building chips (populated by JS after model loads) -->
+          <div id="map-chips-bar" style="
               position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
               display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
               z-index:10;pointer-events:all;
             "></div>
 
-            <!-- 3D-projected pin markers -->
-            <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
+          <!-- 3D-projected pin markers -->
+          <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
 
-            <!-- Controls hint -->
-            <div style="
+          <!-- Controls hint -->
+          <div style="
               position:absolute;bottom:16px;right:16px;
               background:rgba(0,51,0,0.75);color:rgba(255,255,255,0.7);
               font-size:10px;padding:6px 10px;border-radius:8px;
               pointer-events:none;letter-spacing:0.04em;
             ">🖱 Drag · Scroll to zoom</div>
-          </div>
+        </div>
 
-          <!-- ── Building Info Panel ── -->
-          <div id="info-panel">
-            <div class="panel-header">
-              <div class="panel-header-left">
-                <div class="panel-icon-wrap" id="panel-icon">🏛</div>
-                <div>
-                  <div class="panel-name" id="panel-name">Select a Building</div>
-                  <div class="panel-type" id="panel-type">Click a pin on the map</div>
-                </div>
+        <!-- ── Building Info Panel ── -->
+        <div id="info-panel">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <div class="panel-icon-wrap" id="panel-icon">🏛</div>
+              <div>
+                <div class="panel-name" id="panel-name">Select a Building</div>
+                <div class="panel-type" id="panel-type">Click a pin on the map</div>
               </div>
-              <button class="panel-close-btn" id="panel-close-btn">×</button>
             </div>
-            <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
-              <div class="panel-img-icon" id="panel-img-icon">🏛</div>
+            <button class="panel-close-btn" id="panel-close-btn">×</button>
+          </div>
+          <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
+            <div class="panel-img-icon" id="panel-img-icon">🏛</div>
+          </div>
+          <div class="panel-body">
+            <div class="panel-label">Description</div>
+            <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details
+              here.</p>
+            <div id="panel-depts-wrap" style="display:none;">
+              <div class="panel-label">Faculties &amp; Offices</div>
+              <ul class="panel-facilities" id="panel-depts"></ul>
             </div>
-            <div class="panel-body">
-              <div class="panel-label">Description</div>
-              <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details here.</p>
-              <div id="panel-depts-wrap" style="display:none;">
-                <div class="panel-label">Faculties &amp; Offices</div>
-                <ul class="panel-facilities" id="panel-depts"></ul>
-              </div>
-              <div id="panel-contact-wrap" style="display:none;">
-                <div class="panel-label">Contact</div>
-                <p id="panel-contact"></p>
-              </div>
+            <div id="panel-contact-wrap" style="display:none;">
+              <div class="panel-label">Contact</div>
+              <p id="panel-contact"></p>
             </div>
           </div>
         </div>
-        <!-- /map body -->
       </div>
-      <!-- /inner -->
+      <!-- /map body -->
     </div>
-    <!-- /map-overlay -->
-  </body>
-</html>
+    <!-- /inner -->
+  </div>
+  <!-- /map-overlay -->
+</body>
 
+</html>
