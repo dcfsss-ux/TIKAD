@@ -16,6 +16,9 @@ import Experience from '../../Experience/Experience.js';
 const BUILDING_DATA = {
   "masawa_building": {
     name: "Masawa Building", type: "Academic Building", emoji: "🏫",
+    image: "/images/masawa.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(139, 69, 19, 0.75) 0%, #ffffff 100%)",
     desc: "Home to several academic departments offering undergraduate and graduate programs.",
     depts: [
       { icon: "📐", name: "College of Engineering", sub: "Floors 1–3" },
@@ -25,6 +28,9 @@ const BUILDING_DATA = {
   },
   "hinang_building": {
     name: "Hinang Building", type: "Academic Building", emoji: "🏛",
+    image: "/images/hinang.jpg",
+    logo: "/images/logo cegs.jpg",
+    gradient: "linear-gradient(135deg, rgba(128, 0, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Dedicated to the College of Arts and Sciences with modern lecture halls.",
     depts: [
       { icon: "🎨", name: "College of Arts & Sciences", sub: "All Floors" },
@@ -34,6 +40,9 @@ const BUILDING_DATA = {
   },
   "kinaadman_hall": {
     name: "Kinaadman Hall", type: "Academic Hall", emoji: "🎓",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, rgba(128, 0, 128, 0.75) 0%, #ffffff 100%)",
     desc: "Main academic hall for knowledge and learning. Houses the university library annex and research offices.",
     depts: [
       { icon: "📚", name: "Library Annex", sub: "Ground Floor" },
@@ -43,6 +52,9 @@ const BUILDING_DATA = {
   },
   "hiraya_building": {
     name: "Hiraya Building", type: "Academic Building", emoji: "🌟",
+    image: "/images/hiraya.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(255, 140, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Dedicated to creative and performing arts with studios, rehearsal rooms, and exhibition spaces.",
     depts: [
       { icon: "🎭", name: "College of Fine Arts", sub: "Floors 1–2" },
@@ -52,6 +64,9 @@ const BUILDING_DATA = {
   },
   "batok_hall": {
     name: "Batok Hall", type: "Multi-Purpose Hall", emoji: "🏟",
+    image: "/images/batok.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, rgba(255, 0, 0, 0.75) 0%, #ffffff 100%)",
     desc: "A large multi-purpose venue for convocations, university events, and assemblies.",
     depts: [
       { icon: "🏢", name: "Events & Facilities Office", sub: "Ground Floor" },
@@ -61,6 +76,9 @@ const BUILDING_DATA = {
   },
   "new_administrative_bldg": {
     name: "New Admin Building", type: "Administration", emoji: "🏢",
+    image: "/images/new admin.jpeg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, rgba(0, 128, 0, 0.75) 0%, #ffffff 100%)",
     desc: "Central hub for all administrative services including registrar, finance, and student affairs.",
     depts: [
       { icon: "📋", name: "Registrar's Office", sub: "Ground Floor" },
@@ -73,15 +91,15 @@ const BUILDING_DATA = {
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let experience      = null;   // Three.js Experience singleton
-let worldReady      = false;  // true once GLB is loaded & meshes indexed
+let experience = null;   // Three.js Experience singleton
+let worldReady = false;  // true once GLB is loaded & meshes indexed
 
-const meshIndex   = {};       // lowercased mesh name → THREE.Mesh
-const pinList     = [];       // { key, worldPos, el }
-const _projVec    = new THREE.Vector3();
-const _box        = new THREE.Box3();
+const meshIndex = {};       // lowercased mesh name → THREE.Mesh
+const pinList = [];       // { key, worldPos, el }
+const _projVec = new THREE.Vector3();
+const _box = new THREE.Box3();
 
-let activeKey  = null;
+let activeKey = null;
 let activeMesh = null;
 
 // ── Open / Close overlay ──────────────────────────────────────────────────────
@@ -230,11 +248,43 @@ function _openPanel(key) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  set('panel-icon',     data.emoji);
+  // Set the building header gradient dynamically
+  const headerEl = document.querySelector('.panel-header');
+  if (headerEl) {
+    if (data.gradient) {
+      headerEl.style.background = data.gradient;
+    } else {
+      headerEl.style.background = '';
+    }
+  }
+
+  // Set the building logo dynamically (uses image logo if available, otherwise emoji)
+  const iconEl = document.getElementById('panel-icon');
+  if (iconEl) {
+    if (data.logo) {
+      iconEl.innerHTML = `<img src="${data.logo}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px;" />`;
+      iconEl.style.background = 'transparent';
+    } else {
+      iconEl.textContent = data.emoji || '🏛';
+      iconEl.style.background = '#e6ffe6';
+    }
+  }
+
   set('panel-img-icon', data.emoji);
-  set('panel-name',     data.name);
-  set('panel-type',     data.type);
-  set('panel-desc',     data.desc);
+  set('panel-name', data.name);
+  set('panel-type', data.type);
+  set('panel-desc', data.desc);
+
+  // Set the building image dynamically
+  const imgEl = document.getElementById('panel-img-bg');
+  if (imgEl) {
+    if (data.image) {
+      imgEl.style.background = `url('${data.image}') center center / cover no-repeat`;
+    } else {
+      // Fallback/Default image if none is specified
+      imgEl.style.background = `url('/images/kinaadman.jpg') center center / cover no-repeat`;
+    }
+  }
 
   // Departments list
   const deptsWrap = document.getElementById('panel-depts-wrap');
@@ -251,7 +301,7 @@ function _openPanel(key) {
   }
 
   // Contact
-  const contactWrap    = document.getElementById('panel-contact-wrap');
+  const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
   if (contactWrap && contactContent && data.contact) {
     contactContent.innerHTML =
@@ -276,6 +326,10 @@ function _closePanel() {
   if (panel) {
     panel.classList.add('panel-hidden');
     setTimeout(() => { panel.style.display = 'none'; }, 350);
+  }
+  const headerEl = document.querySelector('.panel-header');
+  if (headerEl) {
+    headerEl.style.background = '';
   }
   pinList.forEach(p => p.el.classList.remove('active-pin'));
   const input = document.getElementById('map-search');
@@ -323,15 +377,15 @@ function _createPins() {
 function _updatePins() {
   if (!experience || !worldReady) return;
   const cam = experience.camera.orthographicCamera;
-  const W   = experience.sizes.width;
-  const H   = experience.sizes.height;
+  const W = experience.sizes.width;
+  const H = experience.sizes.height;
 
   pinList.forEach(({ worldPos, el }) => {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
     el.style.visibility = 'visible';
-    el.style.left = ((_projVec.x *  0.5 + 0.5) * W) + 'px';
-    el.style.top  = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
+    el.style.left = ((_projVec.x * 0.5 + 0.5) * W) + 'px';
+    el.style.top = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
   });
 }
 
@@ -391,7 +445,7 @@ function _buildDropdown(query) {
 
 export function initMapOverlay() {
   // Expose for inline onclick in HTML
-  window.openMapOverlay  = openMapOverlay;
+  window.openMapOverlay = openMapOverlay;
   window.closeMapOverlay = closeMapOverlay;
 
   // Bind launch buttons
@@ -445,7 +499,7 @@ export function initMapOverlay() {
 
   // Keep old global for any stray references
   window.closePanel = _closePanel;
-  window.showBuilding = () => {};   // no-op (old static fn)
+  window.showBuilding = () => { };   // no-op (old static fn)
   window.filterBuildings = q => _buildDropdown(q);
 
   // Hide panel initially
