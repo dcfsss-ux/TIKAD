@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANAW – CSU Smart Campus</title>
+  <title>ᜄᜒᜌ – CSU Smart Campus</title>
   <meta name="description"
-    content="TANAW is the official 3D interactive campus map of Caraga State University — navigate every building, office, and facility right from your browser." />
+    content="ᜄᜒᜌ is the official 3D interactive campus map of Caraga State University — navigate every building, office, and facility right from your browser." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Main entry: Vite handles CSS + JS bundling -->
@@ -37,10 +37,15 @@
         <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
       </svg>
       <div>
-        TANAW
+        <span class="giya-baybayin"
+          style="font-size: 20px; font-weight: 700; display: block; line-height: 1.2;">ᜄᜒᜌ</span>
         <span>CSU Smart Campus</span>
       </div>
     </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
+      <span class="nav-toggle-icon"></span>
+    </button>
 
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
@@ -57,13 +62,13 @@
     <canvas id="hero-canvas"></canvas>
 
     <div class="hero-text">
-      <p class="hero-eyebrow">🌿 Caraga State University</p>
+      <p class="hero-eyebrow"> Caraga State University</p>
       <h1 class="hero-title">
         See Your Campus in a Whole New
         <em>Dimension</em>
       </h1>
       <p class="hero-desc">
-        TANAW is CSU's interactive 3D smart campus map — your guide to every
+        <span class="giya-baybayin">ᜄᜒᜌ</span> is CSU's interactive 3D smart campus map — your guide to every
         building, office, and facility on campus.
       </p>
       <div class="hero-actions">
@@ -104,25 +109,24 @@
   <section class="name-origin" id="about">
     <div class="name-origin-inner">
       <div class="word-card reveal">
-        <span class="word-big">TANAW</span>
+        <span class="word-big giya-baybayin">ᜄᜒᜌ</span>
         <span class="word-lang">Filipino · Bisaya</span>
-        <span class="word-meaning">"To Look" · "To See"</span>
+        <span class="word-meaning">"Guide" · "To Guide"</span>
         <p class="word-desc">
-          Derived from the Filipino and Bisaya word meaning to look, to view,
-          or to see from a distance — perfectly capturing the spirit of this
-          smart campus navigation platform.
+          Derived from the Filipino and Bisaya word meaning to guide or direct —
+          perfectly capturing the spirit of this smart campus navigation platform.
         </p>
       </div>
       <div class="name-detail reveal-right">
         <p class="section-eyebrow">About the Project</p>
         <h2 class="section-title">The Name Behind the Map</h2>
         <p>
-          <span>TANAW</span> is more than a campus map. It is a vision — a
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a campus map. It is a guide — a
           platform designed to help every student, faculty member, and visitor
           navigate Caraga State University with ease and confidence.
         </p>
         <p>
-          Developed as an internship project by students of CSU, TANAW brings
+          Developed as an internship project by students of CSU, <span class="giya-baybayin">ᜄᜒᜌ</span> brings
           the campus into the digital age with an interactive 3D map that puts
           every building and facility at your fingertips.
         </p>
@@ -139,22 +143,16 @@
   <section class="features" id="features">
     <div class="features-inner">
       <div class="features-header reveal">
-        <p class="section-eyebrow">What TANAW Offers</p>
+        <p class="section-eyebrow">What <span class="giya-baybayin">ᜄᜒᜌ</span> Offers</p>
         <h2 class="section-title">Everything You Need to Navigate CSU</h2>
         <p class="section-sub">
-          Built with students in mind, TANAW makes it easy to find any
+          Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it easy to find any
           building, office, or facility on campus.
         </p>
       </div>
       <div class="features-grid">
         <div class="feat-card reveal delay-1">
-          <div class="feat-icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="#009900" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
-              <line x1="9" y1="3" x2="9" y2="18"></line>
-              <line x1="15" y1="6" x2="15" y2="21"></line>
-            </svg>
-          </div>
+          <div class="feat-icon">🗺️</div>
           <h3>Interactive 3D Map</h3>
           <p>
             Explore the campus in immersive 3D — rotate, zoom, and navigate
@@ -162,12 +160,7 @@
           </p>
         </div>
         <div class="feat-card reveal delay-2">
-          <div class="feat-icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="#009900" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </div>
+          <div class="feat-icon">🔍</div>
           <h3>Smart Search</h3>
           <p>
             Quickly find any building, office, or department with real-time
@@ -175,12 +168,7 @@
           </p>
         </div>
         <div class="feat-card reveal delay-3">
-          <div class="feat-icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="#009900" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-          </div>
+          <div class="feat-icon">📍</div>
           <h3>Building Info</h3>
           <p>
             Tap any building to see detailed information — hours, facilities,
@@ -188,15 +176,10 @@
           </p>
         </div>
         <div class="feat-card reveal delay-4">
-          <div class="feat-icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" stroke="#009900" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-              <line x1="12" y1="18" x2="12.01" y2="18"></line>
-            </svg>
-          </div>
+          <div class="feat-icon">📱</div>
           <h3>Mobile Friendly</h3>
           <p>
-            Access TANAW from any device. Optimized for phones, tablets, and
+            Access <span class="giya-baybayin">ᜄᜒᜌ</span> from any device. Optimized for phones, tablets, and
             desktops.
           </p>
         </div>
@@ -210,7 +193,7 @@
   <section class="how" id="how">
     <div class="how-inner">
       <p class="section-eyebrow">Simple Steps</p>
-      <h2 class="section-title reveal">How TANAW Works</h2>
+      <h2 class="section-title reveal">How <span class="giya-baybayin">ᜄᜒᜌ</span> Works</h2>
       <p class="section-sub reveal">
         Getting started is easy. No app download required — just open your
         browser and explore.
@@ -218,27 +201,13 @@
       <div class="steps">
         <div class="step reveal delay-1">
           <div class="step-num">01</div>
-          <div class="step-icon">
-            <!-- Monitor / Open in browser -->
-            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#f9dc07" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-              <line x1="8" y1="21" x2="16" y2="21"></line>
-              <line x1="12" y1="17" x2="12" y2="21"></line>
-            </svg>
-          </div>
+          <div class="step-icon">🌐</div>
           <h3>Open the Map</h3>
-          <p>Launch TANAW from any browser. No sign-in or download needed.</p>
+          <p>Launch <span class="giya-baybayin">ᜄᜒᜌ</span> from any browser. No sign-in or download needed.</p>
         </div>
         <div class="step reveal delay-2">
           <div class="step-num">02</div>
-          <div class="step-icon">
-            <!-- Building with search -->
-            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#f9dc07" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-              <path d="M3 9h18"></path>
-              <path d="M9 21V9"></path>
-            </svg>
-          </div>
+          <div class="step-icon">🔍</div>
           <h3>Search or Browse</h3>
           <p>
             Search for a specific building or browse the 3D campus map freely.
@@ -246,13 +215,7 @@
         </div>
         <div class="step reveal delay-3">
           <div class="step-num">03</div>
-          <div class="step-icon">
-            <!-- Location pin -->
-            <svg viewBox="0 0 24 24" width="36" height="36" stroke="#f9dc07" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"></path>
-              <circle cx="12" cy="9" r="2.5"></circle>
-            </svg>
-          </div>
+          <div class="step-icon">📍</div>
           <h3>Get Directions</h3>
           <p>
             Select a building to see its info, facilities, and how to get
@@ -270,9 +233,9 @@
     <div class="team-stage">
       <div class="team-header reveal">
         <p class="section-eyebrow">The Builders</p>
-        <h2 class="section-title">Meet the TANAW Team</h2>
+        <h2 class="section-title">Meet the <span class="giya-baybayin">GIYA</span> Team</h2>
         <p class="section-sub">
-          TANAW is built by a dedicated team of student interns from Caraga
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is built by a dedicated team of student interns from Caraga
           State University, guided by their faculty supervisor.
         </p>
       </div>
@@ -288,7 +251,7 @@
           <div class="member-name">Engr. Maria Santos</div>
           <p class="member-bio">
             Faculty member of the College of Engineering and Technology, CSU.
-            Oversees the TANAW internship project and provides technical
+            Oversees the <span class="giya-baybayin">ᜄᜒᜌ</span> internship project and provides technical
             guidance to the development team.
           </p>
           <div class="member-meta">
@@ -297,30 +260,31 @@
         </div>
 
         <!-- ── Intern Carousel ── -->
-        <div class="team-carousel reveal-right">
-          <div class="carousel-head">
-            <div>
-              <div class="carousel-kicker">Intern Developers</div>
-              <div class="carousel-meta">
-                <span id="carousel-current">1</span> of
-                <span id="carousel-total">5</span>
+          <div class="team-carousel reveal-right">
+            <div class="carousel-head">
+              <div>
+                <div class="carousel-kicker">Intern Developers</div>
+                <div class="carousel-meta">
+                  <span id="carousel-current">1</span> of
+                  <span id="carousel-total">5</span>
+                </div>
+              </div>
+              <div class="carousel-actions">
+                <button class="carousel-btn prev">
+                  ←
+                </button>
+                <button class="carousel-btn next">
+                  →
+                </button>
               </div>
             </div>
-            <div class="carousel-actions">
-              <button class="carousel-btn prev">
-                ←
-              </button>
-              <button class="carousel-btn next">
-                →
-              </button>
-            </div>
-          </div>
 
-          <div class="carousel-window">
-            <div class="carousel-track" id="carousel-track">
-              <!-- Slide 1 -->
-              <div class="intern-slide">
-                <div style="
+            <div class="carousel-window">
+              <div class="carousel-track" id="carousel-track">
+                <!-- Slide 1 -->
+                 <div class="intern-slide">
+  <div
+    style="
       background: #fff;
       border-radius: 24px;
       padding: 40px;
@@ -329,8 +293,10 @@
       min-height: 320px;
       position: relative;
       overflow: hidden;
-    ">
-                  <div style="
+    "
+  >
+    <div
+      style="
         position: absolute;
         top: 0;
         right: 0;
@@ -338,16 +304,20 @@
         height: 120px;
         background: linear-gradient(135deg, #fff3e0, transparent);
         border-radius: 0 24px 0 100%;
-      "></div>
+      "
+    ></div>
 
-                  <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 20px;
         margin-bottom: 24px;
-      ">
-                    <!-- Profile Photo -->
-                    <div style="
+      "
+    >
+      <!-- Profile Photo -->
+      <div
+        style="
           width: 72px;
           height: 72px;
           border-radius: 50%;
@@ -355,54 +325,66 @@
           flex-shrink: 0;
           border: 3px solid #ff9900;
           box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
-        ">
-                      <img src="/images/christian.jpg" alt="Christian B. Abamo" style="
+        "
+      >
+        <img
+          src="/images/christian.jpg"
+          alt="Christian B. Abamo"
+          style="
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-          " />
-                    </div>
+          "
+        />
+      </div>
 
-                    <!-- Name -->
-                    <div>
-                      <div style="
+      <!-- Name -->
+      <div>
+        <div
+          style="
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #ff9900;
             margin-bottom: 4px;
-          ">
-                        3D Artist · Intern
-                      </div>
+          "
+        >
+          3D Artist · Intern
+        </div>
 
-                      <div style="
+        <div
+          style="
             font-family: 'DM Serif Display', serif;
             font-size: 22px;
             color: #003300;
             line-height: 1.2;
-          ">
-                        Christian B. Abamo
-                      </div>
-                    </div>
-                  </div>
+          "
+        >
+          Christian B. Abamo
+        </div>
+      </div>
+    </div>
 
-                  Led the overall architecture of TANAW, developing the 3D
-                  map engine and core navigation features that power the
-                  entire campus exploration experience.
-                  <p style="
+                      Led the overall architecture of TANAW, developing the 3D
+                      map engine and core navigation features that power the
+                      entire campus exploration experience.
+    <p
+      style="
         font-size: 14px;
         color: #4d4d4d;
         line-height: 1.8;
         margin-bottom: 24px;
-      ">
+      "
+    >
+      
+    </p>
 
-                  </p>
-
-                  <!-- Skills -->
-                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
-                    <span style="
+    <!-- Skills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -410,11 +392,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      3D Engine
-                    </span>
+        "
+      >
+        3D Engine
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -422,11 +406,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Navigation
-                    </span>
+        "
+      >
+        Navigation
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -434,14 +420,16 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Architecture
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="intern-slide">
-                <div style="
+        "
+      >
+        Architecture
+      </span>
+    </div>
+  </div>
+</div>
+                <div class="intern-slide">
+  <div
+    style="
       background: #fff;
       border-radius: 24px;
       padding: 40px;
@@ -450,8 +438,10 @@
       min-height: 320px;
       position: relative;
       overflow: hidden;
-    ">
-                  <div style="
+    "
+  >
+    <div
+      style="
         position: absolute;
         top: 0;
         right: 0;
@@ -459,16 +449,20 @@
         height: 120px;
         background: linear-gradient(135deg, #fff3e0, transparent);
         border-radius: 0 24px 0 100%;
-      "></div>
+      "
+    ></div>
 
-                  <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 20px;
         margin-bottom: 24px;
-      ">
-                    <!-- Profile Photo -->
-                    <div style="
+      "
+    >
+      <!-- Profile Photo -->
+      <div
+        style="
           width: 72px;
           height: 72px;
           border-radius: 50%;
@@ -476,54 +470,66 @@
           flex-shrink: 0;
           border: 3px solid #ff9900;
           box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
-        ">
-                      <img src="/images/jhonleovil.jpg" alt="Jhon Leovil M. Avelino" style="
+        "
+      >
+        <img
+          src="/images/jhonleovil.jpg"
+          alt="Jhon Leovil M. Avelino"
+          style="
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-          " />
-                    </div>
+          "
+        />
+      </div>
 
-                    <!-- Name -->
-                    <div>
-                      <div style="
+      <!-- Name -->
+      <div>
+        <div
+          style="
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #ff9900;
             margin-bottom: 4px;
-          ">
-                        UX/UI DEVELOPER · Intern
-                      </div>
+          "
+        >
+          UX/UI DEVELOPER · Intern
+        </div>
 
-                      <div style="
+        <div
+          style="
             font-family: 'DM Serif Display', serif;
             font-size: 22px;
             color: #003300;
             line-height: 1.2;
-          ">
-                        Jhon Leovil M. Avelino
-                      </div>
-                    </div>
-                  </div>
+          "
+        >
+          Jhon Leovil M. Avelino
+        </div>
+      </div>
+    </div>
 
-                  Led the development of the building information panel and
-                  search functionality, making it easy to find offices and
-                  facilities across campus.
-                  <p style="
+                       Led the development of the building information panel and
+                      search functionality, making it easy to find offices and
+                      facilities across campus.
+    <p
+      style="
         font-size: 14px;
         color: #4d4d4d;
         line-height: 1.8;
         margin-bottom: 24px;
-      ">
+      "
+    >
+      
+    </p>
 
-                  </p>
-
-                  <!-- Skills -->
-                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
-                    <span style="
+    <!-- Skills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -531,11 +537,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Search
-                    </span>
+        "
+      >
+        Search
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -543,11 +551,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Info Panel
-                    </span>
+        "
+      >
+        Info Panel
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -555,16 +565,18 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Feature Dev
-                    </span>
-                  </div>
-                </div>
-              </div>
+        "
+      >
+        Feature Dev
+      </span>
+    </div>
+  </div>
+</div>
 
-              <!-- Slide 4 -->
-              <div class="intern-slide">
-                <div style="
+                <!-- Slide 4 -->
+                <div class="intern-slide">
+  <div
+    style="
       background: #fff;
       border-radius: 24px;
       padding: 40px;
@@ -573,8 +585,10 @@
       min-height: 320px;
       position: relative;
       overflow: hidden;
-    ">
-                  <div style="
+    "
+  >
+    <div
+      style="
         position: absolute;
         top: 0;
         right: 0;
@@ -582,16 +596,20 @@
         height: 120px;
         background: linear-gradient(135deg, #fff3e0, transparent);
         border-radius: 0 24px 0 100%;
-      "></div>
+      "
+    ></div>
 
-                  <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 20px;
         margin-bottom: 24px;
-      ">
-                    <!-- Profile Photo -->
-                    <div style="
+      "
+    >
+      <!-- Profile Photo -->
+      <div
+        style="
           width: 72px;
           height: 72px;
           border-radius: 50%;
@@ -599,54 +617,66 @@
           flex-shrink: 0;
           border: 3px solid #ff9900;
           box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
-        ">
-                      <img src="/images/greg.jpg" alt="Greg Carl T. Calo" style="
+        "
+      >
+        <img
+          src="/images/greg.jpg"
+          alt="Greg Carl T. Calo"
+          style="
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-          " />
-                    </div>
+          "
+        />
+      </div>
 
-                    <!-- Name -->
-                    <div>
-                      <div style="
+      <!-- Name -->
+      <div>
+        <div
+          style="
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #ff9900;
             margin-bottom: 4px;
-          ">
-                        UX/UI DEVELOPER · Intern
-                      </div>
+          "
+        >
+          UX/UI DEVELOPER · Intern
+        </div>
 
-                      <div style="
+        <div
+          style="
             font-family: 'DM Serif Display', serif;
             font-size: 22px;
             color: #003300;
             line-height: 1.2;
-          ">
-                        Greg Carl T. Calo
-                      </div>
-                    </div>
-                  </div>
+          "
+        >
+          Greg Carl T. Calo
+        </div>
+      </div>
+    </div>
 
-                  Focused on mobile responsiveness and accessibility testing
-                  to ensure TANAW works seamlessly across all screen sizes
-                  and devices.
-                  <p style="
+                      Focused on mobile responsiveness and accessibility testing
+                      to ensure TANAW works seamlessly across all screen sizes
+                      and devices.
+    <p
+      style="
         font-size: 14px;
         color: #4d4d4d;
         line-height: 1.8;
         margin-bottom: 24px;
-      ">
+      "
+    >
+      
+    </p>
 
-                  </p>
-
-                  <!-- Skills -->
-                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
-                    <span style="
+    <!-- Skills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -654,11 +684,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Developer
-                    </span>
+        "
+      >
+        Developer
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -666,11 +698,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Testing
-                    </span>
+        "
+      >
+        Testing
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -678,16 +712,18 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      QA
-                    </span>
-                  </div>
-                </div>
-              </div>
+        "
+      >
+        QA
+      </span>
+    </div>
+  </div>
+</div>
 
-              <!-- Slide 5 -->
-              <div class="intern-slide">
-                <div style="
+                <!-- Slide 5 -->
+                <div class="intern-slide">
+  <div
+    style="
       background: #fff;
       border-radius: 24px;
       padding: 40px;
@@ -696,8 +732,10 @@
       min-height: 320px;
       position: relative;
       overflow: hidden;
-    ">
-                  <div style="
+    "
+  >
+    <div
+      style="
         position: absolute;
         top: 0;
         right: 0;
@@ -705,16 +743,20 @@
         height: 120px;
         background: linear-gradient(135deg, #fff3e0, transparent);
         border-radius: 0 24px 0 100%;
-      "></div>
+      "
+    ></div>
 
-                  <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 20px;
         margin-bottom: 24px;
-      ">
-                    <!-- Profile Photo -->
-                    <div style="
+      "
+    >
+      <!-- Profile Photo -->
+      <div
+        style="
           width: 72px;
           height: 72px;
           border-radius: 50%;
@@ -722,54 +764,66 @@
           flex-shrink: 0;
           border: 3px solid #ff9900;
           box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
-        ">
-                      <img src="/images/roy.jpg" alt="Roy A. Bayotlang" style="
+        "
+      >
+        <img
+          src="/images/roy.jpg"
+          alt="Roy A. Bayotlang"
+          style="
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-          " />
-                    </div>
+          "
+        />
+      </div>
 
-                    <!-- Name -->
-                    <div>
-                      <div style="
+      <!-- Name -->
+      <div>
+        <div
+          style="
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #ff9900;
             margin-bottom: 4px;
-          ">
-                        UX/UI DEVELOPER · Intern
-                      </div>
+          "
+        >
+          UX/UI DEVELOPER · Intern
+        </div>
 
-                      <div style="
+        <div
+          style="
             font-family: 'DM Serif Display', serif;
             font-size: 22px;
             color: #003300;
             line-height: 1.2;
-          ">
-                        Roy A. Bayotlang
-                      </div>
-                    </div>
-                  </div>
+          "
+        >
+          Roy A. Bayotlang
+        </div>
+      </div>
+    </div>
 
-                  Led the development of the building information panel and
-                  search functionality, making it easy to find offices and
-                  facilities across campus.
-                  <p style="
+                      Led the development of the building information panel and
+                      search functionality, making it easy to find offices and
+                      facilities across campus.
+    <p
+      style="
         font-size: 14px;
         color: #4d4d4d;
         line-height: 1.8;
         margin-bottom: 24px;
-      ">
+      "
+    >
+      
+    </p>
 
-                  </p>
-
-                  <!-- Skills -->
-                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
-                    <span style="
+    <!-- Skills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -777,11 +831,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Feature Dev
-                    </span>
+        "
+      >
+        Feature Dev
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -789,11 +845,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Info Panel
-                    </span>
+        "
+      >
+        Info Panel
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -801,16 +859,18 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Search
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <!-- Slide 5 -->
-              <!-- Slide 6 -->
-              <div class="intern-slide">
-                <div style="
+        "
+      >
+        Search
+      </span>
+    </div>
+  </div>
+</div>
+                <!-- Slide 5 -->
+                <!-- Slide 6 -->
+<div class="intern-slide">
+  <div
+    style="
       background: #fff;
       border-radius: 24px;
       padding: 40px;
@@ -819,8 +879,10 @@
       min-height: 320px;
       position: relative;
       overflow: hidden;
-    ">
-                  <div style="
+    "
+  >
+    <div
+      style="
         position: absolute;
         top: 0;
         right: 0;
@@ -828,16 +890,20 @@
         height: 120px;
         background: linear-gradient(135deg, #fff3e0, transparent);
         border-radius: 0 24px 0 100%;
-      "></div>
+      "
+    ></div>
 
-                  <div style="
+    <div
+      style="
         display: flex;
         align-items: center;
         gap: 20px;
         margin-bottom: 24px;
-      ">
-                    <!-- Profile Photo -->
-                    <div style="
+      "
+    >
+      <!-- Profile Photo -->
+      <div
+        style="
           width: 72px;
           height: 72px;
           border-radius: 50%;
@@ -845,53 +911,65 @@
           flex-shrink: 0;
           border: 3px solid #ff9900;
           box-shadow: 0 4px 16px rgba(255, 153, 0, 0.2);
-        ">
-                      <img src="/images/Cres Steven.jpg" alt="Cres Steven P. Buque" style="
+        "
+      >
+        <img
+          src="/images/Cres Steven.jpg"
+          alt="Cres Steven P. Buque"
+          style="
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-          " />
-                    </div>
+          "
+        />
+      </div>
 
-                    <!-- Name -->
-                    <div>
-                      <div style="
+      <!-- Name -->
+      <div>
+        <div
+          style="
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #ff9900;
             margin-bottom: 4px;
-          ">
-                        3D Artist · Intern
-                      </div>
+          "
+        >
+          3D Artist · Intern
+        </div>
 
-                      <div style="
+        <div
+          style="
             font-family: 'DM Serif Display', serif;
             font-size: 22px;
             color: #003300;
             line-height: 1.2;
-          ">
-                        Cres Steven P. Buque
-                      </div>
-                    </div>
-                  </div>
+          "
+        >
+          Cres Steven P. Buque
+        </div>
+      </div>
+    </div>
 
-                  <!-- Description -->
-                  <p style="
+    <!-- Description -->
+    <p
+      style="
         font-size: 14px;
         color: #4d4d4d;
         line-height: 1.8;
         margin-bottom: 24px;
-      ">
-                    Responsible for creating and applying realistic textures to campus
-                    buildings in Blender, bringing the TANAW 3D campus map to life visually.
-                  </p>
+      "
+    >
+      Responsible for creating and applying realistic textures to campus
+      buildings in Blender, bringing the TANAW 3D campus map to life visually.
+    </p>
 
-                  <!-- Skills -->
-                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
-                    <span style="
+    <!-- Skills -->
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -899,11 +977,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Blender
-                    </span>
+        "
+      >
+        Blender
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -911,11 +991,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      3D Texturing
-                    </span>
+        "
+      >
+        3D Texturing
+      </span>
 
-                    <span style="
+      <span
+        style="
           background: #fff3e0;
           color: #7a3a00;
           padding: 4px 12px;
@@ -923,11 +1005,13 @@
           font-size: 11px;
           font-weight: 600;
           border: 1px solid #ffd099;
-        ">
-                      Visual Design
-                    </span>
-                  </div>
-                </div>
+        "
+      >
+        Visual Design
+      </span>
+    </div>
+  </div>
+</div>
               </div>
             </div>
             <!-- /carousel-track -->
@@ -940,14 +1024,13 @@
       </div>
       <!-- /team-layout -->
     </div>
-    <!-- /team-stage -->
   </section>
 
   <!-- ── CTA ── -->
   <div class="cta-band">
     <h2 class="section-title reveal">Ready to explore CSU?</h2>
     <p>
-      Open <span class="tanaw-gradient">TANAW</span> and discover every corner
+      Open <span class="giya-baybayin">ᜄᜒᜌ</span> and discover every corner
       of Caraga State University — in 3D, right from your browser.
     </p>
     <a href="#" class="cta-btn" id="cta-explore-map">
@@ -957,78 +1040,82 @@
 
   <!-- ── FOOTER ── -->
   <footer>
-    <div class="footer-top">
-      <!-- Brand column -->
-      <div>
-        <div class="footer-logo-wrap">
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="#009900" />
-            <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
-              stroke-width="1.5" />
-            <circle cx="16" cy="16" r="4" fill="#f9dc07" />
-          </svg>
-          <div>
-            <div class="footer-brand-name">TANAW</div>
-            <div class="footer-brand-sub">CSU SMART CAMPUS</div>
+      <div class="footer-top">
+        <!-- Brand column -->
+        <div>
+          <div class="footer-logo-wrap">
+            <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+              <rect width="32" height="32" rx="8" fill="#009900" />
+              <path
+                d="M16 6L26 12V20L16 26L6 20V12L16 6Z"
+                fill="rgba(255,255,255,0.15)"
+                stroke="rgba(255,255,255,0.6)"
+                stroke-width="1.5"
+              />
+              <circle cx="16" cy="16" r="4" fill="#f9dc07" />
+            </svg>
+            <div>
+              <div class="footer-brand-name giya-baybayin">ᜄᜒᜌ</div>
+              <div class="footer-brand-sub">CSU SMART CAMPUS</div>
+            </div>
+          </div>
+          <p class="footer-desc">
+            The official interactive 3D campus navigation platform of Caraga
+            State University. Explore every building, office, and facility from
+            your browser.
+          </p>
+          <div class="footer-social">
+            <a href="#" title="Facebook">
+              <img src="/icons/Facebook.jpg" alt="Facebook" width="24" height="24">
+            </a>
+            <a href="#" title="Twitter">
+              <img src="/icons/Twitter.jpg" alt="Twitter" width="24" height="24">
+            </a>
+            <a href="#" title="GitHub">
+              <img src="/icons/GitHub.jpg" alt="GitHub" width="24" height="24">
+            </a>
           </div>
         </div>
-        <p class="footer-desc">
-          The official interactive 3D campus navigation platform of Caraga
-          State University. Explore every building, office, and facility from
-          your browser.
-        </p>
-        <div class="footer-social">
-          <a href="#" title="Facebook" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.1);transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </a>
-          <a href="#" title="Twitter / X" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.1);transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="https://github.com/dcfsss-ux/TIKAD" target="_blank" rel="noopener noreferrer" title="GitHub" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.1);transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          </a>
+
+        <!-- Links columns -->
+        <div class="footer-col">
+          <div class="footer-col-title">Navigate</div>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#team">Team</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Campus</div>
+          <ul>
+            <li><a href="#">Main Library</a></li>
+            <li><a href="#">Admin Building</a></li>
+            <li><a href="#">Engineering</a></li>
+            <li><a href="#">Student Center</a></li>
+            <li><a href="#">Gymnasium</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">University</div>
+          <ul>
+            <li>
+              <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
+            </li>
+            <li><a href="#">Registrar</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
         </div>
       </div>
-
-      <!-- Links columns -->
-      <div class="footer-col">
-        <div class="footer-col-title">Navigate</div>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#team">Team</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Campus</div>
-        <ul>
-          <li><a href="#">Main Library</a></li>
-          <li><a href="#">Admin Building</a></li>
-          <li><a href="#">Engineering</a></li>
-          <li><a href="#">Student Center</a></li>
-          <li><a href="#">Gymnasium</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">University</div>
-        <ul>
-          <li>
-            <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
-          </li>
-          <li><a href="#">Registrar</a></li>
-          <li><a href="#">Library</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
 
     <div class="footer-bottom">
       <div class="footer-copyright">
-        © 2024 TANAW – CSU Smart Campus. An internship project of Caraga State
+        © 2024 <span class="giya-baybayin">ᜄᜒᜌ</span> – CSU Smart Campus. An internship project of Caraga State
         University.
       </div>
       <div class="footer-badge">
@@ -1042,27 +1129,28 @@
   <div id="map-overlay">
     <!-- Inner container -->
     <div class="map-overlay-inner">
-      <!-- Map Header -->
-      <div class="map-header">
-        <div class="map-header-left">
-          <div class="map-header-icon">
-            🗺️
-          </div>
-          <div>
-            <div class="map-header-title">TANAW Campus Map</div>
-            <div class="map-header-sub">Caraga State University</div>
-          </div>
-        </div>
-        <button id="map-close-btn" class="map-close-btn">
-          ×
-        </button>
-      </div>
-
       <!-- Search Bar -->
       <div class="map-search-wrap">
-        <span class="map-search-icon">🔍</span>
-        <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
-        <div id="search-dropdown"></div>
+        <div class="search-and-toggle-container">
+          <div class="search-input-group">
+            <span class="map-search-icon">🔍</span>
+            <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
+            <div id="search-dropdown"></div>
+          </div>
+          <div class="view-toggle-segmented">
+            <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
+              <span class="view-toggle-icon">🌐</span>
+              <span class="view-toggle-text">3D View</span>
+            </button>
+            <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
+              <span class="view-toggle-icon">🗺️</span>
+              <span class="view-toggle-text">2D View</span>
+            </button>
+          </div>
+          <button id="map-close-btn" class="map-close-btn" aria-label="Close map" title="Close map">
+            ×
+          </button>
+        </div>
       </div>
 
       <!-- Map Body: canvas + info panel -->
@@ -1110,7 +1198,9 @@
             </div>
             <button class="panel-close-btn" id="panel-close-btn">×</button>
           </div>
-          <div class="panel-img" id="panel-img-bg"></div>
+          <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
+            <div class="panel-img-icon" id="panel-img-icon">🏛</div>
+          </div>
           <div class="panel-body">
             <div class="panel-label">Description</div>
             <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details
