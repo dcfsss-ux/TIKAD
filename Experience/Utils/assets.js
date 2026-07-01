@@ -1,7 +1,7 @@
 export default [
   {
-    name: "plateforme10",
-    type: "glbModel",
-    path: "/models/3d-map-scene-daw.glb",
-  },
-];
+    name: 'plateforme10',
+    type: 'glbModel',
+    path: '/models/3d-map-scene-daw.glb'
+  }
+]
