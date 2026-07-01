@@ -1,5 +1,5 @@
 /**
- * mapOverlay.js  –  TANAW 3D Map Integration
+ * mapOverlay.js  –  GIYA 3D Map Integration
  *
  * Boots the Three.js Experience engine into .experience-canvas when the user
  * first clicks "Launch Map". All subsequent opens just toggle visibility.
@@ -248,43 +248,11 @@ function _openPanel(key) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  // Set the building header gradient dynamically
-  const headerEl = document.querySelector('.panel-header');
-  if (headerEl) {
-    if (data.gradient) {
-      headerEl.style.background = data.gradient;
-    } else {
-      headerEl.style.background = '';
-    }
-  }
-
-  // Set the building logo dynamically (uses image logo if available, otherwise emoji)
-  const iconEl = document.getElementById('panel-icon');
-  if (iconEl) {
-    if (data.logo) {
-      iconEl.innerHTML = `<img src="${data.logo}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px;" />`;
-      iconEl.style.background = 'transparent';
-    } else {
-      iconEl.textContent = data.emoji || '🏛';
-      iconEl.style.background = '#e6ffe6';
-    }
-  }
-
+  set('panel-icon', data.emoji);
   set('panel-img-icon', data.emoji);
   set('panel-name', data.name);
   set('panel-type', data.type);
   set('panel-desc', data.desc);
-
-  // Set the building image dynamically
-  const imgEl = document.getElementById('panel-img-bg');
-  if (imgEl) {
-    if (data.image) {
-      imgEl.style.background = `url('${data.image}') center center / cover no-repeat`;
-    } else {
-      // Fallback/Default image if none is specified
-      imgEl.style.background = `url('/images/kinaadman.jpg') center center / cover no-repeat`;
-    }
-  }
 
   // Departments list
   const deptsWrap = document.getElementById('panel-depts-wrap');
