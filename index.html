@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ᜄᜒᜌ – CSU Smart Campus</title>
+  <title>GIYA – CSU Smart Campus</title>
   <meta name="description"
     content="ᜄᜒᜌ is the official 3D interactive campus map of Caraga State University — navigate every building, office, and facility right from your browser." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1020,9 +1020,23 @@
 
       <!-- Search Bar -->
       <div class="map-search-wrap">
-        <span class="map-search-icon">🔍</span>
-        <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
-        <div id="search-dropdown"></div>
+        <div class="search-and-toggle-container">
+          <div class="search-input-group">
+            <span class="map-search-icon">🔍</span>
+            <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
+            <div id="search-dropdown"></div>
+          </div>
+          <div class="view-toggle-segmented">
+            <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
+              <span class="view-toggle-icon">🌐</span>
+              <span class="view-toggle-text">3D View</span>
+            </button>
+            <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
+              <span class="view-toggle-icon">🗺️</span>
+              <span class="view-toggle-text">2D View</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Map Body: canvas + info panel -->

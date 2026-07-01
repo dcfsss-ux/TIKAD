@@ -443,6 +443,22 @@ export function initMapOverlay() {
   const closeBtn = document.getElementById('panel-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', _closePanel);
 
+  // View toggle (2D / 3D) event listeners
+  const btn2D = document.getElementById('view-toggle-2d');
+  const btn3D = document.getElementById('view-toggle-3d');
+  if (btn2D && btn3D) {
+    btn2D.addEventListener('click', () => {
+      if (experience && experience.controls) {
+        experience.controls.setViewMode('2D');
+      }
+    });
+    btn3D.addEventListener('click', () => {
+      if (experience && experience.controls) {
+        experience.controls.setViewMode('3D');
+      }
+    });
+  }
+
   // Keep old global for any stray references
   window.closePanel = _closePanel;
   window.showBuilding = () => { };   // no-op (old static fn)

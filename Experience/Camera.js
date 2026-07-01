@@ -29,10 +29,10 @@ export default class Camera {
       500,
     );
 
-    this.orthographicCamera.position.x = 8;
-    this.orthographicCamera.position.y = 4;
-    this.orthographicCamera.position.z = 8;
-    this.orthographicCamera.zoom = 0.85;
+    this.orthographicCamera.position.x = 8.5;
+    this.orthographicCamera.position.y = 4.5;
+    this.orthographicCamera.position.z = 3.5;
+    this.orthographicCamera.zoom = 0.65;
     this.orthographicCamera.updateProjectionMatrix();
 
     this.scene.add(this.orthographicCamera);
