@@ -12,6 +12,9 @@ export default class Controls {
     this.time = this.experience.time;
     this.camera = this.experience.camera;
 
+    this.is2D = false;
+    this.saved3DState = null;
+
     this.setOrbitControls();
   }
 
@@ -26,7 +29,76 @@ export default class Controls {
     this.controls.listenToKeyEvents(window);
 
     this.loadCameraState();
+    this.syncViewToggleButtons();
     this.controls.addEventListener("end", () => this.saveCameraState());
+  }
+
+  setViewMode(mode) {
+    if (mode === "2D") {
+      if (this.is2D) return;
+      this.is2D = true;
+
+      // Save the current 3D camera state to restore it later
+      this.saved3DState = {
+        position: this.camera.orthographicCamera.position.clone(),
+        target: this.controls.target.clone(),
+        zoom: this.camera.orthographicCamera.zoom,
+      };
+
+      // Restrict OrbitControls to look straight down and prevent rotation
+      this.controls.enableRotate = false;
+      this.controls.minPolarAngle = 0;
+      this.controls.maxPolarAngle = 0;
+      this.controls.minAzimuthAngle = Math.PI / 2;
+      this.controls.maxAzimuthAngle = Math.PI / 2;
+
+      // Reset azimuth and polar angles to point straight down
+      this.controls.update();
+      this.saveCameraState();
+    } else {
+      if (!this.is2D) return;
+      this.is2D = false;
+
+      // Re-enable rotation
+      this.controls.enableRotate = true;
+      this.controls.minPolarAngle = 0;
+      this.controls.maxPolarAngle = Math.PI / 2;
+      this.controls.minAzimuthAngle = -Infinity;
+      this.controls.maxAzimuthAngle = Infinity;
+
+      // Restore 3D state
+      if (this.saved3DState) {
+        this.camera.orthographicCamera.position.copy(this.saved3DState.position);
+        this.controls.target.copy(this.saved3DState.target);
+        this.camera.orthographicCamera.zoom = this.saved3DState.zoom;
+      } else {
+        // Fallback default 3D camera setup
+        this.camera.orthographicCamera.position.set(8.5, 4.5, 3.5);
+        this.controls.target.set(0, 0, 0);
+        this.camera.orthographicCamera.zoom = 0.65;
+      }
+
+      this.camera.orthographicCamera.updateProjectionMatrix();
+      this.controls.update();
+      this.saveCameraState();
+    }
+
+    this.syncViewToggleButtons();
+  }
+
+  syncViewToggleButtons() {
+    if (typeof document === "undefined") return;
+    const btn2D = document.getElementById("view-toggle-2d");
+    const btn3D = document.getElementById("view-toggle-3d");
+    if (btn2D && btn3D) {
+      if (this.is2D) {
+        btn2D.classList.add("active");
+        btn3D.classList.remove("active");
+      } else {
+        btn3D.classList.add("active");
+        btn2D.classList.remove("active");
+      }
+    }
   }
 
   loadCameraState() {
@@ -36,7 +108,8 @@ export default class Controls {
     if (!saved) return;
 
     try {
-      const { position, target, zoom } = JSON.parse(saved);
+      const state = JSON.parse(saved);
+      const { position, target, zoom, is2D, saved3DState } = state;
       if (Array.isArray(position) && Array.isArray(target)) {
         this.camera.orthographicCamera.position.fromArray(position);
         this.controls.target.fromArray(target);
@@ -44,6 +117,30 @@ export default class Controls {
       if (typeof zoom === "number") {
         this.camera.orthographicCamera.zoom = zoom;
       }
+
+      this.is2D = !!is2D;
+      if (saved3DState) {
+        this.saved3DState = {
+          position: new THREE.Vector3().fromArray(saved3DState.position),
+          target: new THREE.Vector3().fromArray(saved3DState.target),
+          zoom: saved3DState.zoom
+        };
+      }
+
+      if (this.is2D) {
+        this.controls.enableRotate = false;
+        this.controls.minPolarAngle = 0;
+        this.controls.maxPolarAngle = 0;
+        this.controls.minAzimuthAngle = Math.PI / 2;
+        this.controls.maxAzimuthAngle = Math.PI / 2;
+      } else {
+        this.controls.enableRotate = true;
+        this.controls.minPolarAngle = 0;
+        this.controls.maxPolarAngle = Math.PI / 2;
+        this.controls.minAzimuthAngle = -Infinity;
+        this.controls.maxAzimuthAngle = Infinity;
+      }
+
       this.camera.orthographicCamera.updateProjectionMatrix();
       this.controls.update();
     } catch (error) {
@@ -58,6 +155,12 @@ export default class Controls {
       position: this.camera.orthographicCamera.position.toArray(),
       target: this.controls.target.toArray(),
       zoom: this.camera.orthographicCamera.zoom,
+      is2D: this.is2D,
+      saved3DState: this.saved3DState ? {
+        position: this.saved3DState.position.toArray(),
+        target: this.saved3DState.target.toArray(),
+        zoom: this.saved3DState.zoom
+      } : null
     };
 
     window.localStorage.setItem("cameraState", JSON.stringify(state));
