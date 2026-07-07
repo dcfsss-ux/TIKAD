@@ -33,7 +33,7 @@
   font-weight: 800;
   line-height: 1;
   display: block;
-  background: linear-gradient(135deg, #009900, #f9dc07);
+  background: linear-gradient(135deg, #009900, #EDDD53);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -171,7 +171,11 @@
 }
 
 .how .section-eyebrow {
-  color: #f9dc07;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
 }
 
 .how .section-title {
@@ -200,7 +204,7 @@
   font-weight: 800;
   line-height: 1;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #33bb33, #f9dc07);
+  background: linear-gradient(135deg, #33bb33, #EDDD53);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

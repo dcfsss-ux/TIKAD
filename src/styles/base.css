@@ -34,7 +34,8 @@
   --text-dark: #1a1a1a;
   --text-mid: #333333;
   --text-soft: #4d4d4d;
-  --gold: #f9dc07;
+  --gold: #EDDD53;
+  --gold-gradient: linear-gradient(90deg, rgba(237, 221, 83, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(237, 221, 83, 1) 100%);
   --orange: #ff9900;
 }
 
@@ -90,9 +91,9 @@ section {
   background: linear-gradient(90deg,
       transparent,
       #009900,
-      #f9dc07,
-      #ff9900,
-      #f9dc07,
+      #EDDD53,
+      #ffffff,
+      #EDDD53,
       #009900,
       transparent);
   background-size: 200% 100%;
@@ -101,7 +102,7 @@ section {
 
 /* ── ᜄᜒᜌ GRADIENT TEXT ── */
 .giya-gradient {
-  background: linear-gradient(135deg, #f9dc07 0%, #fffce6 100%);
+  background: var(--gold-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

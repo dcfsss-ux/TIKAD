@@ -15,79 +15,260 @@ import Experience from '../../Experience/Experience.js';
 // Run the app, open the console and look for the logged mesh names after load.
 const BUILDING_DATA = {
   "masawa_building": {
-    name: "Masawa Building", type: "Academic Building", emoji: "🏫",
+    name: "Masawa Building", shortName: "Masawa", type: "Academic Building", emoji: "🏫",
     image: "/images/masawa.jpg",
     logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, rgba(139, 69, 19, 0.75) 0%, #ffffff 100%)",
-    desc: "Home to several academic departments offering undergraduate and graduate programs.",
+    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
+    desc: "Houses the College of Computing and Information Sciences (CCIS), offering undergraduate programs in Computer Science, Information Technology, and related fields. Equipped with modern computer labs and development studios.",
     depts: [
-      { icon: "📐", name: "College of Engineering", sub: "Floors 1–3" },
-      { icon: "💻", name: "Dept. of Computer Science", sub: "Floor 2" },
+      { icon: "💻", name: "College of Computing & Information Sciences", sub: "All Floors" },
+      { icon: "🖥️", name: "Computer Labs 1–4", sub: "Floors 1–2" },
+      { icon: "🔐", name: "IT Resource Center", sub: "Floor 3" },
     ],
-    contact: { phone: "(000) 000-0001", email: "masawa@csu.edu.ph" }
+    contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
   },
   "hinang_building": {
-    name: "Hinang Building", type: "Academic Building", emoji: "🏛",
+    name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
     image: "/images/hinang.jpg",
     logo: "/images/logo cegs.jpg",
-    gradient: "linear-gradient(135deg, rgba(128, 0, 0, 0.75) 0%, #ffffff 100%)",
-    desc: "Dedicated to the College of Arts and Sciences with modern lecture halls.",
+    gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)",
+    desc: "Home of the College of Engineering and Geosciences (CEGS), providing programs in Civil, Electrical, and Mechanical Engineering. Features laboratories, drafting rooms, and workshops for hands-on technical education.",
     depts: [
-      { icon: "🎨", name: "College of Arts & Sciences", sub: "All Floors" },
-      { icon: "📖", name: "Dept. of Humanities", sub: "Floor 1" },
+      { icon: "⚙️", name: "College of Engineering & Geosciences", sub: "All Floors" },
+      { icon: "🏗️", name: "Civil Engineering Lab", sub: "Ground Floor" },
+      { icon: "⚡", name: "Electrical Engineering Lab", sub: "Floor 2" },
+      { icon: "🔧", name: "Mechanical Workshop", sub: "Floor 3" },
     ],
-    contact: { phone: "(000) 000-0002", email: "hinang@csu.edu.ph" }
+    contact: { phone: "(085) 341-2322", email: "cegs@csu.edu.ph" }
   },
   "kinaadman_hall": {
-    name: "Kinaadman Hall", type: "Academic Hall", emoji: "🎓",
+    name: "Kinaadman Hall", shortName: "Kinaadman", type: "Academic Hall", emoji: "🎓",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, rgba(128, 0, 128, 0.75) 0%, #ffffff 100%)",
-    desc: "Main academic hall for knowledge and learning. Houses the university library annex and research offices.",
+    gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)",
+    desc: "Named after the Bisaya word for knowledge, Kinaadman Hall is the intellectual hub of the campus. It houses the College of Humanities, Arts, and Social Sciences (CHASS) alongside the University Research Center.",
     depts: [
-      { icon: "📚", name: "Library Annex", sub: "Ground Floor" },
-      { icon: "🔬", name: "Research & Development Office", sub: "Floor 2" },
+      { icon: "📚", name: "College of Humanities, Arts & Social Sciences", sub: "Floors 1–3" },
+      { icon: "🔬", name: "University Research Center", sub: "Floor 4" },
+      { icon: "📖", name: "Library Annex", sub: "Ground Floor" },
     ],
-    contact: { phone: "(000) 000-0003", email: "kinaadman@csu.edu.ph" }
+    contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
   },
   "hiraya_building": {
-    name: "Hiraya Building", type: "Academic Building", emoji: "🌟",
+    name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, rgba(255, 140, 0, 0.75) 0%, #ffffff 100%)",
-    desc: "Dedicated to creative and performing arts with studios, rehearsal rooms, and exhibition spaces.",
+    gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)",
+    desc: "The Hiraya Building supports the College of Agriculture and Natural Resources (CANR) and the College of Fisheries. It offers programs and research facilities centered on sustainable agriculture, aquaculture, and environmental science.",
     depts: [
-      { icon: "🎭", name: "College of Fine Arts", sub: "Floors 1–2" },
-      { icon: "🎵", name: "Music Department", sub: "Floor 3" },
+      { icon: "🌾", name: "College of Agriculture & Natural Resources", sub: "Floors 1–2" },
+      { icon: "🐟", name: "College of Fisheries", sub: "Floor 3" },
+      { icon: "🧪", name: "Agricultural Science Labs", sub: "Ground Floor" },
     ],
-    contact: { phone: "(000) 000-0004", email: "hiraya@csu.edu.ph" }
+    contact: { phone: "(085) 341-2324", email: "canr@csu.edu.ph" }
   },
   "batok_hall": {
-    name: "Batok Hall", type: "Multi-Purpose Hall", emoji: "🏟",
+    name: "Batok Hall", shortName: "Batok", type: "Multi-Purpose Hall", emoji: "🏟",
     image: "/images/batok.jpg",
     logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, rgba(255, 0, 0, 0.75) 0%, #ffffff 100%)",
-    desc: "A large multi-purpose venue for convocations, university events, and assemblies.",
+    gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)",
+    desc: "The primary venue for university-wide events, convocations, commencement ceremonies, and large-scale student activities. Batok Hall seats over 1,000 people and is equipped with full audio-visual systems.",
     depts: [
       { icon: "🏢", name: "Events & Facilities Office", sub: "Ground Floor" },
-      { icon: "🎤", name: "University Auditorium", sub: "Main Hall" },
+      { icon: "🎤", name: "Main Auditorium", sub: "Main Hall" },
+      { icon: "🎪", name: "Student Activity Center", sub: "Side Wing" },
     ],
-    contact: { phone: "(000) 000-0005", email: "batokevents@csu.edu.ph" }
+    contact: { phone: "(085) 341-2325", email: "events@csu.edu.ph" }
   },
   "new_administrative_bldg": {
-    name: "New Admin Building", type: "Administration", emoji: "🏢",
+    name: "New Admin Building", shortName: "Admin", type: "Administration", emoji: "🏢",
     image: "/images/new admin.jpeg",
     logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, rgba(0, 128, 0, 0.75) 0%, #ffffff 100%)",
-    desc: "Central hub for all administrative services including registrar, finance, and student affairs.",
+    gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)",
+    desc: "The central hub for all administrative operations of Caraga State University. Houses the Office of the President, University Registrar, Finance Division, and student support services. One-stop for all official university transactions.",
     depts: [
-      { icon: "📋", name: "Registrar's Office", sub: "Ground Floor" },
-      { icon: "💰", name: "Finance & Accounting", sub: "Floor 2" },
-      { icon: "👥", name: "Student Affairs Office", sub: "Floor 3" },
-      { icon: "🎓", name: "Office of the President", sub: "Floor 4" },
+      { icon: "🎓", name: "Office of the University President", sub: "Floor 4" },
+      { icon: "📋", name: "University Registrar's Office", sub: "Ground Floor" },
+      { icon: "💰", name: "Finance & Accounting Division", sub: "Floor 2" },
+      { icon: "👥", name: "Student Affairs & Services", sub: "Floor 3" },
+      { icon: "📢", name: "Public Information Office", sub: "Floor 1" },
     ],
-    contact: { phone: "(000) 000-0006", email: "admin@csu.edu.ph" }
+    contact: { phone: "(085) 341-2300", email: "admin@csu.edu.ph" }
   },
+  "state-of-the-art-library": {
+    name: "State-of-the-Art Library", shortName: "Library", type: "Library / Learning Hub", emoji: "📖",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
+    desc: "Caraga State University's main campus library. Houses vast print collections, multimedia centers, digital learning lounges, research archives, and open study areas for all student levels.",
+    depts: [
+      { icon: "📚", name: "Circulation & Reference Section", sub: "Floor 1" },
+      { icon: "🖥️", name: "E-Library & Multimedia Lounge", sub: "Floor 2" },
+      { icon: "🔍", name: "Graduate Research Section", sub: "Floor 3" }
+    ],
+    contact: { phone: "(085) 341-2350", email: "library@csu.edu.ph" }
+  },
+  "kalinaw_hall": {
+    name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)",
+    desc: "Acts as the university's prime guest facility, lodging services, and executive seminar workspace, providing high-quality hospitality accommodations for visiting scholars and events.",
+    depts: [
+      { icon: "🛏️", name: "Guest Suites & Dormitories", sub: "Floors 2–3" },
+      { icon: "🎙️", name: "Executive Seminar Rooms", sub: "Floor 1" },
+      { icon: "☕", name: "Social & Catering Services", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2361", email: "kalinaw@csu.edu.ph" }
+  },
+  "csu_student_center": {
+    name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
+    desc: "The nerve center for all student activities, student government leadership meetings, publications, and student welfare services.",
+    depts: [
+      { icon: "⚖️", name: "University Student Council Office", sub: "Floor 2" },
+      { icon: "📰", name: "Gold Collar Publications", sub: "Floor 2" },
+      { icon: "🎭", name: "Organization Workspaces", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2370", email: "studentcenter@csu.edu.ph" }
+  },
+  "ced_building": {
+    name: "CED Building", shortName: "CED", type: "Academic Building", emoji: "🏫",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo cegs.jpg",
+    gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)",
+    desc: "Houses the College of Education (CED). Dedicated to training and preparing the next generation of educators, instructors, and specialists.",
+    depts: [
+      { icon: "🍎", name: "Elementary & Secondary Education", sub: "Floor 1" },
+      { icon: "🏃", name: "Physical Education Department", sub: "Floor 2" },
+      { icon: "📖", name: "Professional Education Department", sub: "Floor 3" }
+    ],
+    contact: { phone: "(085) 341-2330", email: "ced@csu.edu.ph" }
+  },
+  "caa_building": {
+    name: "CAA Building", shortName: "CAA", type: "Academic Building", emoji: "🌾",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo cegs.jpg",
+    gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)",
+    desc: "College of Agriculture and Forestry. Equipped with laboratories for soil studies, plant sciences, and research spaces supporting campus agricultural farms.",
+    depts: [
+      { icon: "🌱", name: "Agricultural Science Dept", sub: "Floor 1" },
+      { icon: "🌲", name: "Forestry & Silviculture Section", sub: "Floor 2" }
+    ],
+    contact: { phone: "(085) 341-2340", email: "caa@csu.edu.ph" }
+  },
+  "dost": {
+    name: "DOST Building", shortName: "DOST", type: "Research Center", emoji: "🔬",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #0f2c59 0%, #205090 100%)",
+    desc: "Department of Science and Technology research center. Hosts joint innovation labs, meteorological research units, and regional development initiatives.",
+    depts: [
+      { icon: "🔬", name: "CSU-DOST Regional Laboratory", sub: "Floor 1" },
+      { icon: "🛰️", name: "Geospatial Research Center", sub: "Floor 2" }
+    ],
+    contact: { phone: "(085) 341-2390", email: "dost@csu.edu.ph" }
+  },
+  "food_innovation_center": {
+    name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo cegs.jpg",
+    gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)",
+    desc: "Dedicated to local food technology development, offering testing laboratories and processing machinery for food scientists and agricultural graduates.",
+    depts: [
+      { icon: "🧪", name: "Food Testing Lab", sub: "Floor 1" },
+      { icon: "⚙️", name: "Product Development Wing", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2388", email: "fic@csu.edu.ph" }
+  },
+  "hostel": {
+    name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)",
+    desc: "Campus hostel facility providing lodging services, conference spaces, and visitor suites for incoming guests and scholars.",
+    depts: [
+      { icon: "🛏️", name: "Guest Accommodations", sub: "Floors 1–2" },
+      { icon: "🍽️", name: "Lobby Dining area", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2365", email: "hostel@csu.edu.ph" }
+  },
+  "school_of_medicine_(_under_cons_)": {
+    name: "School of Medicine", shortName: "Medicine", type: "Under Construction", emoji: "🏥",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)",
+    desc: "Future campus building dedicated to the upcoming College of Medicine, designed to house advanced clinical laboratories and simulation classrooms.",
+    depts: [
+      { icon: "🏗️", name: "Construction Site - Under Development", sub: "N/A" }
+    ],
+    contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
+  },
+  "university_gymnasium_(under_cons)": {
+    name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)",
+    desc: "Future state-of-the-art sports arena for university athletics, concerts, cultural pageants, and campus gatherings.",
+    depts: [
+      { icon: "🏗️", name: "Construction Site - Under Development", sub: "N/A" }
+    ],
+    contact: { phone: "(085) 341-2300", email: "gym.project@csu.edu.ph" }
+  },
+  "old_administrative_building": {
+    name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", type: "Academic Support", emoji: "🏢",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
+    desc: "The legacy administrative center, now housing auxiliary units, faculty offices, and legacy records departments.",
+    depts: [
+      { icon: "📦", name: "Auxiliary Records Office", sub: "Floor 1" },
+      { icon: "👥", name: "Faculty Lounge & Offices", sub: "Floor 2" }
+    ],
+    contact: { phone: "(085) 341-2305", email: "oldadmin@csu.edu.ph" }
+  },
+  "alumni_office": {
+    name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
+    desc: "Mainquarters for the CSU Alumni Association, managing alumni databases, networking, and annual reunions.",
+    depts: [
+      { icon: "👥", name: "Alumni Relations Desk", sub: "Floor 1" },
+      { icon: "🏆", name: "Alumni Heritage Hall", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2311", email: "alumni@csu.edu.ph" }
+  },
+
+  // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
+  "bbc_cafeteria": { name: "BBC Cafeteria", shortName: "Cafeteria", interactive: false },
+  "canteen": { name: "Main Canteen", shortName: "Canteen", interactive: false },
+  "ced_canteen": { name: "CED Canteen", shortName: "Canteen", interactive: false },
+  "caa_canteen": { name: "CAA Canteen", shortName: "Canteen", interactive: false },
+  "overpass": { name: "Campus Overpass", shortName: "Overpass", interactive: false },
+  "guard_house": { name: "Guard House", shortName: "Guard House", interactive: false },
+  "guard_house001": { name: "Guard House", shortName: "Guard House", interactive: false },
+
+  "harrison_statue": { name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
+  "ochoa_statue": { name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
+  "green_house": { name: "Green House", shortName: "Green House", interactive: false },
+  "micoriza_green_house": { name: "Micoriza Green House", shortName: "Green House", interactive: false },
+  "church": { name: "Campus Chapel", shortName: "Chapel", interactive: false },
+  "eco_park_building": { name: "Eco Park", shortName: "Eco Park", interactive: false },
+  "reservoir": { name: "Water Reservoir", shortName: "Reservoir", interactive: false },
+  "mrf": { name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
+  "feedmill": { name: "Feedmill", shortName: "Feedmill", interactive: false },
+  "milk_processing_facility": { name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
+  "da_dairy_processing_center": { name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
+  "caretaker_house": { name: "Caretaker House", shortName: "Caretaker House", interactive: false },
+  "beef_cattle_building": { name: "Beef Cattle Shed", shortName: "Cattle Building", interactive: false },
+  "barn_house": { name: "Barn House", shortName: "Barn House", interactive: false },
+  "goat_house": { name: "Goat House", shortName: "Goat House", interactive: false },
+  "sheep_house": { name: "Sheep House", shortName: "Sheep House", interactive: false },
+  "agro-forestry_shed": { name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
+  "wood_workshoptech_voc_building": { name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false }
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -113,15 +294,6 @@ export function openMapOverlay() {
   requestAnimationFrame(() => requestAnimationFrame(() => {
     overlay.style.opacity = '1';
   }));
-
-  // If the model is still loading when the user opens the map, show the preloader
-  if (!worldReady) {
-    const preloader = document.getElementById('tikad-preloader');
-    if (preloader) {
-      preloader.classList.remove('hidden');
-      preloader.style.opacity = '1';
-    }
-  }
 }
 
 export function closeMapOverlay() {
@@ -141,25 +313,37 @@ function _bootExperience() {
 
   experience = new Experience(canvas);
 
-  // Preloader progress
-  const progEl = document.getElementById('loading-progress');
-  if (experience.resources && progEl) {
-    experience.resources.loadingManager?.onProgress?.( // fallback — Resources class emits ready
-      (url, loaded, total) => {
-        progEl.textContent = Math.round((loaded / total) * 100);
-      }
-    );
+  // ── Wire up progress to new preloader bar + pct ──────────────────────────
+  const barEl  = document.getElementById('preloader-bar');
+  const pctEl  = document.getElementById('loading-progress');
+
+  function _setProgress(pct) {
+    const clamped = Math.min(100, Math.max(0, Math.round(pct)));
+    if (barEl) barEl.style.width = clamped + '%';
+    if (pctEl) pctEl.textContent  = clamped + '%';
+  }
+
+  if (experience.resources) {
+    const mgr = experience.resources.loadingManager;
+    if (mgr) {
+      mgr.onProgress = (_url, loaded, total) => {
+        if (total > 0) _setProgress((loaded / total) * 100);
+      };
+    }
   }
 
   experience.world.on('worldready', () => {
     worldReady = true;
+    _setProgress(100);
 
-    // Hide preloader
+    // Hide preloader with a short delay so the bar reaches 100% visually
     const preloader = document.getElementById('tikad-preloader');
     if (preloader) {
-      preloader.style.transition = 'opacity 0.6s ease';
-      preloader.style.opacity = '0';
-      setTimeout(() => preloader.classList.add('hidden'), 700);
+      setTimeout(() => {
+        preloader.style.transition = 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)';
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.classList.add('hidden'), 750);
+      }, 400);
     }
 
     // Index all meshes from the GLB
@@ -187,11 +371,13 @@ function _buildChips() {
   if (!bar) return;
   bar.innerHTML = '';
   Object.entries(BUILDING_DATA).forEach(([key, data]) => {
+    // Only display interactive buildings in the directory list
+    if (data.interactive === false) return;
+
     const btn = document.createElement('button');
     btn.className = 'cat-btn';
-    btn.textContent = data.name.split(' ')[0];
+    btn.textContent = data.shortName || data.name.split(' ')[0];
     btn.title = data.name;
-    btn.style.cssText = 'pointer-events:all;font-size:12px;padding:6px 14px;';
     btn.addEventListener('click', () => {
       _selectBuilding(key, true);
       // sync search input
@@ -215,8 +401,8 @@ function _selectBuilding(key, openPanel = true) {
   if (mesh) {
     activeMesh = mesh;
     const mat = mesh.material.clone();
-    if (mat.color) mat.color.setHex(0xffff00);
-    if (mat.emissive) { mat.emissive.setHex(0xffff00); mat.emissiveIntensity = 1.2; }
+    if (mat.color) mat.color.setHex(0xeddd53);
+    if (mat.emissive) { mat.emissive.setHex(0xeddd53); mat.emissiveIntensity = 1.2; }
     mesh.material = mat;
   } else {
     console.warn(`No mesh found for "${key}". Available keys:`, Object.keys(meshIndex));
@@ -226,6 +412,11 @@ function _selectBuilding(key, openPanel = true) {
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => {
     b.classList.toggle('active-cat', b.title === BUILDING_DATA[key]?.name);
   });
+
+  // Glow the matching 3D pin label
+  pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
+  const activePin = pinList.find(p => p.key === key);
+  if (activePin) activePin.el.querySelector('.pin-label')?.classList.add('active-pin');
 
   if (openPanel) _openPanel(key);
 }
@@ -245,6 +436,7 @@ function _resetHighlight() {
 function _openPanel(key) {
   const data = BUILDING_DATA[key];
   if (!data) return;
+  if (data.interactive === false) return; // Static landmarks — no panel
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
@@ -357,20 +549,31 @@ function _createPins() {
 
     const el = document.createElement('div');
     el.className = 'bldg-pin';
-    el.style.cssText = 'position:absolute;transform:translate(-50%,-100%);cursor:pointer;pointer-events:all;text-align:center;z-index:5;';
-    el.innerHTML = `
-      <div class="pin-ring"></div>
-      <div class="pin-dot"></div>
-      <div class="pin-label">${data.name.split(' ')[0]}</div>
-    `;
+    
+    const isInteractive = data.interactive !== false;
+    
+    if (isInteractive) {
+      el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
+      el.innerHTML = `
+        <div class="pin-label">${data.abbrev || data.shortName || data.name.split(' ')[0]}</div>
+      `;
 
-    el.addEventListener('click', () => {
-      pinList.forEach(p => p.el.querySelector('.pin-dot')?.classList.remove('active-pin'));
-      el.querySelector('.pin-dot')?.classList.add('active-pin');
-      const input = document.getElementById('map-search');
-      if (input) input.value = data.name;
-      _selectBuilding(key, true);
-    });
+      el.addEventListener('click', () => {
+        // Remove active state from all pins
+        pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
+        // Add active state to clicked pin
+        el.querySelector('.pin-label')?.classList.add('active-pin');
+        const input = document.getElementById('map-search');
+        if (input) input.value = data.name;
+        _selectBuilding(key, true);
+      });
+    } else {
+      // Non-interactive / static labels (e.g. Canteens, ATMs, Chapels)
+      el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
+      el.innerHTML = `
+        <div class="pin-label-static">${data.shortName || data.name}</div>
+      `;
+    }
 
     container.appendChild(el);
     pinList.push({ key, worldPos, el });
@@ -396,9 +599,11 @@ function _updatePins() {
 
 function _handleSearch(query) {
   if (!query.trim()) return;
+  // Only search interactive buildings
   const key = Object.keys(BUILDING_DATA).find(k =>
-    k.includes(query.toLowerCase()) ||
-    BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase())
+    BUILDING_DATA[k].interactive !== false &&
+    (k.includes(query.toLowerCase()) ||
+    BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
   );
   if (key) {
     _selectBuilding(key, true);
@@ -413,8 +618,10 @@ function _buildDropdown(query) {
   if (!dd) return;
   if (!query.trim()) { dd.style.display = 'none'; return; }
 
+  // Only show interactive buildings in the search dropdown
   const matches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
-    k.includes(query.toLowerCase()) || b.name.toLowerCase().includes(query.toLowerCase())
+    b.interactive !== false &&
+    (k.includes(query.toLowerCase()) || b.name.toLowerCase().includes(query.toLowerCase()))
   );
 
   if (!matches.length) { dd.style.display = 'none'; return; }
@@ -422,12 +629,11 @@ function _buildDropdown(query) {
   dd.innerHTML = matches.map(([key, b]) => `
     <div
       data-key="${key}"
-      style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f3f4f6;font-size:13px;color:#1a1a2e;"
-      onmouseover="this.style.background='#e6ffe6'"
-      onmouseout="this.style.background='#fff'"
+      class="search-dropdown-item"
     >
-      ${b.name}
-      <span style="margin-left:auto;font-size:11px;color:#9ca3af;">${b.type}</span>
+      <span>${b.emoji || '🏛'}</span>
+      <span>${b.name}</span>
+      <span class="search-dropdown-item-type">${b.type || ''}</span>
     </div>`).join('');
 
   // click handler per result
