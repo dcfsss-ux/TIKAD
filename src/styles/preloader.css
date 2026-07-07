@@ -2,52 +2,151 @@
 
 .hidden { display: none !important; }
 
+/* ── Overlay ────────────────────────────────────────────────────────────── */
 .preloader {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background: linear-gradient(160deg, #003300 0%, #005500 60%, #009900 100%);
+  background: #050f05;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.preloader-wrapper {
+/* Radial ambient glow behind the logo */
+.preloader-bg-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0, 120, 0, 0.28) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Content wrapper ─────────────────────────────────────────────────────── */
+.preloader-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 28px;
 }
 
-.loading {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+/* ── Logo + spinning ring ────────────────────────────────────────────────── */
+.preloader-logo-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  /* No flex here — all children are absolutely positioned independently */
 }
 
-.loader {
-  width: 56px;
-  height: 56px;
-  animation: spin 2s linear infinite;
-  filter: brightness(0) invert(1) opacity(0.9);
+/* Absolute SVG ring behind the logo */
+.preloader-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+/* The gold arc animates from 0 → full */
+.preloader-ring-arc {
+  transform-origin: 60px 60px;
+  transform: rotate(-90deg);
+  animation: arc-fill 2s ease-out forwards;
+  filter: drop-shadow(0 0 6px rgba(237, 221, 83, 0.66));
 }
 
-.loading-progress {
-  font-family: 'DM Serif Display', serif;
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: #f9dc07;
+@keyframes arc-fill {
+  0%   { stroke-dashoffset: 340; opacity: 0.6; }
+  60%  { stroke-dashoffset: 80;  opacity: 1; }
+  100% { stroke-dashoffset: 0;   opacity: 1; }
+}
+
+/* Inner circle behind the baybayin text */
+.preloader-logo-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #005500, #001a00);
+  border: 1.5px solid rgba(237, 221, 83, 0.25);
+  box-shadow:
+    0 0 24px rgba(0, 100, 0, 0.5),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  animation: logo-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 150, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05); }
+  50%       { box-shadow: 0 0 36px rgba(0, 200, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
+}
+
+/* Baybayin script character — absolutely centered, offset for Tagalog font ascenders */
+.preloader-baybayin {
+  font-family: 'Noto Sans Tagalog', sans-serif;
+  font-size: 22px;
   line-height: 1;
+  color: #EDDD53;
+  text-shadow: 0 0 12px rgba(237, 221, 83, 0.6);
+  user-select: none;
+  animation: baybayin-glow 2.8s ease-in-out infinite;
+  /* Absolute positioning independent of font metrics */
+  position: absolute;
+  left: 50%;
+  /* Noto Sans Tagalog glyphs sit in the TOP of their bounding box.
+     Position element top at center, then pull up only half the
+     element height so the glyph visually lands in the circle center. */
+  top: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+@keyframes baybayin-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(237, 221, 83, 0.5); }
+  50%       { text-shadow: 0 0 20px rgba(237, 221, 83, 0.9), 0 0 40px rgba(237, 221, 83, 0.3); }
+}
+
+/* ── Label text ──────────────────────────────────────────────────────────── */
+.preloader-label {
+  font-family: 'Inter', 'DM Serif Display', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+}
+
+/* ── Progress bar ────────────────────────────────────────────────────────── */
+.preloader-bar-wrap {
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.preloader-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #009900 0%, #EDDD53 70%, #ffffff 85%, #EDDD53 100%);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+  box-shadow: 0 0 8px rgba(237, 221, 83, 0.5);
+}
+
+/* ── Percentage counter ──────────────────────────────────────────────────── */
+.preloader-pct {
+  font-family: 'Inter', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(237, 221, 83, 0.75);
   min-width: 3ch;
   text-align: center;
 }
-
-/* ── 3D Map Pin Markers ──────────────────────────────────────────────────── */
-#mapPins .bldg-pin .pin-dot  { transition: background 0.2s, transform 0.2s; }
-#mapPins .bldg-pin:hover .pin-dot { transform: scale(1.4); background: #f9dc07; }
-#mapPins .bldg-pin .active-pin    { background: #f9dc07 !important; }

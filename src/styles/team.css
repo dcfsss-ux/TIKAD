@@ -75,7 +75,11 @@
 }
 
 .team-supervisor .member-role {
-  color: #f9dc07;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
 }
 
 .team-supervisor .member-name {
@@ -94,9 +98,9 @@
 }
 
 .team-supervisor .team-tag {
-  background: rgba(249, 220, 7, 0.12);
-  border: 1px solid rgba(249, 220, 7, 0.25);
-  color: #f9dc07;
+  background: rgba(237, 221, 83, 0.12);
+  border: 1px solid rgba(237, 221, 83, 0.25);
+  color: #EDDD53;
   padding: 4px 12px;
   border-radius: 12px;
   font-size: 11px;
@@ -109,7 +113,7 @@
   font-size: 44px;
   margin-top: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(249, 220, 7, 0.35);
+  box-shadow: 0 8px 32px rgba(237, 221, 83, 0.35);
 }
 
 /* ── CAROUSEL ── */
@@ -250,7 +254,7 @@
   padding: 28px 24px;
   text-align: center;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border-top: 3px solid #f9dc07;
+  border-top: 3px solid #EDDD53;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
 }
 
@@ -453,22 +457,22 @@
 
 /* Yellow theme */
 .intern-card-yellow {
-  border-top: 4px solid #f9dc07;
+  border-top: 4px solid #EDDD53;
 }
 .intern-card-yellow .intern-card-bg-glow {
   background: linear-gradient(135deg, #fffde6, transparent);
 }
 .intern-card-yellow .intern-card-avatar {
-  background: linear-gradient(135deg, #fffde6, #f9dc07);
-  box-shadow: 0 4px 16px rgba(249, 220, 7, 0.25);
+  background: linear-gradient(135deg, #fffde6, #EDDD53);
+  box-shadow: 0 4px 16px rgba(237, 221, 83, 0.25);
 }
 .intern-card-yellow .intern-card-title-meta {
-  color: #b8970a;
+  color: #a88907;
 }
 .intern-card-yellow .intern-card-tag {
   background: #fffde6;
-  color: #7a6200;
-  border: 1px solid #f9dc07;
+  color: #705b00;
+  border: 1px solid #EDDD53;
 }
 
 /* Orange theme */

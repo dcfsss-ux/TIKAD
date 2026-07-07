@@ -79,15 +79,19 @@ nav.scrolled {
   background: #003300;
 }
 
-/* ── NAV CTA pulse ring ── */
+/* ── NAV CTA hover glow (removed infinite pulse ring) ── */
 .nav-cta::after {
   content: '';
   position: absolute;
   inset: -4px;
   border-radius: 12px;
-  border: 2px solid #009900;
+  border: 2px solid rgba(0, 153, 0, 0.5);
   opacity: 0;
-  animation: ring-pulse 2.5s ease-out infinite;
+  transition: opacity 0.3s;
+}
+
+.nav-cta:hover::after {
+  opacity: 1;
 }
 
 /* Mobile menu button toggle */
