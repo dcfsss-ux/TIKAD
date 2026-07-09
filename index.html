@@ -1155,28 +1155,26 @@
   <div id="map-overlay">
     <!-- Inner container -->
     <div class="map-overlay-inner">
-      <!-- Search Bar -->
+      <!-- Search Bar — floats top-left -->
       <div class="map-search-wrap">
-        <div class="search-and-toggle-container">
-          <div class="search-input-group">
-            <span class="map-search-icon">🔍</span>
-            <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
-            <div id="search-dropdown"></div>
-          </div>
-          <div class="view-toggle-segmented">
-            <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
-              <span class="view-toggle-icon">🌐</span>
-              <span class="view-toggle-text">3D View</span>
-            </button>
-            <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
-              <span class="view-toggle-icon">🗺️</span>
-              <span class="view-toggle-text">2D View</span>
-            </button>
-          </div>
-          <button id="map-close-btn" class="map-close-btn" aria-label="Close map" title="Close map">
-            ×
+        <span class="map-search-icon">🔍</span>
+        <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
+        <div id="search-dropdown"></div>
+      </div>
+
+      <!-- View Toggle + Close — floats top-right -->
+      <div class="map-controls-wrap">
+        <div class="view-toggle-segmented">
+          <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
+            <span class="view-toggle-icon">🌐</span>
+            <span class="view-toggle-text">3D</span>
+          </button>
+          <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
+            <span class="view-toggle-icon">🗺️</span>
+            <span class="view-toggle-text">2D</span>
           </button>
         </div>
+        <button id="map-close-btn" class="map-close-btn" aria-label="Close map" title="Close map">×</button>
       </div>
 
       <!-- Map Body: canvas + info panel -->
@@ -1210,18 +1208,16 @@
 
         <!-- ── Building Info Panel ── -->
         <div id="info-panel">
-          <div class="panel-header">
-            <div class="panel-header-left">
-              <div class="panel-icon-wrap" id="panel-icon">🏛</div>
+          <button class="panel-close-btn" id="panel-close-btn">×</button>
+          <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
+            <div class="panel-img-icon" id="panel-img-icon">🏛</div>
+            <div class="panel-img-overlay">
+              <div class="panel-img-logo" id="panel-icon"></div>
               <div>
                 <div class="panel-name" id="panel-name">Select a Building</div>
                 <div class="panel-type" id="panel-type">Click a pin on the map</div>
               </div>
             </div>
-            <button class="panel-close-btn" id="panel-close-btn">×</button>
-          </div>
-          <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
-            <div class="panel-img-icon" id="panel-img-icon">🏛</div>
           </div>
           <div class="panel-body">
             <div class="panel-label">Description</div>

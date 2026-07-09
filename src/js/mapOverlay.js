@@ -359,6 +359,26 @@ function _bootExperience() {
     _buildChips();
     _createPins();
 
+    // ── Diagnostic: log bounding box sizes for all registered buildings ──
+    const _diagBox = new THREE.Box3();
+    const _diagSize = new THREE.Vector3();
+    Object.entries(BUILDING_DATA).forEach(([key, data]) => {
+      const mesh = meshIndex[key]
+        ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
+      if (mesh) {
+        _diagBox.setFromObject(mesh);
+        _diagBox.getSize(_diagSize);
+        const vol = _diagSize.x * _diagSize.y * _diagSize.z;
+        if (_diagSize.y < 0.15 || vol < 0.05) {
+          console.warn(`⚠️ TINY BUILDING: "${key}" (${data.shortName}) — size: ${_diagSize.x.toFixed(2)} × ${_diagSize.y.toFixed(2)} × ${_diagSize.z.toFixed(2)}, vol=${vol.toFixed(4)}`);
+        } else {
+          console.log(`📦 "${key}" — size: ${_diagSize.x.toFixed(2)} × ${_diagSize.y.toFixed(2)} × ${_diagSize.z.toFixed(2)}`);
+        }
+      } else {
+        console.warn(`❌ NO MESH for "${key}" (${data.shortName})`);
+      }
+    });
+
     // Pin position update every frame
     experience.time.on('update', _updatePins);
   });
@@ -440,25 +460,15 @@ function _openPanel(key) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  // Set the building header gradient dynamically
-  const headerEl = document.querySelector('.panel-header');
-  if (headerEl) {
-    if (data.gradient) {
-      headerEl.style.background = data.gradient;
-    } else {
-      headerEl.style.background = '';
-    }
-  }
-
-  // Set the building logo dynamically (uses image logo if available, otherwise emoji)
+  // Set the building logo in the image overlay
   const iconEl = document.getElementById('panel-icon');
   if (iconEl) {
     if (data.logo) {
-      iconEl.innerHTML = `<img src="${data.logo}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 4px;" />`;
+      iconEl.innerHTML = `<img src="${data.logo}" />`;
       iconEl.style.background = 'transparent';
     } else {
-      iconEl.textContent = '🏛';
-      iconEl.style.background = '#e6ffe6';
+      iconEl.textContent = data.emoji || '🏛';
+      iconEl.style.background = 'rgba(255,255,255,0.15)';
     }
   }
 
@@ -476,7 +486,6 @@ function _openPanel(key) {
     if (data.image) {
       imgEl.style.background = `url('${data.image}') center center / cover no-repeat`;
     } else {
-      // Fallback/Default image if none is specified
       imgEl.style.background = `url('/images/kinaadman.jpg') center center / cover no-repeat`;
     }
   }
@@ -522,10 +531,6 @@ function _closePanel() {
     panel.classList.add('panel-hidden');
     setTimeout(() => { panel.style.display = 'none'; }, 350);
   }
-  const headerEl = document.querySelector('.panel-header');
-  if (headerEl) {
-    headerEl.style.background = '';
-  }
   pinList.forEach(p => p.el.classList.remove('active-pin'));
   const input = document.getElementById('map-search');
   if (input) input.value = '';
@@ -545,7 +550,13 @@ function _createPins() {
       ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
 
     const worldPos = new THREE.Vector3();
-    if (mesh) { _box.setFromObject(mesh); _box.getCenter(worldPos); }
+    if (mesh) {
+      _box.setFromObject(mesh);
+      _box.getCenter(worldPos);
+      // Elevate the pin to float cleanly above the top of the building's bounding box
+      const height = _box.max.y - _box.min.y;
+      worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
+    }
 
     const el = document.createElement('div');
     el.className = 'bldg-pin';
@@ -576,7 +587,7 @@ function _createPins() {
     }
 
     container.appendChild(el);
-    pinList.push({ key, worldPos, el });
+    pinList.push({ key, worldPos, el, interactive: isInteractive });
   });
 }
 
@@ -585,10 +596,19 @@ function _updatePins() {
   const cam = experience.camera.orthographicCamera;
   const W = experience.sizes.width;
   const H = experience.sizes.height;
+  const zoom = cam.zoom;
 
-  pinList.forEach(({ worldPos, el }) => {
+  pinList.forEach(({ worldPos, el, interactive }) => {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
+    
+    // Zoom-based Level of Detail (LOD) filtering for static/non-interactive pins
+    if (!interactive && zoom < 0.85) {
+      el.style.display = 'none';
+      return;
+    }
+
+    el.style.display = '';
     el.style.visibility = 'visible';
     el.style.left = ((_projVec.x * 0.5 + 0.5) * W) + 'px';
     el.style.top = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
