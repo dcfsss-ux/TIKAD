@@ -25,96 +25,98 @@
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
 }
 
-/* ── SEARCH BAR ── */
+/* ── SEARCH BAR — compact pill, floats top-left ── */
 .map-search-wrap {
   position: absolute;
   top: 18px;
   left: 18px;
-  right: 18px;
   z-index: 50;
-  background: transparent;
-  padding: 0;
-  border-bottom: 0;
-  flex-shrink: 0;
-}
-
-.search-and-toggle-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-}
-
-.search-input-group {
-  position: relative;
-  flex: 1;
-  max-width: 480px;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(194, 222, 194, 0.45);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 51, 0, 0.08);
+  padding: 0 14px 0 12px;
+  min-width: 260px;
+  max-width: 400px;
 }
 
 #map-search {
-  width: 100%;
-  padding: 10px 16px 10px 38px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
+  flex: 1;
+  padding: 11px 10px 11px 6px;
+  border: none;
+  background: transparent;
   font-size: 14px;
   font-family: inherit;
-  background: #fff;
-  transition: border-color 0.2s;
   outline: none;
+  color: #003300;
+  min-width: 0;
 }
 
-#map-search:focus {
-  border-color: #009900;
+#map-search::placeholder {
+  color: #9ca3af;
 }
 
 .map-search-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px;
+  font-size: 15px;
+  flex-shrink: 0;
   pointer-events: none;
+  opacity: 0.6;
 }
 
 #search-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
-  margin-top: 4px;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 150;
   display: none;
   overflow: hidden;
 }
 
+/* ── VIEW TOGGLE + CLOSE — compact group, floats top-right ── */
+.map-controls-wrap {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* ── VIEW TOGGLE SEGMENTED ── */
 .view-toggle-segmented {
   display: flex;
-  background: #edf4ed;
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   padding: 3px;
   border-radius: 12px;
-  border: 1px solid #c2dec2;
-  flex-shrink: 0;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid rgba(194, 222, 194, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 51, 0, 0.08);
 }
 
 .view-toggle-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   border: none;
   background: transparent;
-  padding: 8px 16px;
+  padding: 7px 13px;
   border-radius: 9px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #4b6b4b;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
 }
 
@@ -126,53 +128,51 @@
   background: #fff;
   color: #008000;
   box-shadow:
-    0 4px 12px rgba(0, 51, 0, 0.12),
+    0 3px 10px rgba(0, 51, 0, 0.12),
     0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .view-toggle-icon {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .map-close-btn {
   flex-shrink: 0;
-  border: 1px solid #c2dec2;
-  background: #fff;
+  border: 1.5px solid rgba(194, 222, 194, 0.45);
+  background: rgba(255, 255, 255, 0.88);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   color: #003300;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 51, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 51, 0, 0.08);
   transition:
-    transform 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease;
 }
 
 .map-close-btn:hover {
-  background: #f5faf5;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 51, 0, 0.12);
+  background: rgba(240, 255, 240, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 51, 0, 0.14);
 }
 
 @media (max-width: 480px) {
-  .search-and-toggle-container {
-    gap: 8px;
-  }
-  .view-toggle-text {
-    display: none;
+  .map-search-wrap {
+    right: 18px;
+    max-width: none;
+    min-width: 0;
   }
 
-  .map-close-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    font-size: 17px;
+  .map-controls-wrap {
+    top: auto;
+    bottom: 60px;
+    right: 18px;
   }
 }
 
@@ -180,16 +180,14 @@
   .map-search-wrap {
     top: 12px;
     left: 12px;
-    right: 12px;
   }
 
-  #info-panel {
-    top: 86px;
+  .map-controls-wrap {
+    top: 12px;
     right: 12px;
-    left: 12px;
-    width: auto;
   }
 }
+
 
 /* ── MAP BODY (canvas + panel) ── */
 .map-body {
@@ -291,61 +289,94 @@
   pointer-events: none;
 }
 
-.panel-header {
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.panel-header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.panel-icon-wrap {
-  width: 36px;
-  height: 36px;
-  background: #e6ffe6;
-  border-radius: 8px;
+/* ── Close button — floats on top-right of panel ── */
+#info-panel .panel-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 25;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  line-height: 1;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: background 0.2s;
+}
+
+#info-panel .panel-close-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+/* ── Image area ── */
+.panel-img {
+  height: 140px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-img-icon {
+  font-size: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Name overlay on the image ── */
+.panel-img-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 14px 10px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.panel-img-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.panel-img-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
 }
 
 .panel-name {
   font-weight: 700;
   font-size: 14px;
-  color: #003300;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .panel-type {
   font-size: 11px;
-  color: #4d4d4d;
-}
-
-.panel-close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #9ca3af;
-  line-height: 1;
-  padding: 0 4px;
-}
-
-.panel-img {
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.panel-img-icon {
-  font-size: 40px;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .panel-body {
@@ -428,47 +459,32 @@
   flex-shrink: 0;
 }
 
-/* ── CHIPS BAR — transparent floating pills ── */
+/* ── CHIPS BAR — hidden (building selection via search + 3D pins) ── */
 #map-chips-bar {
-  position: absolute;
-  top: 72px;
+  display: none;
   left: 18px;
-  width: 360px;
-  max-height: calc(100% - 110px);
-  overflow-y: auto;
+  right: 18px;
+  width: auto;
+  max-width: calc(100% - 36px);
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-content: flex-start;
-  z-index: 10;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-content: center;
+  z-index: 45;
   pointer-events: all;
   background: transparent;
   border: none;
-  padding: 6px 0;
+  padding: 4px 0 10px 0;
   border-radius: 0;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   box-shadow: none;
-  scrollbar-width: none;
-  scrollbar-color: rgba(237, 221, 83, 0.3) transparent;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
 #map-chips-bar::-webkit-scrollbar {
-  height: 4px;
-}
-
-#map-chips-bar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#map-chips-bar::-webkit-scrollbar-thumb {
-  background: rgba(237, 221, 83, 0.3);
-  border-radius: 2px;
-}
-
-#map-chips-bar::-webkit-scrollbar-thumb:hover {
-  background: rgba(237, 221, 83, 0.5);
+  display: none; /* Hide scrollbar for Chrome/Safari/Edge */
 }
 
 #map-chips-bar .cat-btn {
@@ -635,4 +651,5 @@
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0.75;
 }
