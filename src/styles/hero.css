@@ -156,21 +156,51 @@
   justify-content: center;
 }
 
-/* ── 3D MODEL CONTAINER ── */
+/* ── 3D MODEL CONTAINER — live Three.js hero preview ── */
 #model-3d-container {
   width: 88%;
   aspect-ratio: 4/3;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  display: flex;
-  flex-direction: column;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
-  animation: float 5s ease-in-out infinite;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+  animation: none;
   position: relative;
   z-index: 1;
+  background: linear-gradient(135deg, #0a1a0a 0%, #0d2d0d 60%, #003300 100%);
+  cursor: grab;
+}
+
+#model-3d-container:active {
+  cursor: grabbing;
+}
+
+/* ── Loading shimmer overlay ── */
+.hero-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(255,255,255,0.0) 30%,
+    rgba(255,255,255,0.06) 50%,
+    rgba(255,255,255,0.0) 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.6s infinite linear;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  z-index: 2;
+}
+
+@keyframes shimmer-sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Hero badge stays above canvas ── */
+.hero-badge {
+  z-index: 5;
 }
 
 /* ── LEGACY HERO MOCK (fallback) ── */
