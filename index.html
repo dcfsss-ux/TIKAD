@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Baybayin font loaded early so the character renders on first paint -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tagalog&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
 
   <!--
     CRITICAL INLINE CSS — loaded before ANY external stylesheet or JS bundle.
@@ -19,12 +20,14 @@
   -->
   <style>
     /* Lock down the page colour before any bundle arrives */
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       background: #050f05;
       overflow: hidden;
     }
+
     /* Preloader shell — must match preloader.css so there's no jump */
     #tikad-preloader {
       position: fixed;
@@ -35,6 +38,7 @@
       align-items: center;
       justify-content: center;
     }
+
     /* Baybayin character — absolutely positioned inside the ring */
     .preloader-baybayin {
       font-family: 'Noto Sans Tagalog', sans-serif;
@@ -48,8 +52,9 @@
       z-index: 2;
       white-space: nowrap;
     }
+
     /* Keep everything else invisible until the bundle paints it */
-    body > *:not(#tikad-preloader) {
+    body>*:not(#tikad-preloader) {
       visibility: hidden;
     }
   </style>
@@ -69,8 +74,9 @@
           <span class="preloader-baybayin">ᜄᜒᜌ</span>
         </div>
         <svg class="preloader-ring-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="60" r="54" stroke="rgba(237,221,83,0.15)" stroke-width="2"/>
-          <circle class="preloader-ring-arc" cx="60" cy="60" r="54" stroke="#EDDD53" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="340" stroke-dashoffset="340"/>
+          <circle cx="60" cy="60" r="54" stroke="rgba(237,221,83,0.15)" stroke-width="2" />
+          <circle class="preloader-ring-arc" cx="60" cy="60" r="54" stroke="#EDDD53" stroke-width="2.5"
+            stroke-linecap="round" stroke-dasharray="340" stroke-dashoffset="340" />
         </svg>
       </div>
       <p class="preloader-label">Loading Campus Model</p>
@@ -1159,8 +1165,8 @@
     <div class="map-overlay-inner">
       <!-- Search Bar — floats top-left -->
       <div class="map-search-wrap">
-        <span class="map-search-icon">🔍</span>
-        <input id="map-search" type="text" placeholder="Search buildings, offices, facilities…" />
+        <span class="map-search-icon mdi mdi-magnify"></span>
+        <input id="map-search" type="text" placeholder="Search…" />
         <div id="search-dropdown"></div>
       </div>
 
@@ -1168,11 +1174,11 @@
       <div class="map-controls-wrap">
         <div class="view-toggle-segmented">
           <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
-            <span class="view-toggle-icon">🌐</span>
+            <span class="view-toggle-icon mdi mdi-webpack"></span>
             <span class="view-toggle-text">3D</span>
           </button>
           <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
-            <span class="view-toggle-icon">🗺️</span>
+            <span class="view-toggle-icon mdi mdi-map"></span>
             <span class="view-toggle-text">2D</span>
           </button>
         </div>
