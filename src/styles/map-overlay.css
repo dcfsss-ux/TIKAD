@@ -9,20 +9,21 @@
   transition: opacity 0.4s ease;
   align-items: stretch;
   justify-content: center;
-  padding: 24px;
+  padding: 0;
 }
 
 /* ── MAP INNER CONTAINER ── */
 .map-overlay-inner {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
-  max-width: 1100px;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  box-shadow: none;
 }
 
 /* ── SEARCH BAR — compact pill, floats top-left ── */
@@ -459,9 +460,8 @@
   flex-shrink: 0;
 }
 
-/* ── CHIPS BAR — hidden (building selection via search + 3D pins) ── */
+/* ── CHIPS BAR — building selection via search + 3D pins ── */
 #map-chips-bar {
-  display: none;
   left: 18px;
   right: 18px;
   width: auto;
@@ -652,4 +652,41 @@
   backdrop-filter: blur(2px);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   opacity: 0.75;
+}
+
+/* ── VIEW 3D MODEL BUTTON ── */
+.panel-view3d-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0d1117 0%, #1a2a1a 100%);
+  color: #4ade80;
+  border: 1.5px solid rgba(74, 222, 128, 0.35);
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    color 0.2s;
+}
+
+.panel-view3d-btn:hover {
+  background: linear-gradient(135deg, #1a2e1a 0%, #1f3a1f 100%);
+  border-color: rgba(74, 222, 128, 0.65);
+  color: #86efac;
+  box-shadow:
+    0 0 14px rgba(74, 222, 128, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.panel-view3d-btn:active {
+  transform: scale(0.98);
 }

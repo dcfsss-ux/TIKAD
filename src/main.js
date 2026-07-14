@@ -13,6 +13,7 @@ import './styles/team.css';
 import './styles/cta-footer.css';
 import './styles/map-overlay.css';
 import './styles/preloader.css';
+import './styles/building-viewer.css';
 
 // ── JS Module Imports ────────────────────────────────────────────
 import { initNav }          from './js/nav.js';
