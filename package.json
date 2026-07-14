@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "giya-csu-smart-campus",
   "version": "1.0.0",
   "description": "GIYA – CSU Smart Campus 3D Map Landing Page",
@@ -8,6 +9,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.4.1",
+    "@gltf-transform/extensions": "^4.4.1",
+    "gltfpack": "^1.2.0",
     "vite": "^5.2.0"
   },
   "dependencies": {
