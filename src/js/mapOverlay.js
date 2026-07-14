@@ -9,6 +9,7 @@
 
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
+import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
 
 // ── Building registry ─────────────────────────────────────────────────────────
 // Keys must match (lowercased, trimmed) mesh names exported in your GLB file.
@@ -32,6 +33,7 @@ const BUILDING_DATA = {
     image: "/images/hinang.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)",
+    model3d: "/models/hinang.draco.glb",
     desc: "Home of the College of Engineering and Geosciences (CEGS), providing programs in Civil, Electrical, and Mechanical Engineering. Features laboratories, drafting rooms, and workshops for hands-on technical education.",
     depts: [
       { icon: "⚙️", name: "College of Engineering & Geosciences", sub: "All Floors" },
@@ -46,6 +48,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)",
+    model3d: "/models/kinaadman.draco.glb",
     desc: "Named after the Bisaya word for knowledge, Kinaadman Hall is the intellectual hub of the campus. It houses the College of Humanities, Arts, and Social Sciences (CHASS) alongside the University Research Center.",
     depts: [
       { icon: "📚", name: "College of Humanities, Arts & Social Sciences", sub: "Floors 1–3" },
@@ -59,6 +62,7 @@ const BUILDING_DATA = {
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)",
+    model3d: "/models/hiraya.draco.glb",
     desc: "The Hiraya Building supports the College of Agriculture and Natural Resources (CANR) and the College of Fisheries. It offers programs and research facilities centered on sustainable agriculture, aquaculture, and environmental science.",
     depts: [
       { icon: "🌾", name: "College of Agriculture & Natural Resources", sub: "Floors 1–2" },
@@ -72,6 +76,7 @@ const BUILDING_DATA = {
     image: "/images/batok.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)",
+    model3d: "/models/nsb-batok.draco.glb",
     desc: "The primary venue for university-wide events, convocations, commencement ceremonies, and large-scale student activities. Batok Hall seats over 1,000 people and is equipped with full audio-visual systems.",
     depts: [
       { icon: "🏢", name: "Events & Facilities Office", sub: "Ground Floor" },
@@ -85,6 +90,7 @@ const BUILDING_DATA = {
     image: "/images/new admin.jpeg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)",
+    model3d: "/models/textured-admin-building.draco.glb",   // ← lazy-loaded on demand
     desc: "The central hub for all administrative operations of Caraga State University. Houses the Office of the President, University Registrar, Finance Division, and student support services. One-stop for all official university transactions.",
     depts: [
       { icon: "🎓", name: "Office of the University President", sub: "Floor 4" },
@@ -100,6 +106,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
+    model3d: "/models/textured-library.draco.glb",
     desc: "Caraga State University's main campus library. Houses vast print collections, multimedia centers, digital learning lounges, research archives, and open study areas for all student levels.",
     depts: [
       { icon: "📚", name: "Circulation & Reference Section", sub: "Floor 1" },
@@ -176,6 +183,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)",
+    model3d: "/models/food%20technology%20center.draco.glb",
     desc: "Dedicated to local food technology development, offering testing laboratories and processing machinery for food scientists and agricultural graduates.",
     depts: [
       { icon: "🧪", name: "Food Testing Lab", sub: "Floor 1" },
@@ -211,6 +219,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)",
+    model3d: "/models/textured-gym-building.draco.glb",
     desc: "Future state-of-the-art sports arena for university athletics, concerts, cultural pageants, and campus gatherings.",
     depts: [
       { icon: "🏗️", name: "Construction Site - Under Development", sub: "N/A" }
@@ -240,6 +249,32 @@ const BUILDING_DATA = {
       { icon: "🏆", name: "Alumni Heritage Hall", sub: "Floor 1" }
     ],
     contact: { phone: "(085) 341-2311", email: "alumni@csu.edu.ph" }
+  },
+
+  "old_cas": {
+    name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)",
+    model3d: "/models/old_cas.draco.glb",
+    desc: "Original College of Arts and Sciences building, now serving as additional academic space for various university departments and administrative units.",
+    depts: [
+      { icon: "📚", name: "Arts & Sciences Departments", sub: "All Floors" },
+    ],
+    contact: { phone: "(085) 341-2300", email: "cas@csu.edu.ph" }
+  },
+  "sports_office": {
+    name: "Sports Office", shortName: "Sports", type: "Athletics & Sports", emoji: "🏆",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
+    model3d: "/models/sports_office.draco.glb",
+    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
+    depts: [
+      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
+      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
+    ],
+    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
   },
 
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
@@ -353,31 +388,8 @@ function _bootExperience() {
       meshIndex[key] = node;
       if (node.material) node.userData.origMat = node.material.clone();
     });
-    console.log(`✅ ${Object.keys(meshIndex).length} meshes loaded:`, Object.keys(meshIndex));
-    window._meshes = meshIndex; // debug helper
-
     _buildChips();
     _createPins();
-
-    // ── Diagnostic: log bounding box sizes for all registered buildings ──
-    const _diagBox = new THREE.Box3();
-    const _diagSize = new THREE.Vector3();
-    Object.entries(BUILDING_DATA).forEach(([key, data]) => {
-      const mesh = meshIndex[key]
-        ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
-      if (mesh) {
-        _diagBox.setFromObject(mesh);
-        _diagBox.getSize(_diagSize);
-        const vol = _diagSize.x * _diagSize.y * _diagSize.z;
-        if (_diagSize.y < 0.15 || vol < 0.05) {
-          console.warn(`⚠️ TINY BUILDING: "${key}" (${data.shortName}) — size: ${_diagSize.x.toFixed(2)} × ${_diagSize.y.toFixed(2)} × ${_diagSize.z.toFixed(2)}, vol=${vol.toFixed(4)}`);
-        } else {
-          console.log(`📦 "${key}" — size: ${_diagSize.x.toFixed(2)} × ${_diagSize.y.toFixed(2)} × ${_diagSize.z.toFixed(2)}`);
-        }
-      } else {
-        console.warn(`❌ NO MESH for "${key}" (${data.shortName})`);
-      }
-    });
 
     // Pin position update every frame
     experience.time.on('update', _updatePins);
@@ -439,6 +451,14 @@ function _selectBuilding(key, openPanel = true) {
   if (activePin) activePin.el.querySelector('.pin-label')?.classList.add('active-pin');
 
   if (openPanel) _openPanel(key);
+
+  // Automatically open the floating 3D building preview if this building has a 3D model asset
+  const data = BUILDING_DATA[key];
+  if (data && data.model3d) {
+    openBuildingViewer(data.model3d, data.name);
+  } else {
+    closeBuildingViewer();
+  }
 }
 
 function _resetHighlight() {
@@ -516,6 +536,18 @@ function _openPanel(key) {
     contactWrap.style.display = 'none';
   }
 
+  // ── "View 3D Model" button (only for buildings with a model3d path) ──
+  const viewBtnWrap = document.getElementById('panel-view3d-wrap');
+  const viewBtn     = document.getElementById('panel-view3d-btn');
+  if (viewBtnWrap && viewBtn) {
+    if (data.model3d) {
+      viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
+      viewBtnWrap.style.display = '';
+    } else {
+      viewBtnWrap.style.display = 'none';
+    }
+  }
+
   // Show panel (uses existing TIKAD #info-panel CSS)
   const panel = document.getElementById('info-panel');
   if (panel) {
@@ -526,6 +558,7 @@ function _openPanel(key) {
 
 function _closePanel() {
   _resetHighlight();
+  closeBuildingViewer();
   const panel = document.getElementById('info-panel');
   if (panel) {
     panel.classList.add('panel-hidden');
@@ -742,9 +775,8 @@ export function initMapOverlay() {
     });
   }
 
-  // Keep old global for any stray references
+  // Keep old globals for any stray references
   window.closePanel = _closePanel;
-  window.showBuilding = () => { };   // no-op (old static fn)
   window.filterBuildings = q => _buildDropdown(q);
 
   // Hide panel initially
