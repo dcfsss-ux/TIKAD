@@ -228,6 +228,16 @@ function _startScene(modelPath) {
   _controls.autoRotateSpeed = 1.0;
   _controls.minDistance = 2;
   _controls.maxDistance = 25;
+
+  // Clamp polar angle so the camera always stays above the object.
+  // minPolarAngle = 0  → can look straight down from directly overhead.
+  // maxPolarAngle ≈ 85° → never crosses the horizon to look from underneath.
+  _controls.minPolarAngle = 0;
+  _controls.maxPolarAngle = Math.PI / 2 - 0.05;
+
+  // Target is the geometric center of the loaded model.
+  // Since _loadModel offsets gltf.scene.position to -center, the mesh center
+  // lands exactly at world origin — so (0,0,0) is always correct here.
   _controls.target.set(0, 0, 0);
   _controls.update();
 
