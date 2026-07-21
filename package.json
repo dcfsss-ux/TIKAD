@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "giya-csu-smart-campus",
   "version": "1.0.0",
   "description": "GIYA – CSU Smart Campus 3D Map Landing Page",
