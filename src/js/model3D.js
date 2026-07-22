@@ -32,10 +32,11 @@ export function initModel3D() {
     alpha: true,
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.outputEncoding   = THREE.sRGBEncoding;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping      = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 2.5;
   renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = false;
 
   // ── Scene ────────────────────────────────────────────────────────
   const scene = new THREE.Scene();
@@ -100,10 +101,9 @@ export function initModel3D() {
     (gltf) => {
       const model = gltf.scene;
 
-      // Mirror Plateforme10.js fixes
+      // Mirror Plateforme10.js fixes — frustum culling ON (saves draw calls)
       model.traverse((child) => {
         if (child.isMesh) {
-          child.frustumCulled = false;
           const mats = Array.isArray(child.material) ? child.material : [child.material];
           mats.forEach((m) => { if (m.map) m.map.flipY = false; });
         }
@@ -187,16 +187,25 @@ export function initModel3D() {
 
   // ── Render loop (very subtle drift, no auto-spin) ────────────────
   const clock = new THREE.Clock();
+  let   lastRotY = null;          // detect when nothing changed
   function animate() {
     requestAnimationFrame(animate);
     if (!running) return;
+
     const delta = clock.getDelta();
+    let needsRender = isDragging; // always render while dragging
+
     // Only drift when user is not dragging
     if (!isDragging && pivot) {
-      rotY += delta * 0.03; // ~1.7°/s — barely perceptible
+      rotY += delta * 0.03;       // ~1.7°/s — barely perceptible
       pivot.rotation.y = rotY;
+      needsRender = true;         // drift changed the frame
     }
-    renderer.render(scene, camera);
+
+    // Skip the GPU draw call when nothing has changed
+    if (needsRender) {
+      renderer.render(scene, camera);
+    }
   }
   animate();
 }

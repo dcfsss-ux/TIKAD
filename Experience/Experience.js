@@ -49,6 +49,8 @@ export default class Experience {
     this.camera.resize()
     this.world.resize()
     this.renderer.resize()
+    // Projection matrix changed — force a redraw
+    this.renderer.requestRender()
     document.documentElement.style.setProperty('--100vh', `${window.innerHeight}px`)
   }
 
@@ -59,6 +61,14 @@ export default class Experience {
 
     if(this.controls) {
       this.controls.update()
+    }
+
+    // If the world has active animations (GSAP tweens, preloader, highlight
+    // pulses etc.) they will call requestRender() themselves. But as a safety
+    // net we also request a render every tick while the preloader is active so
+    // the loading bar animates smoothly.
+    if (this.preloader && this.preloader.isLoading) {
+      this.renderer.requestRender()
     }
   }
 }
