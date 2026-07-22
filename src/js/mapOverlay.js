@@ -57,7 +57,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
   },
-  "hiraya_building": {
+  "hiaraya_building": {
     name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
@@ -115,7 +115,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2350", email: "library@csu.edu.ph" }
   },
-  "kalinaw_hall": {
+  "kalinaw": {
     name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -214,7 +214,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
   },
-  "university_gymnasium_(under_cons)": {
+  "csu_gym": {
     name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -381,12 +381,20 @@ function _bootExperience() {
       }, 400);
     }
 
-    // Index all meshes from the GLB
+    // Index all nodes (both Groups/Object3Ds and Meshes) from the GLB
     experience.scene.traverse((node) => {
-      if (!node.isMesh) return;
+      if (!node.name) return;
       const key = node.name.toLowerCase().trim();
-      meshIndex[key] = node;
-      if (node.material) node.userData.origMat = node.material.clone();
+      if (key) {
+        meshIndex[key] = node;
+      }
+      if (node.isMesh && node.material) {
+        if (!node.userData.origMat) {
+          node.userData.origMat = Array.isArray(node.material)
+            ? node.material.map(m => m.clone())
+            : node.material.clone();
+        }
+      }
     });
     _buildChips();
     _createPins();
@@ -394,6 +402,39 @@ function _bootExperience() {
     // Pin position update every frame
     experience.time.on('update', _updatePins);
   });
+}
+
+// ── Node lookup helper ────────────────────────────────────────────────────────
+function _findNode(key) {
+  if (!key) return null;
+  const cleanKey = key.toLowerCase().trim();
+  if (meshIndex[cleanKey]) return meshIndex[cleanKey];
+
+  const normKey = cleanKey.replace(/[^a-z0-9]/g, '');
+  if (!normKey) return null;
+
+  // Exact match after normalization (ignoring underscores, spaces, dashes)
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK === normKey) return node;
+  }
+
+  // Partial / inclusion match (pick closest length match)
+  let bestMatch = null;
+  let bestLen = Infinity;
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (!normK) continue;
+    if (normK.includes(normKey) || normKey.includes(normK)) {
+      const diff = Math.abs(normK.length - normKey.length);
+      if (diff < bestLen) {
+        bestLen = diff;
+        bestMatch = node;
+      }
+    }
+  }
+
+  return bestMatch;
 }
 
 // ── Quick-select chips (bottom bar) ──────────────────────────────────────────
@@ -422,22 +463,40 @@ function _buildChips() {
 
 // ── Building selection & highlight ───────────────────────────────────────────
 
+let highlightedMeshes = [];
+
 function _selectBuilding(key, openPanel = true) {
   _resetHighlight();
   activeKey = key;
 
-  // Fuzzy-find mesh (exact → partial)
-  const mesh = meshIndex[key]
-    ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
+  const node = _findNode(key);
 
-  if (mesh) {
-    activeMesh = mesh;
-    const mat = mesh.material.clone();
-    if (mat.color) mat.color.setHex(0xeddd53);
-    if (mat.emissive) { mat.emissive.setHex(0xeddd53); mat.emissiveIntensity = 1.2; }
-    mesh.material = mat;
+  if (node) {
+    node.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (!child.userData.origMat) {
+          child.userData.origMat = Array.isArray(child.material)
+            ? child.material.map(m => m.clone())
+            : child.material.clone();
+        }
+
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        const highlightedMats = mats.map(m => {
+          const cloned = m.clone();
+          if (cloned.color) cloned.color.setHex(0xeddd53);
+          if (cloned.emissive) {
+            cloned.emissive.setHex(0xeddd53);
+            cloned.emissiveIntensity = 1.2;
+          }
+          return cloned;
+        });
+
+        child.material = Array.isArray(child.material) ? highlightedMats : highlightedMats[0];
+        highlightedMeshes.push(child);
+      }
+    });
   } else {
-    console.warn(`No mesh found for "${key}". Available keys:`, Object.keys(meshIndex));
+    console.warn(`No node found for "${key}". Available keys:`, Object.keys(meshIndex));
   }
 
   // Highlight active chip
@@ -462,11 +521,14 @@ function _selectBuilding(key, openPanel = true) {
 }
 
 function _resetHighlight() {
-  if (activeMesh) {
-    const orig = activeMesh.userData.origMat;
-    if (orig) activeMesh.material = orig.clone();
-    activeMesh = null;
-  }
+  highlightedMeshes.forEach(child => {
+    if (child.userData.origMat) {
+      child.material = Array.isArray(child.userData.origMat)
+        ? child.userData.origMat.map(m => m.clone())
+        : child.userData.origMat.clone();
+    }
+  });
+  highlightedMeshes = [];
   activeKey = null;
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
 }
@@ -579,17 +641,20 @@ function _createPins() {
   pinList.length = 0;
 
   Object.entries(BUILDING_DATA).forEach(([key, data]) => {
-    const mesh = meshIndex[key]
-      ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
+    const node = _findNode(key);
+
+    if (!node) {
+      console.warn(`[GIYA Map] Pin creation skipped: No 3D model node found for "${key}" (${data.name})`);
+      return;
+    }
 
     const worldPos = new THREE.Vector3();
-    if (mesh) {
-      _box.setFromObject(mesh);
-      _box.getCenter(worldPos);
-      // Elevate the pin to float cleanly above the top of the building's bounding box
-      const height = _box.max.y - _box.min.y;
-      worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
-    }
+    _box.setFromObject(node);
+    _box.getCenter(worldPos);
+
+    // Elevate the pin to float cleanly above the top of the building's bounding box
+    const height = _box.max.y - _box.min.y;
+    worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
 
     const el = document.createElement('div');
     el.className = 'bldg-pin';
