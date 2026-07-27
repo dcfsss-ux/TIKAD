@@ -10,6 +10,8 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
+import { getBuildingByNameOrKey } from './supabaseClient.js';
+
 
 // ── Building registry ─────────────────────────────────────────────────────────
 // Keys must match (lowercased, trimmed) mesh names exported in your GLB file.
@@ -351,7 +353,6 @@ const BUILDING_DATA = {
   "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
   "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
   "gents'_dormitory_(_under_cons)": { name: "Gent's Dormitory (Under Const.)", shortName: "Gent's Dorm", interactive: false },
-  "graduation_portrait": { name: "Graduation Portrait", shortName: "Grad. Portrait", interactive: false },
   "hardenning_area": { name: "Hardening Area", shortName: "Hardening Area", interactive: false },
   "hero_statue": { name: "Hero Statue", shortName: "Hero Statue", interactive: false },
   "ladies'_dormitory_(_under_cons)": { name: "Ladies' Dormitory (Under Const.)", shortName: "Ladies' Dorm", interactive: false },
@@ -606,12 +607,19 @@ function _resetHighlight() {
 
 // ── Info panel ────────────────────────────────────────────────────────────────
 
-function _openPanel(key) {
+async function _openPanel(key) {
   const data = BUILDING_DATA[key];
   if (!data) return;
   if (data.interactive === false) return; // Static landmarks — no panel
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  // Fetch live Supabase building record if available
+  const dbBuilding = await getBuildingByNameOrKey(key);
+
+  const buildingName = dbBuilding?.Building_name || data.name;
+  const buildingDesc = dbBuilding?.Description || data.desc;
+  const buildingImg = dbBuilding?.Image_URL || data.image || '/images/kinaadman.jpg';
 
   // Set the building logo in the image overlay
   const iconEl = document.getElementById('panel-icon');
@@ -629,29 +637,45 @@ function _openPanel(key) {
   const imgIconEl = document.getElementById('panel-img-icon');
   if (imgIconEl) imgIconEl.style.display = 'none';
 
-  set('panel-name', data.name);
+  set('panel-name', buildingName);
   set('panel-type', data.type);
-  set('panel-desc', data.desc);
+  set('panel-desc', buildingDesc);
 
-  // Set the building image dynamically
+  // Set the building image dynamically from Supabase Storage or local image
   const imgEl = document.getElementById('panel-img-bg');
   if (imgEl) {
-    if (data.image) {
-      imgEl.style.background = `url('${data.image}') center center / cover no-repeat`;
-    } else {
-      imgEl.style.background = `url('/images/kinaadman.jpg') center center / cover no-repeat`;
-    }
+    imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // Departments list
+  // Combine local departments with Supabase OFFICES / ROOMS / FACILITIES
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
-  if (deptsWrap && deptsList && data.depts?.length) {
-    deptsList.innerHTML = data.depts.map(d => `
+
+  let departmentsHTML = '';
+  if (dbBuilding?.OFFICES?.length > 0) {
+    departmentsHTML += dbBuilding.OFFICES.map(o => `
+      <li class="panel-facility-item">
+        <span class="panel-facility-check">🏢</span>
+        <span><strong>${o.Office_name}</strong>${o.Weblinks ? ` · <a href="${o.Weblinks}" target="_blank" style="color:#eddd53;">Link</a>` : ''}</span>
+      </li>`).join('');
+  }
+  if (dbBuilding?.FACILITIES?.length > 0) {
+    departmentsHTML += dbBuilding.FACILITIES.map(f => `
+      <li class="panel-facility-item">
+        <span class="panel-facility-check">🔬</span>
+        <span><strong>${f.Facility_name}</strong></span>
+      </li>`).join('');
+  }
+  if (!departmentsHTML && data.depts?.length) {
+    departmentsHTML = data.depts.map(d => `
       <li class="panel-facility-item">
         <span class="panel-facility-check">${d.icon || '🏢'}</span>
         <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
       </li>`).join('');
+  }
+
+  if (deptsWrap && deptsList && departmentsHTML) {
+    deptsList.innerHTML = departmentsHTML;
     deptsWrap.style.display = '';
   } else if (deptsWrap) {
     deptsWrap.style.display = 'none';
@@ -674,7 +698,7 @@ function _openPanel(key) {
   const viewBtn = document.getElementById('panel-view3d-btn');
   if (viewBtnWrap && viewBtn) {
     if (data.model3d) {
-      viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
+      viewBtn.onclick = () => openBuildingViewer(data.model3d, buildingName);
       viewBtnWrap.style.display = '';
     } else {
       viewBtnWrap.style.display = 'none';
@@ -688,6 +712,7 @@ function _openPanel(key) {
     panel.style.display = 'block';
   }
 }
+
 
 function _closePanel() {
   _resetHighlight();
