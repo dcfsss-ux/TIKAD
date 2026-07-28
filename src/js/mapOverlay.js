@@ -10,6 +10,9 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
+import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.js';
+
+
 
 // ── Building registry ─────────────────────────────────────────────────────────
 // Keys must match (lowercased, trimmed) mesh names exported in your GLB file.
@@ -57,7 +60,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
   },
-  "hiraya_building": {
+  "hiaraya_building": {
     name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
@@ -115,7 +118,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2350", email: "library@csu.edu.ph" }
   },
-  "kalinaw_hall": {
+  "kalinaw": {
     name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -143,6 +146,8 @@ const BUILDING_DATA = {
   },
   "ced_building": {
     name: "CED Building", shortName: "CED", type: "Academic Building", emoji: "🏫",
+    supabaseId: 7,          // Building_ID in Supabase BUILDINGS table
+    supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],  // Supabase name aliases
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)",
@@ -214,7 +219,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
   },
-  "university_gymnasium_(under_cons)": {
+  "csu_gym": {
     name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -238,18 +243,6 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2305", email: "oldadmin@csu.edu.ph" }
   },
-  "alumni_office": {
-    name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
-    desc: "Mainquarters for the CSU Alumni Association, managing alumni databases, networking, and annual reunions.",
-    depts: [
-      { icon: "👥", name: "Alumni Relations Desk", sub: "Floor 1" },
-      { icon: "🏆", name: "Alumni Heritage Hall", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2311", email: "alumni@csu.edu.ph" }
-  },
 
   "old_cas": {
     name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
@@ -264,7 +257,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "cas@csu.edu.ph" }
   },
   "sports_office": {
-    name: "Sports Office", shortName: "Sports", type: "Athletics & Sports", emoji: "🏆",
+    name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
@@ -277,11 +270,39 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
   },
 
+  "Villares": {
+    name: "Villares", shortName: "Villares", type: "Athletics & Sports", emoji: "🏆",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
+    model3d: "/models/sports_office.draco.glb",
+    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
+    depts: [
+      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
+      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
+    ],
+    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
+  },
+  "Annex 3": {
+    name: "Annex 3", shortName: "Annex 3", type: "Athletics & Sports", emoji: "🏆",
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
+    model3d: "/models/sports_office.draco.glb",
+    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
+    depts: [
+      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
+      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
+    ],
+    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
+  },
+
+
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-  "bbc_cafeteria": { name: "BBC Cafeteria", shortName: "Cafeteria", interactive: false },
+  "bbc_cafeteria": { name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
   "canteen": { name: "Main Canteen", shortName: "Canteen", interactive: false },
-  "ced_canteen": { name: "CED Canteen", shortName: "Canteen", interactive: false },
-  "caa_canteen": { name: "CAA Canteen", shortName: "Canteen", interactive: false },
+  "ced_canteen": { name: "CED Canteen", shortName: "CED Canteen", interactive: false },
+  "caa_canteen": { name: "CAA Canteen", shortName: "CAA Canteen", interactive: false },
   "overpass": { name: "Campus Overpass", shortName: "Overpass", interactive: false },
   "guard_house": { name: "Guard House", shortName: "Guard House", interactive: false },
   "guard_house001": { name: "Guard House", shortName: "Guard House", interactive: false },
@@ -303,7 +324,55 @@ const BUILDING_DATA = {
   "goat_house": { name: "Goat House", shortName: "Goat House", interactive: false },
   "sheep_house": { name: "Sheep House", shortName: "Sheep House", interactive: false },
   "agro-forestry_shed": { name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
-  "wood_workshoptech_voc_building": { name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false }
+  "wood_workshoptech_voc_building": { name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
+
+  // ── ADDITIONAL CAMPUS STRUCTURES ──────────────────────────────────────────
+  "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
+  "alumni_office": { name: "Alumni Office", shortName: "Alumni Office", interactive: false },
+  "amante_building": { name: "Amante Building", shortName: "Amante Bldg.", interactive: false },
+  "annex_2_(old_ladies_dorm)": { name: "Annex 2 (Old Ladies Dorm)", shortName: "Annex 2", interactive: false },
+  "annex_3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
+  "atm_machine_landbank": { name: "ATM - Landbank", shortName: "ATM Landbank", interactive: false },
+  "atm_machine_pnb": { name: "ATM - PNB", shortName: "ATM PNB", interactive: false },
+  "bio_diagnostic_laboratory": { name: "Bio-Diagnostic Laboratory", shortName: "Bio-Diag Lab", interactive: false },
+  "bodega": { name: "Bodega", shortName: "Bodega", interactive: false },
+  "bookstore_and_orgms_office": { name: "Bookstore & Orgs Office", shortName: "Bookstore", interactive: false },
+  "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", interactive: false },
+  "caa_layering_house": { name: "CAA Layering House", shortName: "Layering House", interactive: false },
+  "caa_restroom": { name: "CAA Restroom", shortName: "CAA Restroom", interactive: false },
+  "caa_swine_laboratory": { name: "CAA Swine Laboratory", shortName: "Swine Lab", interactive: false },
+  "caraga_black_native_chicken": { name: "Caraga Black Native Chicken House", shortName: "Native Chicken", interactive: false },
+  "cas_covered_court": { name: "CAS Covered Court", shortName: "CAS Court", interactive: false },
+  "cas_student_center": { name: "CAS Student Center", shortName: "CAS Std. Ctr.", interactive: false },
+  "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
+  "ccard_office": { name: "CCARD Office", shortName: "CCARD Office", interactive: false },
+  "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
+  "ched_lgu": { name: "CHED-LGU Building", shortName: "CHED-LGU", interactive: false },
+  "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
+  "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
+  "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
+  "executive_house": { name: "Executive House", shortName: "Executive House", interactive: false },
+  "farm_nursery": { name: "Farm Nursery", shortName: "Farm Nursery", interactive: false },
+  "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
+  "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
+  "gents'_dormitory_(_under_cons)": { name: "Gent's Dormitory (Under Const.)", shortName: "Gent's Dorm", interactive: false },
+  "hardenning_area": { name: "Hardening Area", shortName: "Hardening Area", interactive: false },
+  "hero_statue": { name: "Hero Statue", shortName: "Hero Statue", interactive: false },
+  "ladies'_dormitory_(_under_cons)": { name: "Ladies' Dormitory (Under Const.)", shortName: "Ladies' Dorm", interactive: false },
+  "mechanical_dryer": { name: "Mechanical Dryer", shortName: "Mech. Dryer", interactive: false },
+  "micoriza_office": { name: "Micoriza Office", shortName: "Micoriza Office", interactive: false },
+  "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
+  "oatc": { name: "OATC", shortName: "OATC", interactive: false },
+  "old_ccaarrd_building": { name: "Old CCAARRD Building", shortName: "Old CCAARRD", interactive: false },
+  "old_cegsttloresearch_services_office": { name: "Old Research Services Office", shortName: "Old Research Ofc.", interactive: false },
+  "old_farm_mechanization_center": { name: "Old Farm Mechanization Center", shortName: "Old Farm Mech.", interactive: false },
+  "power_house": { name: "Power House", shortName: "Power House", interactive: false },
+  "power_house001": { name: "Power House", shortName: "Power House", interactive: false },
+  "rooting_recovery": { name: "Rooting Recovery Area", shortName: "Rooting Area", interactive: false },
+  "rotc_office": { name: "ROTC Office", shortName: "ROTC Office", interactive: false },
+  "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
+  "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", interactive: false },
+  "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false }
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -349,13 +418,13 @@ function _bootExperience() {
   experience = new Experience(canvas);
 
   // ── Wire up progress to new preloader bar + pct ──────────────────────────
-  const barEl  = document.getElementById('preloader-bar');
-  const pctEl  = document.getElementById('loading-progress');
+  const barEl = document.getElementById('preloader-bar');
+  const pctEl = document.getElementById('loading-progress');
 
   function _setProgress(pct) {
     const clamped = Math.min(100, Math.max(0, Math.round(pct)));
     if (barEl) barEl.style.width = clamped + '%';
-    if (pctEl) pctEl.textContent  = clamped + '%';
+    if (pctEl) pctEl.textContent = clamped + '%';
   }
 
   if (experience.resources) {
@@ -381,19 +450,66 @@ function _bootExperience() {
       }, 400);
     }
 
-    // Index all meshes from the GLB
+    // Index all nodes (both Groups/Object3Ds and Meshes) from the GLB
     experience.scene.traverse((node) => {
-      if (!node.isMesh) return;
+      if (!node.name) return;
       const key = node.name.toLowerCase().trim();
-      meshIndex[key] = node;
-      if (node.material) node.userData.origMat = node.material.clone();
+      if (key) {
+        meshIndex[key] = node;
+      }
+      if (node.isMesh && node.material) {
+        if (!node.userData.origMat) {
+          node.userData.origMat = Array.isArray(node.material)
+            ? node.material.map(m => m.clone())
+            : node.material.clone();
+        }
+      }
     });
+    // TEMP DEBUG: log all mesh keys and highlight ones NOT yet in BUILDING_DATA
+    const knownKeys = Object.keys(BUILDING_DATA).map(k => k.toLowerCase().trim());
+    const allKeys = Object.keys(meshIndex).sort();
+    const unknownKeys = allKeys.filter(k => !knownKeys.some(kk => k.includes(kk) || kk.includes(k)));
+    console.log('[GIYA] ALL scene node keys:\n' + allKeys.join('\n'));
+    console.log('[GIYA] UNLABELED nodes (not in BUILDING_DATA):\n' + unknownKeys.join('\n'));
     _buildChips();
     _createPins();
 
     // Pin position update every frame
     experience.time.on('update', _updatePins);
   });
+}
+
+// ── Node lookup helper ────────────────────────────────────────────────────────
+function _findNode(key) {
+  if (!key) return null;
+  const cleanKey = key.toLowerCase().trim();
+  if (meshIndex[cleanKey]) return meshIndex[cleanKey];
+
+  const normKey = cleanKey.replace(/[^a-z0-9]/g, '');
+  if (!normKey) return null;
+
+  // Exact match after normalization (ignoring underscores, spaces, dashes)
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK === normKey) return node;
+  }
+
+  // Partial / inclusion match (pick closest length match)
+  let bestMatch = null;
+  let bestLen = Infinity;
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (!normK) continue;
+    if (normK.includes(normKey) || normKey.includes(normK)) {
+      const diff = Math.abs(normK.length - normKey.length);
+      if (diff < bestLen) {
+        bestLen = diff;
+        bestMatch = node;
+      }
+    }
+  }
+
+  return bestMatch;
 }
 
 // ── Quick-select chips (bottom bar) ──────────────────────────────────────────
@@ -422,22 +538,40 @@ function _buildChips() {
 
 // ── Building selection & highlight ───────────────────────────────────────────
 
-function _selectBuilding(key, openPanel = true) {
+let highlightedMeshes = [];
+
+function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highlightRoom = null, searchMode = false) {
   _resetHighlight();
   activeKey = key;
 
-  // Fuzzy-find mesh (exact → partial)
-  const mesh = meshIndex[key]
-    ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
+  const node = _findNode(key);
 
-  if (mesh) {
-    activeMesh = mesh;
-    const mat = mesh.material.clone();
-    if (mat.color) mat.color.setHex(0xeddd53);
-    if (mat.emissive) { mat.emissive.setHex(0xeddd53); mat.emissiveIntensity = 1.2; }
-    mesh.material = mat;
+  if (node) {
+    node.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (!child.userData.origMat) {
+          child.userData.origMat = Array.isArray(child.material)
+            ? child.material.map(m => m.clone())
+            : child.material.clone();
+        }
+
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        const highlightedMats = mats.map(m => {
+          const cloned = m.clone();
+          if (cloned.color) cloned.color.setHex(0xeddd53);
+          if (cloned.emissive) {
+            cloned.emissive.setHex(0xeddd53);
+            cloned.emissiveIntensity = 1.2;
+          }
+          return cloned;
+        });
+
+        child.material = Array.isArray(child.material) ? highlightedMats : highlightedMats[0];
+        highlightedMeshes.push(child);
+      }
+    });
   } else {
-    console.warn(`No mesh found for "${key}". Available keys:`, Object.keys(meshIndex));
+    console.warn(`No node found for "${key}". Available keys:`, Object.keys(meshIndex));
   }
 
   // Highlight active chip
@@ -450,11 +584,11 @@ function _selectBuilding(key, openPanel = true) {
   const activePin = pinList.find(p => p.key === key);
   if (activePin) activePin.el.querySelector('.pin-label')?.classList.add('active-pin');
 
-  if (openPanel) _openPanel(key);
+  if (openPanel) _openPanel(key, highlightRoom, searchMode);
 
-  // Automatically open the floating 3D building preview if this building has a 3D model asset
+  // Automatically open or close the 3D building viewer based on suppress3dViewer
   const data = BUILDING_DATA[key];
-  if (data && data.model3d) {
+  if (!suppress3dViewer && data && data.model3d) {
     openBuildingViewer(data.model3d, data.name);
   } else {
     closeBuildingViewer();
@@ -462,23 +596,41 @@ function _selectBuilding(key, openPanel = true) {
 }
 
 function _resetHighlight() {
-  if (activeMesh) {
-    const orig = activeMesh.userData.origMat;
-    if (orig) activeMesh.material = orig.clone();
-    activeMesh = null;
-  }
+  highlightedMeshes.forEach(child => {
+    if (child.userData.origMat) {
+      child.material = Array.isArray(child.userData.origMat)
+        ? child.userData.origMat.map(m => m.clone())
+        : child.userData.origMat.clone();
+    }
+  });
+  highlightedMeshes = [];
   activeKey = null;
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
 }
 
 // ── Info panel ────────────────────────────────────────────────────────────────
 
-function _openPanel(key) {
+async function _openPanel(key, highlightRoom = null, searchMode = false) {
   const data = BUILDING_DATA[key];
   if (!data) return;
   if (data.interactive === false) return; // Static landmarks — no panel
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+
+  // Fetch live Supabase building record:
+  // Prefer direct ID lookup (supabaseId) to avoid name-matching failures.
+  let dbBuilding = null;
+  if (data.supabaseId) {
+    const { getBuildingDetails } = await import('./supabaseClient.js');
+    dbBuilding = await getBuildingDetails(data.supabaseId);
+    console.log(`[Panel] Direct ID lookup for "${key}" (ID ${data.supabaseId}):`, dbBuilding?.Building_name || 'null');
+  } else {
+    dbBuilding = await getBuildingByNameOrKey(key);
+  }
+
+  const buildingName = dbBuilding?.Building_name || data.name;
+  const buildingDesc = dbBuilding?.Description || data.desc;
+  const buildingImg = dbBuilding?.Image_URL || data.image || '/images/kinaadman.jpg';
 
   // Set the building logo in the image overlay
   const iconEl = document.getElementById('panel-icon');
@@ -496,55 +648,175 @@ function _openPanel(key) {
   const imgIconEl = document.getElementById('panel-img-icon');
   if (imgIconEl) imgIconEl.style.display = 'none';
 
-  set('panel-name', data.name);
+  set('panel-name', buildingName);
   set('panel-type', data.type);
-  set('panel-desc', data.desc);
+  set('panel-desc', buildingDesc);
 
-  // Set the building image dynamically
+  // Set the building image dynamically from Supabase Storage or local image
   const imgEl = document.getElementById('panel-img-bg');
   if (imgEl) {
-    if (data.image) {
-      imgEl.style.background = `url('${data.image}') center center / cover no-repeat`;
-    } else {
-      imgEl.style.background = `url('/images/kinaadman.jpg') center center / cover no-repeat`;
-    }
+    imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // Departments list
+  // ── Floor-grouped accordion for ROOMS / OFFICES / FACILITIES ─────────────
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
-  if (deptsWrap && deptsList && data.depts?.length) {
-    deptsList.innerHTML = data.depts.map(d => `
+
+  let departmentsHTML = '';
+  const hasSupabaseData = dbBuilding && (
+    dbBuilding.ROOMS?.length > 0 ||
+    dbBuilding.OFFICES?.length > 0 ||
+    dbBuilding.FACILITIES?.length > 0
+  );
+
+  if (hasSupabaseData) {
+    // Collect all items keyed by floor number
+    const floorMap = {};
+
+    const addToFloor = (floor, html) => {
+      const f = floor || 1;
+      if (!floorMap[f]) floorMap[f] = [];
+      floorMap[f].push(html);
+    };
+
+    // ── Rooms ──────────────────────────────────────────────────────────────
+    (dbBuilding.ROOMS || []).forEach(r => {
+      const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
+      const roomSub   = r.Room_number && r.Room_name ? r.Room_name : null;
+      const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
+      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+      addToFloor(r.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
+          <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Offices ────────────────────────────────────────────────────────────
+    (dbBuilding.OFFICES || []).forEach(o => {
+      const isMatched = highlightRoom && o.Office_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+      const label = o.Weblinks
+        ? `<a href="${o.Weblinks}" target="_blank" style="color:inherit;text-decoration:none;"><strong>${o.Office_name}</strong></a>`
+        : `<strong>${o.Office_name}</strong>`;
+
+      addToFloor(o.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
+          <span class="floor-item-label">${label}</span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Facilities ─────────────────────────────────────────────────────────
+    (dbBuilding.FACILITIES || []).forEach(f => {
+      const isMatched = highlightRoom && f.Facility_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+      addToFloor(f.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
+          <span class="floor-item-label"><strong>${f.Facility_name}</strong></span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Render one <details> accordion per floor, sorted ──────────────────
+    const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+    departmentsHTML = sortedFloors.map(floor => {
+      const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
+      const openAttr = hasMatch ? ' open' : '';
+      const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
+      const itemCount = floorMap[floor].length;
+      return `
+        <details class="floor-accordion"${openAttr}>
+          <summary class="floor-accordion-header">
+            <span class="floor-accordion-icon">▶</span>
+            <span class="floor-accordion-title">Floor ${floor}</span>
+            <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
+            ${matchIndicator}
+          </summary>
+          <ul class="floor-accordion-list">
+            ${floorMap[floor].join('')}
+          </ul>
+        </details>`;
+    }).join('');
+
+  } else if (data.depts?.length) {
+    // Fallback: local hardcoded departments (no Supabase data)
+    departmentsHTML = data.depts.map(d => `
       <li class="panel-facility-item">
         <span class="panel-facility-check">${d.icon || '🏢'}</span>
         <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
       </li>`).join('');
+  }
+
+  if (deptsWrap && deptsList && departmentsHTML) {
+    deptsList.innerHTML = departmentsHTML;
     deptsWrap.style.display = '';
+
+    // Wire up the rotating arrow animation for each accordion
+    deptsList.querySelectorAll('.floor-accordion').forEach(el => {
+      el.addEventListener('toggle', () => {
+        const icon = el.querySelector('.floor-accordion-icon');
+        if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
+      });
+      // Set initial state for already-open accordions (matched)
+      if (el.open) {
+        const icon = el.querySelector('.floor-accordion-icon');
+        if (icon) icon.style.transform = 'rotate(90deg)';
+      }
+    });
   } else if (deptsWrap) {
     deptsWrap.style.display = 'none';
   }
 
-  // Contact
-  const contactWrap = document.getElementById('panel-contact-wrap');
-  const contactContent = document.getElementById('panel-contact');
-  if (contactWrap && contactContent && data.contact) {
-    contactContent.innerHTML =
-      (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
-      (data.contact.email ? `✉️ ${data.contact.email}` : '');
-    contactWrap.style.display = '';
-  } else if (contactWrap) {
-    contactWrap.style.display = 'none';
-  }
 
-  // ── "View 3D Model" button (only for buildings with a model3d path) ──
+  // ── Search mode: hide Description, Contact, and 3D button — show only header + floors ──
+  const descWrap  = document.querySelector('.panel-body > .panel-label:first-child');
+  const descEl    = document.getElementById('panel-desc');
+  const contactWrap  = document.getElementById('panel-contact-wrap');
+  const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
-  const viewBtn     = document.getElementById('panel-view3d-btn');
-  if (viewBtnWrap && viewBtn) {
-    if (data.model3d) {
-      viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
-      viewBtnWrap.style.display = '';
-    } else {
-      viewBtnWrap.style.display = 'none';
+  const viewBtn = document.getElementById('panel-view3d-btn');
+
+  if (searchMode) {
+    // Hide description section
+    if (descWrap) descWrap.style.display = 'none';
+    if (descEl)   descEl.style.display   = 'none';
+    // Hide contact
+    if (contactWrap) contactWrap.style.display = 'none';
+    // Hide 3D button
+    if (viewBtnWrap) viewBtnWrap.style.display = 'none';
+  } else {
+    // Normal mode — restore description
+    if (descWrap) descWrap.style.display = '';
+    if (descEl)   descEl.style.display   = '';
+
+    // Contact
+    if (contactWrap && contactContent && data.contact) {
+      contactContent.innerHTML =
+        (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
+        (data.contact.email ? `✉️ ${data.contact.email}` : '');
+      contactWrap.style.display = '';
+    } else if (contactWrap) {
+      contactWrap.style.display = 'none';
+    }
+
+    // ── "View 3D Model" button ──
+    if (viewBtnWrap && viewBtn) {
+      if (data.model3d) {
+        viewBtn.onclick = () => openBuildingViewer(data.model3d, buildingName);
+        viewBtnWrap.style.display = '';
+      } else {
+        viewBtnWrap.style.display = 'none';
+      }
     }
   }
 
@@ -555,6 +827,7 @@ function _openPanel(key) {
     panel.style.display = 'block';
   }
 }
+
 
 function _closePanel() {
   _resetHighlight();
@@ -579,23 +852,26 @@ function _createPins() {
   pinList.length = 0;
 
   Object.entries(BUILDING_DATA).forEach(([key, data]) => {
-    const mesh = meshIndex[key]
-      ?? Object.entries(meshIndex).find(([k]) => k.includes(key) || key.includes(k))?.[1];
+    const node = _findNode(key);
+
+    if (!node) {
+      console.warn(`[GIYA Map] Pin creation skipped: No 3D model node found for "${key}" (${data.name})`);
+      return;
+    }
 
     const worldPos = new THREE.Vector3();
-    if (mesh) {
-      _box.setFromObject(mesh);
-      _box.getCenter(worldPos);
-      // Elevate the pin to float cleanly above the top of the building's bounding box
-      const height = _box.max.y - _box.min.y;
-      worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
-    }
+    _box.setFromObject(node);
+    _box.getCenter(worldPos);
+
+    // Elevate the pin to float cleanly above the top of the building's bounding box
+    const height = _box.max.y - _box.min.y;
+    worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
 
     const el = document.createElement('div');
     el.className = 'bldg-pin';
-    
+
     const isInteractive = data.interactive !== false;
-    
+
     if (isInteractive) {
       el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
       el.innerHTML = `
@@ -634,9 +910,9 @@ function _updatePins() {
   pinList.forEach(({ worldPos, el, interactive }) => {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
-    
-    // Zoom-based Level of Detail (LOD) filtering for static/non-interactive pins
-    if (!interactive && zoom < 0.85) {
+
+    // Zoom-based Level of Detail (LOD) — show static labels at any meaningful zoom
+    if (!interactive && zoom < 0.3) {
       el.style.display = 'none';
       return;
     }
@@ -650,58 +926,221 @@ function _updatePins() {
 
 // ── Search (wired to existing #map-search input) ──────────────────────────────
 
-function _handleSearch(query) {
+function _findKeyByBuildingName(name) {
+  if (!name) return null;
+  const clean = name.toLowerCase().trim();
+
+  // Normalize a string: lowercase, remove punctuation/underscores/extra spaces
+  const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+
+  const cleanNorm = normalize(clean);
+
+  // ── Strategy 0: Check supabaseNames aliases (highest priority) ───────────────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    if (!b.supabaseNames) continue;
+    const hit = b.supabaseNames.some(alias =>
+      normalize(alias) === cleanNorm ||
+      normalize(alias).includes(cleanNorm) ||
+      cleanNorm.includes(normalize(alias))
+    );
+    if (hit) return k;
+  }
+
+  // ── Strategy 1: Exact normalized name match ──────────────────────────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    if (normalize(b.name) === cleanNorm) return k;
+  }
+
+  // ── Strategy 2: Normalized name contains the other (substring) ───────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    const bNorm = normalize(b.name);
+    if (bNorm.includes(cleanNorm) || cleanNorm.includes(bNorm)) return k;
+  }
+
+  // ── Strategy 3: Key-derived words vs. query words (word overlap) ──────────
+  // e.g. "new_administrative_bldg" → ["new","administrative","bldg"] vs "new admin building"
+  const queryWords = cleanNorm.split(' ').filter(w => w.length > 2);
+  let bestKey = null;
+  let bestScore = 0;
+
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    const keyWords  = normalize(k.replace(/_/g, ' ')).split(' ').filter(w => w.length > 2);
+    const nameWords = normalize(b.name).split(' ').filter(w => w.length > 2);
+    const allWords  = [...new Set([...keyWords, ...nameWords])];
+
+    let score = 0;
+    for (const qw of queryWords) {
+      // Allow prefix matching (e.g. "admin" matches "administrative")
+      if (allWords.some(w => w.startsWith(qw) || qw.startsWith(w))) score++;
+    }
+    if (score > bestScore) { bestScore = score; bestKey = k; }
+  }
+
+  if (bestScore > 0) return bestKey;
+
+  console.warn(`[GIYA Search] Could not map building name "${name}" to any BUILDING_DATA key.`);
+  return null;
+}
+
+async function _handleSearch(query) {
   if (!query.trim()) return;
-  // Only search interactive buildings
+
+  const { rooms, offices, facilities } = await searchCampusEntities(query);
+  console.log('[GIYA Search] Query:', query, '→ rooms:', rooms, 'offices:', offices, 'facilities:', facilities);
+
+  if (rooms.length > 0) {
+    const r = rooms[0];
+    const buildingName = r.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched room:', r.Room_number, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${r.Room_number || r.Room_name} (${buildingName})`;
+      _selectBuilding(key, true, true, r.Room_number || r.Room_name, true);
+      return;
+    }
+  }
+
+  if (offices.length > 0) {
+    const o = offices[0];
+    const buildingName = o.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched office:', o.Office_name, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${o.Office_name} (${buildingName})`;
+      _selectBuilding(key, true, true, o.Office_name, true);
+      return;
+    }
+  }
+
+  if (facilities.length > 0) {
+    const f = facilities[0];
+    const buildingName = f.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched facility:', f.Facility_name, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${f.Facility_name} (${buildingName})`;
+      _selectBuilding(key, true, true, f.Facility_name, true);
+      return;
+    }
+  }
+
+  // Fallback to interactive building name search
   const key = Object.keys(BUILDING_DATA).find(k =>
     BUILDING_DATA[k].interactive !== false &&
     (k.includes(query.toLowerCase()) ||
-    BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
+      BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
   );
   if (key) {
-    _selectBuilding(key, true);
+    _selectBuilding(key, true, false, null);
   } else {
     const dd = document.getElementById('search-dropdown');
-    if (dd) { dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No buildings found</div>'; dd.style.display = 'block'; }
+    if (dd) { dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No matches found</div>'; dd.style.display = 'block'; }
   }
 }
 
-function _buildDropdown(query) {
+async function _buildDropdown(query) {
   const dd = document.getElementById('search-dropdown');
   if (!dd) return;
-  if (!query.trim()) { dd.style.display = 'none'; return; }
+  if (!query.trim() || query.trim().length < 2) { dd.style.display = 'none'; return; }
 
-  // Only show interactive buildings in the search dropdown
-  const matches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
+  const { buildings, rooms, offices, facilities } = await searchCampusEntities(query);
+
+  let html = '';
+
+  // 1. Render matched Rooms
+  rooms.forEach(r => {
+    const bName = r.BUILDINGS?.Building_name || 'Building';
+    const target = r.Room_number || r.Room_name || '';
+    const roomSub = (r.Room_number && r.Room_name) ? ` — ${r.Room_name}` : (r.Room_name && !r.Room_number ? r.Room_name : '');
+    const roomMain = r.Room_number || r.Room_name || 'Unnamed Room';
+    html += `
+      <div data-type="room" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
+        <span><i class="mdi mdi-door"></i></span>
+        <span><strong>${roomMain}</strong>${r.Room_number && r.Room_name ? ` — ${r.Room_name}` : ''}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 2. Render matched Offices
+  offices.forEach(o => {
+    const bName = o.BUILDINGS?.Building_name || 'Building';
+    html += `
+      <div data-type="office" data-building="${bName}" data-target="${o.Office_name}" class="search-dropdown-item">
+        <span><i class="mdi mdi-briefcase-outline"></i></span>
+        <span>${o.Office_name}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 3. Render matched Facilities
+  facilities.forEach(f => {
+    const bName = f.BUILDINGS?.Building_name || 'Building';
+    html += `
+      <div data-type="facility" data-building="${bName}" data-target="${f.Facility_name}" class="search-dropdown-item">
+        <span><i class="mdi mdi-domain"></i></span>
+        <span>${f.Facility_name}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 4. Render matched Local Buildings
+  const localMatches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
     b.interactive !== false &&
     (k.includes(query.toLowerCase()) || b.name.toLowerCase().includes(query.toLowerCase()))
   );
 
-  if (!matches.length) { dd.style.display = 'none'; return; }
+  localMatches.forEach(([key, b]) => {
+    html += `
+      <div data-type="building" data-key="${key}" class="search-dropdown-item">
+        <span>${b.emoji || '🏛'}</span>
+        <span>${b.name}</span>
+        <span class="search-dropdown-item-type">${b.type || 'Building'}</span>
+      </div>`;
+  });
 
-  dd.innerHTML = matches.map(([key, b]) => `
-    <div
-      data-key="${key}"
-      class="search-dropdown-item"
-    >
-      <span>${b.emoji || '🏛'}</span>
-      <span>${b.name}</span>
-      <span class="search-dropdown-item-type">${b.type || ''}</span>
-    </div>`).join('');
+  if (!html) {
+    dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No matches found</div>';
+    dd.style.display = 'block';
+    return;
+  }
 
-  // click handler per result
-  dd.querySelectorAll('[data-key]').forEach(el => {
+  dd.innerHTML = html;
+
+  // Add click events for dropdown items
+  dd.querySelectorAll('.search-dropdown-item').forEach(el => {
     el.addEventListener('click', () => {
-      const k = el.dataset.key;
-      const input = document.getElementById('map-search');
-      if (input) input.value = BUILDING_DATA[k].name;
+      const type = el.dataset.type;
       dd.style.display = 'none';
-      _selectBuilding(k, true);
+
+      if (type === 'building') {
+        const k = el.dataset.key;
+        const input = document.getElementById('map-search');
+        if (input) input.value = BUILDING_DATA[k]?.name || k;
+        _selectBuilding(k, true, false, null);
+      } else {
+        const buildingName = el.dataset.building;
+        const targetName = el.dataset.target;
+        const input = document.getElementById('map-search');
+        if (input) input.value = `${targetName} (${buildingName})`;
+
+        const key = _findKeyByBuildingName(buildingName);
+        if (key) {
+          // Select building, open panel in search mode, SUPPRESS 3D MODEL VIEWER, highlight target!
+          _selectBuilding(key, true, true, targetName, true);
+        }
+      }
     });
   });
 
   dd.style.display = 'block';
 }
+
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 
