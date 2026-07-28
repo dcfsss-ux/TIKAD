@@ -10,7 +10,8 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { getBuildingByNameOrKey } from './supabaseClient.js';
+import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.js';
+
 
 
 // ── Building registry ─────────────────────────────────────────────────────────
@@ -145,6 +146,8 @@ const BUILDING_DATA = {
   },
   "ced_building": {
     name: "CED Building", shortName: "CED", type: "Academic Building", emoji: "🏫",
+    supabaseId: 7,          // Building_ID in Supabase BUILDINGS table
+    supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],  // Supabase name aliases
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)",
@@ -537,7 +540,7 @@ function _buildChips() {
 
 let highlightedMeshes = [];
 
-function _selectBuilding(key, openPanel = true) {
+function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highlightRoom = null, searchMode = false) {
   _resetHighlight();
   activeKey = key;
 
@@ -581,11 +584,11 @@ function _selectBuilding(key, openPanel = true) {
   const activePin = pinList.find(p => p.key === key);
   if (activePin) activePin.el.querySelector('.pin-label')?.classList.add('active-pin');
 
-  if (openPanel) _openPanel(key);
+  if (openPanel) _openPanel(key, highlightRoom, searchMode);
 
-  // Automatically open the floating 3D building preview if this building has a 3D model asset
+  // Automatically open or close the 3D building viewer based on suppress3dViewer
   const data = BUILDING_DATA[key];
-  if (data && data.model3d) {
+  if (!suppress3dViewer && data && data.model3d) {
     openBuildingViewer(data.model3d, data.name);
   } else {
     closeBuildingViewer();
@@ -607,15 +610,23 @@ function _resetHighlight() {
 
 // ── Info panel ────────────────────────────────────────────────────────────────
 
-async function _openPanel(key) {
+async function _openPanel(key, highlightRoom = null, searchMode = false) {
   const data = BUILDING_DATA[key];
   if (!data) return;
   if (data.interactive === false) return; // Static landmarks — no panel
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  // Fetch live Supabase building record if available
-  const dbBuilding = await getBuildingByNameOrKey(key);
+  // Fetch live Supabase building record:
+  // Prefer direct ID lookup (supabaseId) to avoid name-matching failures.
+  let dbBuilding = null;
+  if (data.supabaseId) {
+    const { getBuildingDetails } = await import('./supabaseClient.js');
+    dbBuilding = await getBuildingDetails(data.supabaseId);
+    console.log(`[Panel] Direct ID lookup for "${key}" (ID ${data.supabaseId}):`, dbBuilding?.Building_name || 'null');
+  } else {
+    dbBuilding = await getBuildingByNameOrKey(key);
+  }
 
   const buildingName = dbBuilding?.Building_name || data.name;
   const buildingDesc = dbBuilding?.Description || data.desc;
@@ -647,26 +658,98 @@ async function _openPanel(key) {
     imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // Combine local departments with Supabase OFFICES / ROOMS / FACILITIES
+  // ── Floor-grouped accordion for ROOMS / OFFICES / FACILITIES ─────────────
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
 
   let departmentsHTML = '';
-  if (dbBuilding?.OFFICES?.length > 0) {
-    departmentsHTML += dbBuilding.OFFICES.map(o => `
-      <li class="panel-facility-item">
-        <span class="panel-facility-check">🏢</span>
-        <span><strong>${o.Office_name}</strong>${o.Weblinks ? ` · <a href="${o.Weblinks}" target="_blank" style="color:#eddd53;">Link</a>` : ''}</span>
-      </li>`).join('');
-  }
-  if (dbBuilding?.FACILITIES?.length > 0) {
-    departmentsHTML += dbBuilding.FACILITIES.map(f => `
-      <li class="panel-facility-item">
-        <span class="panel-facility-check">🔬</span>
-        <span><strong>${f.Facility_name}</strong></span>
-      </li>`).join('');
-  }
-  if (!departmentsHTML && data.depts?.length) {
+  const hasSupabaseData = dbBuilding && (
+    dbBuilding.ROOMS?.length > 0 ||
+    dbBuilding.OFFICES?.length > 0 ||
+    dbBuilding.FACILITIES?.length > 0
+  );
+
+  if (hasSupabaseData) {
+    // Collect all items keyed by floor number
+    const floorMap = {};
+
+    const addToFloor = (floor, html) => {
+      const f = floor || 1;
+      if (!floorMap[f]) floorMap[f] = [];
+      floorMap[f].push(html);
+    };
+
+    // ── Rooms ──────────────────────────────────────────────────────────────
+    (dbBuilding.ROOMS || []).forEach(r => {
+      const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
+      const roomSub   = r.Room_number && r.Room_name ? r.Room_name : null;
+      const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
+      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+      addToFloor(r.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
+          <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Offices ────────────────────────────────────────────────────────────
+    (dbBuilding.OFFICES || []).forEach(o => {
+      const isMatched = highlightRoom && o.Office_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+      const label = o.Weblinks
+        ? `<a href="${o.Weblinks}" target="_blank" style="color:inherit;text-decoration:none;"><strong>${o.Office_name}</strong></a>`
+        : `<strong>${o.Office_name}</strong>`;
+
+      addToFloor(o.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
+          <span class="floor-item-label">${label}</span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Facilities ─────────────────────────────────────────────────────────
+    (dbBuilding.FACILITIES || []).forEach(f => {
+      const isMatched = highlightRoom && f.Facility_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const matchStyle = isMatched ? ' floor-item--matched' : '';
+      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+      addToFloor(f.Floor, `
+        <li class="floor-item${matchStyle}">
+          <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
+          <span class="floor-item-label"><strong>${f.Facility_name}</strong></span>
+          ${badge}
+        </li>`);
+    });
+
+    // ── Render one <details> accordion per floor, sorted ──────────────────
+    const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+    departmentsHTML = sortedFloors.map(floor => {
+      const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
+      const openAttr = hasMatch ? ' open' : '';
+      const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
+      const itemCount = floorMap[floor].length;
+      return `
+        <details class="floor-accordion"${openAttr}>
+          <summary class="floor-accordion-header">
+            <span class="floor-accordion-icon">▶</span>
+            <span class="floor-accordion-title">Floor ${floor}</span>
+            <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
+            ${matchIndicator}
+          </summary>
+          <ul class="floor-accordion-list">
+            ${floorMap[floor].join('')}
+          </ul>
+        </details>`;
+    }).join('');
+
+  } else if (data.depts?.length) {
+    // Fallback: local hardcoded departments (no Supabase data)
     departmentsHTML = data.depts.map(d => `
       <li class="panel-facility-item">
         <span class="panel-facility-check">${d.icon || '🏢'}</span>
@@ -677,31 +760,63 @@ async function _openPanel(key) {
   if (deptsWrap && deptsList && departmentsHTML) {
     deptsList.innerHTML = departmentsHTML;
     deptsWrap.style.display = '';
+
+    // Wire up the rotating arrow animation for each accordion
+    deptsList.querySelectorAll('.floor-accordion').forEach(el => {
+      el.addEventListener('toggle', () => {
+        const icon = el.querySelector('.floor-accordion-icon');
+        if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
+      });
+      // Set initial state for already-open accordions (matched)
+      if (el.open) {
+        const icon = el.querySelector('.floor-accordion-icon');
+        if (icon) icon.style.transform = 'rotate(90deg)';
+      }
+    });
   } else if (deptsWrap) {
     deptsWrap.style.display = 'none';
   }
 
-  // Contact
-  const contactWrap = document.getElementById('panel-contact-wrap');
-  const contactContent = document.getElementById('panel-contact');
-  if (contactWrap && contactContent && data.contact) {
-    contactContent.innerHTML =
-      (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
-      (data.contact.email ? `✉️ ${data.contact.email}` : '');
-    contactWrap.style.display = '';
-  } else if (contactWrap) {
-    contactWrap.style.display = 'none';
-  }
 
-  // ── "View 3D Model" button (only for buildings with a model3d path) ──
+  // ── Search mode: hide Description, Contact, and 3D button — show only header + floors ──
+  const descWrap  = document.querySelector('.panel-body > .panel-label:first-child');
+  const descEl    = document.getElementById('panel-desc');
+  const contactWrap  = document.getElementById('panel-contact-wrap');
+  const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
-  if (viewBtnWrap && viewBtn) {
-    if (data.model3d) {
-      viewBtn.onclick = () => openBuildingViewer(data.model3d, buildingName);
-      viewBtnWrap.style.display = '';
-    } else {
-      viewBtnWrap.style.display = 'none';
+
+  if (searchMode) {
+    // Hide description section
+    if (descWrap) descWrap.style.display = 'none';
+    if (descEl)   descEl.style.display   = 'none';
+    // Hide contact
+    if (contactWrap) contactWrap.style.display = 'none';
+    // Hide 3D button
+    if (viewBtnWrap) viewBtnWrap.style.display = 'none';
+  } else {
+    // Normal mode — restore description
+    if (descWrap) descWrap.style.display = '';
+    if (descEl)   descEl.style.display   = '';
+
+    // Contact
+    if (contactWrap && contactContent && data.contact) {
+      contactContent.innerHTML =
+        (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
+        (data.contact.email ? `✉️ ${data.contact.email}` : '');
+      contactWrap.style.display = '';
+    } else if (contactWrap) {
+      contactWrap.style.display = 'none';
+    }
+
+    // ── "View 3D Model" button ──
+    if (viewBtnWrap && viewBtn) {
+      if (data.model3d) {
+        viewBtn.onclick = () => openBuildingViewer(data.model3d, buildingName);
+        viewBtnWrap.style.display = '';
+      } else {
+        viewBtnWrap.style.display = 'none';
+      }
     }
   }
 
@@ -811,58 +926,221 @@ function _updatePins() {
 
 // ── Search (wired to existing #map-search input) ──────────────────────────────
 
-function _handleSearch(query) {
+function _findKeyByBuildingName(name) {
+  if (!name) return null;
+  const clean = name.toLowerCase().trim();
+
+  // Normalize a string: lowercase, remove punctuation/underscores/extra spaces
+  const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+
+  const cleanNorm = normalize(clean);
+
+  // ── Strategy 0: Check supabaseNames aliases (highest priority) ───────────────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    if (!b.supabaseNames) continue;
+    const hit = b.supabaseNames.some(alias =>
+      normalize(alias) === cleanNorm ||
+      normalize(alias).includes(cleanNorm) ||
+      cleanNorm.includes(normalize(alias))
+    );
+    if (hit) return k;
+  }
+
+  // ── Strategy 1: Exact normalized name match ──────────────────────────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    if (normalize(b.name) === cleanNorm) return k;
+  }
+
+  // ── Strategy 2: Normalized name contains the other (substring) ───────────
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    const bNorm = normalize(b.name);
+    if (bNorm.includes(cleanNorm) || cleanNorm.includes(bNorm)) return k;
+  }
+
+  // ── Strategy 3: Key-derived words vs. query words (word overlap) ──────────
+  // e.g. "new_administrative_bldg" → ["new","administrative","bldg"] vs "new admin building"
+  const queryWords = cleanNorm.split(' ').filter(w => w.length > 2);
+  let bestKey = null;
+  let bestScore = 0;
+
+  for (const [k, b] of Object.entries(BUILDING_DATA)) {
+    const keyWords  = normalize(k.replace(/_/g, ' ')).split(' ').filter(w => w.length > 2);
+    const nameWords = normalize(b.name).split(' ').filter(w => w.length > 2);
+    const allWords  = [...new Set([...keyWords, ...nameWords])];
+
+    let score = 0;
+    for (const qw of queryWords) {
+      // Allow prefix matching (e.g. "admin" matches "administrative")
+      if (allWords.some(w => w.startsWith(qw) || qw.startsWith(w))) score++;
+    }
+    if (score > bestScore) { bestScore = score; bestKey = k; }
+  }
+
+  if (bestScore > 0) return bestKey;
+
+  console.warn(`[GIYA Search] Could not map building name "${name}" to any BUILDING_DATA key.`);
+  return null;
+}
+
+async function _handleSearch(query) {
   if (!query.trim()) return;
-  // Only search interactive buildings
+
+  const { rooms, offices, facilities } = await searchCampusEntities(query);
+  console.log('[GIYA Search] Query:', query, '→ rooms:', rooms, 'offices:', offices, 'facilities:', facilities);
+
+  if (rooms.length > 0) {
+    const r = rooms[0];
+    const buildingName = r.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched room:', r.Room_number, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${r.Room_number || r.Room_name} (${buildingName})`;
+      _selectBuilding(key, true, true, r.Room_number || r.Room_name, true);
+      return;
+    }
+  }
+
+  if (offices.length > 0) {
+    const o = offices[0];
+    const buildingName = o.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched office:', o.Office_name, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${o.Office_name} (${buildingName})`;
+      _selectBuilding(key, true, true, o.Office_name, true);
+      return;
+    }
+  }
+
+  if (facilities.length > 0) {
+    const f = facilities[0];
+    const buildingName = f.BUILDINGS?.Building_name;
+    console.log('[GIYA Search] Matched facility:', f.Facility_name, 'in building:', buildingName);
+    const key = _findKeyByBuildingName(buildingName);
+    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
+    if (key) {
+      const input = document.getElementById('map-search');
+      if (input) input.value = `${f.Facility_name} (${buildingName})`;
+      _selectBuilding(key, true, true, f.Facility_name, true);
+      return;
+    }
+  }
+
+  // Fallback to interactive building name search
   const key = Object.keys(BUILDING_DATA).find(k =>
     BUILDING_DATA[k].interactive !== false &&
     (k.includes(query.toLowerCase()) ||
       BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
   );
   if (key) {
-    _selectBuilding(key, true);
+    _selectBuilding(key, true, false, null);
   } else {
     const dd = document.getElementById('search-dropdown');
-    if (dd) { dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No buildings found</div>'; dd.style.display = 'block'; }
+    if (dd) { dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No matches found</div>'; dd.style.display = 'block'; }
   }
 }
 
-function _buildDropdown(query) {
+async function _buildDropdown(query) {
   const dd = document.getElementById('search-dropdown');
   if (!dd) return;
-  if (!query.trim()) { dd.style.display = 'none'; return; }
+  if (!query.trim() || query.trim().length < 2) { dd.style.display = 'none'; return; }
 
-  // Only show interactive buildings in the search dropdown
-  const matches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
+  const { buildings, rooms, offices, facilities } = await searchCampusEntities(query);
+
+  let html = '';
+
+  // 1. Render matched Rooms
+  rooms.forEach(r => {
+    const bName = r.BUILDINGS?.Building_name || 'Building';
+    const target = r.Room_number || r.Room_name || '';
+    const roomSub = (r.Room_number && r.Room_name) ? ` — ${r.Room_name}` : (r.Room_name && !r.Room_number ? r.Room_name : '');
+    const roomMain = r.Room_number || r.Room_name || 'Unnamed Room';
+    html += `
+      <div data-type="room" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
+        <span><i class="mdi mdi-door"></i></span>
+        <span><strong>${roomMain}</strong>${r.Room_number && r.Room_name ? ` — ${r.Room_name}` : ''}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 2. Render matched Offices
+  offices.forEach(o => {
+    const bName = o.BUILDINGS?.Building_name || 'Building';
+    html += `
+      <div data-type="office" data-building="${bName}" data-target="${o.Office_name}" class="search-dropdown-item">
+        <span><i class="mdi mdi-briefcase-outline"></i></span>
+        <span>${o.Office_name}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 3. Render matched Facilities
+  facilities.forEach(f => {
+    const bName = f.BUILDINGS?.Building_name || 'Building';
+    html += `
+      <div data-type="facility" data-building="${bName}" data-target="${f.Facility_name}" class="search-dropdown-item">
+        <span><i class="mdi mdi-domain"></i></span>
+        <span>${f.Facility_name}</span>
+        <span class="search-dropdown-item-type">in ${bName}</span>
+      </div>`;
+  });
+
+  // 4. Render matched Local Buildings
+  const localMatches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
     b.interactive !== false &&
     (k.includes(query.toLowerCase()) || b.name.toLowerCase().includes(query.toLowerCase()))
   );
 
-  if (!matches.length) { dd.style.display = 'none'; return; }
+  localMatches.forEach(([key, b]) => {
+    html += `
+      <div data-type="building" data-key="${key}" class="search-dropdown-item">
+        <span>${b.emoji || '🏛'}</span>
+        <span>${b.name}</span>
+        <span class="search-dropdown-item-type">${b.type || 'Building'}</span>
+      </div>`;
+  });
 
-  dd.innerHTML = matches.map(([key, b]) => `
-    <div
-      data-key="${key}"
-      class="search-dropdown-item"
-    >
-      <span>${b.emoji || '🏛'}</span>
-      <span>${b.name}</span>
-      <span class="search-dropdown-item-type">${b.type || ''}</span>
-    </div>`).join('');
+  if (!html) {
+    dd.innerHTML = '<div style="padding:10px 14px;font-size:13px;color:#6b7280;">No matches found</div>';
+    dd.style.display = 'block';
+    return;
+  }
 
-  // click handler per result
-  dd.querySelectorAll('[data-key]').forEach(el => {
+  dd.innerHTML = html;
+
+  // Add click events for dropdown items
+  dd.querySelectorAll('.search-dropdown-item').forEach(el => {
     el.addEventListener('click', () => {
-      const k = el.dataset.key;
-      const input = document.getElementById('map-search');
-      if (input) input.value = BUILDING_DATA[k].name;
+      const type = el.dataset.type;
       dd.style.display = 'none';
-      _selectBuilding(k, true);
+
+      if (type === 'building') {
+        const k = el.dataset.key;
+        const input = document.getElementById('map-search');
+        if (input) input.value = BUILDING_DATA[k]?.name || k;
+        _selectBuilding(k, true, false, null);
+      } else {
+        const buildingName = el.dataset.building;
+        const targetName = el.dataset.target;
+        const input = document.getElementById('map-search');
+        if (input) input.value = `${targetName} (${buildingName})`;
+
+        const key = _findKeyByBuildingName(buildingName);
+        if (key) {
+          // Select building, open panel in search mode, SUPPRESS 3D MODEL VIEWER, highlight target!
+          _selectBuilding(key, true, true, targetName, true);
+        }
+      }
     });
   });
 
   dd.style.display = 'block';
 }
+
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 
