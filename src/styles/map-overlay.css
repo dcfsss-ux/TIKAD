@@ -567,6 +567,13 @@
   opacity: 1;
 }
 
+.floor-item-sub {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 /* ── Status dot ─────────────────────────────────────────────────────────── */
 .floor-status-dot {
   width: 8px;

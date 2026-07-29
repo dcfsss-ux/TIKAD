@@ -20,9 +20,9 @@ export async function getBuildingDetails(buildingId) {
       Image_URL,
       Model_type,
       Status_type,
-      ROOMS ( Room_ID, Room_number, Room_name, Floor, Room_type, Status ),
-      OFFICES ( Office_ID, Office_name, Weblinks, Floor ),
-      FACILITIES ( Facility_ID, Facility_name, Floor )
+      ROOMS ( Room_ID, Room_number, Room_name, Floor ),
+      OFFICES ( Office_ID, Office_name, Abbreviations, Room_number, Floor ),
+      FACILITIES ( Facility_ID, Facility_name, Abbreviations, Room_number, Floor )
     `)
     .eq('Building_ID', buildingId)
     .single();
@@ -77,9 +77,9 @@ export async function getBuildingByNameOrKey(keyOrName) {
     Image_URL,
     Model_type,
     Status_type,
-    ROOMS ( Room_ID, Room_number, Room_name, Floor, Room_type, Status ),
-    OFFICES ( Office_ID, Office_name, Weblinks, Floor ),
-    FACILITIES ( Facility_ID, Facility_name, Floor )
+    ROOMS ( Room_ID, Room_number, Room_name, Floor ),
+    OFFICES ( Office_ID, Office_name, Abbreviations, Room_number, Floor ),
+    FACILITIES ( Facility_ID, Facility_name, Abbreviations, Room_number, Floor )
   `;
 
   // ── Try 1: match cleanName (e.g. "ced") ──────────────────────────────
