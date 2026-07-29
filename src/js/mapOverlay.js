@@ -20,6 +20,8 @@ import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.j
 const BUILDING_DATA = {
   "masawa_building": {
     name: "Masawa Building", shortName: "Masawa", type: "Academic Building", emoji: "🏫",
+    supabaseId: 12,
+    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa'],
     image: "/images/masawa.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
@@ -33,6 +35,8 @@ const BUILDING_DATA = {
   },
   "hinang_building": {
     name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
+    supabaseId: 6,
+    supabaseNames: ['Hinang', 'Hinang Building'],
     image: "/images/hinang.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)",
@@ -48,6 +52,8 @@ const BUILDING_DATA = {
   },
   "kinaadman_hall": {
     name: "Kinaadman Hall", shortName: "Kinaadman", type: "Academic Hall", emoji: "🎓",
+    supabaseId: 5,
+    supabaseNames: ['Kinaadman', 'Kinaadman Hall'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)",
@@ -62,6 +68,8 @@ const BUILDING_DATA = {
   },
   "hiaraya_building": {
     name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
+    supabaseId: 3,
+    supabaseNames: ['Hiraya', 'Hiraya Building'],
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)",
@@ -76,6 +84,8 @@ const BUILDING_DATA = {
   },
   "batok_hall": {
     name: "Batok Hall", shortName: "Batok", type: "Multi-Purpose Hall", emoji: "🏟",
+    supabaseId: 4,
+    supabaseNames: ['Batok', 'Batok Hall'],
     image: "/images/batok.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)",
@@ -90,6 +100,8 @@ const BUILDING_DATA = {
   },
   "new_administrative_bldg": {
     name: "New Admin Building", shortName: "Admin", type: "Administration", emoji: "🏢",
+    supabaseId: 1,
+    supabaseNames: ['New Administration Building', 'New Admin Building', 'Admin'],
     image: "/images/new admin.jpeg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)",
@@ -106,6 +118,8 @@ const BUILDING_DATA = {
   },
   "state-of-the-art-library": {
     name: "State-of-the-Art Library", shortName: "Library", type: "Library / Learning Hub", emoji: "📖",
+    supabaseId: 11,
+    supabaseNames: ['Library', 'State-of-the-Art Library'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
@@ -120,6 +134,8 @@ const BUILDING_DATA = {
   },
   "kalinaw": {
     name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
+    supabaseId: 10,
+    supabaseNames: ['Kalinaw', 'Kalinaw Hall'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)",
@@ -133,6 +149,8 @@ const BUILDING_DATA = {
   },
   "csu_student_center": {
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
+    supabaseId: 19,
+    supabaseNames: ['Student Center', 'CSU Student Center'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
@@ -161,6 +179,8 @@ const BUILDING_DATA = {
   },
   "caa_building": {
     name: "CAA Building", shortName: "CAA", type: "Academic Building", emoji: "🌾",
+    supabaseId: 8,
+    supabaseNames: ['CAA', 'CAA Building'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)",
@@ -173,6 +193,8 @@ const BUILDING_DATA = {
   },
   "dost": {
     name: "DOST Building", shortName: "DOST", type: "Research Center", emoji: "🔬",
+    supabaseId: 15,
+    supabaseNames: ['DOST Building', 'DOST'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #0f2c59 0%, #205090 100%)",
@@ -185,6 +207,8 @@ const BUILDING_DATA = {
   },
   "food_innovation_center": {
     name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
+    supabaseId: 18,
+    supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)",
@@ -198,6 +222,8 @@ const BUILDING_DATA = {
   },
   "hostel": {
     name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
+    supabaseId: 16,
+    supabaseNames: ['Hostel', 'University Hostel'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)",
@@ -221,6 +247,8 @@ const BUILDING_DATA = {
   },
   "csu_gym": {
     name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
+    supabaseId: 13,
+    supabaseNames: ['CSU Gymnasium', 'University Gymnasium', 'Gym'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)",
@@ -233,6 +261,8 @@ const BUILDING_DATA = {
   },
   "old_administrative_building": {
     name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", type: "Academic Support", emoji: "🏢",
+    supabaseId: 2,
+    supabaseNames: ['Old Administration Building', 'Old Admin Building'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
@@ -246,6 +276,8 @@ const BUILDING_DATA = {
 
   "old_cas": {
     name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
+    supabaseId: 20,
+    supabaseNames: ['Old CAS', 'Old CAS Building'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)",
@@ -258,6 +290,8 @@ const BUILDING_DATA = {
   },
   "sports_office": {
     name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
+    supabaseId: 14,
+    supabaseNames: ['PE Building', 'Sports Office'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
@@ -272,6 +306,8 @@ const BUILDING_DATA = {
 
   "Villares": {
     name: "Villares", shortName: "Villares", type: "Athletics & Sports", emoji: "🏆",
+    supabaseId: 9,
+    supabaseNames: ['Villares'],
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
@@ -328,7 +364,19 @@ const BUILDING_DATA = {
 
   // ── ADDITIONAL CAMPUS STRUCTURES ──────────────────────────────────────────
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
-  "alumni_office": { name: "Alumni Office", shortName: "Alumni Office", interactive: false },
+  "alumni_office": {
+    name: "Alumni Center", shortName: "Alumni Center", type: "Administrative Unit", emoji: "🎓",
+    supabaseId: 17,
+    supabaseNames: ['Alumni Center', 'Alumni Office'],
+    image: "/images/kinaadman.jpg",
+    logo: "/images/logo chass.jpg",
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
+    desc: "Serves the Caraga State University Alumni Association, managing alumni records, events, and community engagements.",
+    depts: [
+      { icon: "🎓", name: "Alumni Affairs Office", sub: "Ground Floor" }
+    ],
+    contact: { phone: "(085) 341-2300", email: "alumni@csu.edu.ph" }
+  },
   "amante_building": { name: "Amante Building", shortName: "Amante Bldg.", interactive: false },
   "annex_2_(old_ladies_dorm)": { name: "Annex 2 (Old Ladies Dorm)", shortName: "Annex 2", interactive: false },
   "annex_3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
@@ -698,31 +746,32 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
     // ── Offices ────────────────────────────────────────────────────────────
     (dbBuilding.OFFICES || []).forEach(o => {
-      const isMatched = highlightRoom && o.Office_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const officeSub = o.Abbreviations || o.Room_number || null;
+      const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
+      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
       const matchStyle = isMatched ? ' floor-item--matched' : '';
       const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-      const label = o.Weblinks
-        ? `<a href="${o.Weblinks}" target="_blank" style="color:inherit;text-decoration:none;"><strong>${o.Office_name}</strong></a>`
-        : `<strong>${o.Office_name}</strong>`;
 
       addToFloor(o.Floor, `
         <li class="floor-item${matchStyle}">
           <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
-          <span class="floor-item-label">${label}</span>
+          <span class="floor-item-label"><strong>${o.Office_name}</strong>${officeSub ? ` <span class="floor-item-sub">${officeSub}</span>` : ''}</span>
           ${badge}
         </li>`);
     });
 
     // ── Facilities ─────────────────────────────────────────────────────────
     (dbBuilding.FACILITIES || []).forEach(f => {
-      const isMatched = highlightRoom && f.Facility_name.toLowerCase().includes(highlightRoom.toLowerCase());
+      const facilitySub = f.Abbreviations || f.Room_number || null;
+      const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
+      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
       const matchStyle = isMatched ? ' floor-item--matched' : '';
       const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
 
       addToFloor(f.Floor, `
         <li class="floor-item${matchStyle}">
           <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
-          <span class="floor-item-label"><strong>${f.Facility_name}</strong></span>
+          <span class="floor-item-label"><strong>${f.Facility_name}</strong>${facilitySub ? ` <span class="floor-item-sub">${facilitySub}</span>` : ''}</span>
           ${badge}
         </li>`);
     });
