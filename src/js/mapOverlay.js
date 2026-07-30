@@ -12,10 +12,11 @@ import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
 
 // ── Building registry ─────────────────────────────────────────────────────────
-// Keys must match (lowercased, trimmed) mesh names exported in your GLB file.
-// Run the app, open the console and look for the logged mesh names after load.
+// glbName  = exact node/mesh name as it appears in the GLB (case-insensitive match).
+// The key is only used internally; glbName drives the 3-D lookup.
 const BUILDING_DATA = {
   "masawa_building": {
+    glbName: "MASAWA BUILDING",
     name: "Masawa Building", shortName: "Masawa", type: "Academic Building", emoji: "🏫",
     image: "/images/masawa.jpg",
     logo: "/images/logo ccis.jpg",
@@ -29,6 +30,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
   },
   "hinang_building": {
+    glbName: "HINANG BUILDING",
     name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
     image: "/images/hinang.jpg",
     logo: "/images/logo cegs.jpg",
@@ -44,6 +46,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2322", email: "cegs@csu.edu.ph" }
   },
   "kinaadman_hall": {
+    glbName: "KINAADMAN HALL",
     name: "Kinaadman Hall", shortName: "Kinaadman", type: "Academic Hall", emoji: "🎓",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -58,6 +61,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
   },
   "hiaraya_building": {
+    glbName: "HIRAYA BUILDING",
     name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
     image: "/images/hiraya.jpg",
     logo: "/images/logo ccis.jpg",
@@ -72,6 +76,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2324", email: "canr@csu.edu.ph" }
   },
   "batok_hall": {
+    glbName: "BATOK HALL",
     name: "Batok Hall", shortName: "Batok", type: "Multi-Purpose Hall", emoji: "🏟",
     image: "/images/batok.jpg",
     logo: "/images/logo chass.jpg",
@@ -86,6 +91,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2325", email: "events@csu.edu.ph" }
   },
   "new_administrative_bldg": {
+    glbName: "NEW ADMINISTRATIVE BUILDING",
     name: "New Admin Building", shortName: "Admin", type: "Administration", emoji: "🏢",
     image: "/images/new admin.jpeg",
     logo: "/images/logo ccis.jpg",
@@ -102,6 +108,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "admin@csu.edu.ph" }
   },
   "state-of-the-art-library": {
+    glbName: "STATE-OF-THE-ART LIBRARY",
     name: "State-of-the-Art Library", shortName: "Library", type: "Library / Learning Hub", emoji: "📖",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
@@ -116,6 +123,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2350", email: "library@csu.edu.ph" }
   },
   "kalinaw": {
+    glbName: "KALINAW",
     name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -129,6 +137,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2361", email: "kalinaw@csu.edu.ph" }
   },
   "csu_student_center": {
+    glbName: "CSU STUDENT CENTER",
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
@@ -142,6 +151,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2370", email: "studentcenter@csu.edu.ph" }
   },
   "ced_building": {
+    glbName: "CED BUILDING",
     name: "CED Building", shortName: "CED", type: "Academic Building", emoji: "🏫",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
@@ -155,6 +165,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2330", email: "ced@csu.edu.ph" }
   },
   "caa_building": {
+    glbName: "CAA BUILDING",
     name: "CAA Building", shortName: "CAA", type: "Academic Building", emoji: "🌾",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
@@ -167,6 +178,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2340", email: "caa@csu.edu.ph" }
   },
   "dost": {
+    glbName: "DOST",
     name: "DOST Building", shortName: "DOST", type: "Research Center", emoji: "🔬",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
@@ -179,6 +191,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2390", email: "dost@csu.edu.ph" }
   },
   "food_innovation_center": {
+    glbName: "FOOD INNOVATION CENTER",
     name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
@@ -192,6 +205,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2388", email: "fic@csu.edu.ph" }
   },
   "hostel": {
+    glbName: "UNIVERSITY HOSTEL",
     name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -204,6 +218,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2365", email: "hostel@csu.edu.ph" }
   },
   "school_of_medicine_(_under_cons_)": {
+    glbName: "SCHOOL OF MEDICINE ( UNDER CONS. )",
     name: "School of Medicine", shortName: "Medicine", type: "Under Construction", emoji: "🏥",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
@@ -215,6 +230,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
   },
   "csu_gym": {
+    glbName: "STATE-OF-THE ART SPORTS COMPLEX.001",
     name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -227,6 +243,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "gym.project@csu.edu.ph" }
   },
   "old_administrative_building": {
+    glbName: "OLD ADMINISTRATIVE BUILDING",
     name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", type: "Academic Support", emoji: "🏢",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -239,6 +256,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2305", email: "oldadmin@csu.edu.ph" }
   },
   "alumni_office": {
+    glbName: "ALUMNI OFFICE",
     name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -252,6 +270,7 @@ const BUILDING_DATA = {
   },
 
   "old_cas": {
+    glbName: "OLD CAS BUILDING",
     name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo ccis.jpg",
@@ -264,6 +283,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "cas@csu.edu.ph" }
   },
   "sports_office": {
+    glbName: "ROTC OFFICE",
     name: "Sports Office", shortName: "Sports", type: "Athletics & Sports", emoji: "🏆",
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
@@ -278,32 +298,29 @@ const BUILDING_DATA = {
   },
 
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-  "bbc_cafeteria": { name: "BBC Cafeteria", shortName: "Cafeteria", interactive: false },
-  "canteen": { name: "Main Canteen", shortName: "Canteen", interactive: false },
-  "ced_canteen": { name: "CED Canteen", shortName: "Canteen", interactive: false },
-  "caa_canteen": { name: "CAA Canteen", shortName: "Canteen", interactive: false },
-  "overpass": { name: "Campus Overpass", shortName: "Overpass", interactive: false },
-  "guard_house": { name: "Guard House", shortName: "Guard House", interactive: false },
-  "guard_house001": { name: "Guard House", shortName: "Guard House", interactive: false },
-
-  "harrison_statue": { name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
-  "ochoa_statue": { name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
-  "green_house": { name: "Green House", shortName: "Green House", interactive: false },
-  "micoriza_green_house": { name: "Micoriza Green House", shortName: "Green House", interactive: false },
-  "church": { name: "Campus Chapel", shortName: "Chapel", interactive: false },
-  "eco_park_building": { name: "Eco Park", shortName: "Eco Park", interactive: false },
-  "reservoir": { name: "Water Reservoir", shortName: "Reservoir", interactive: false },
-  "mrf": { name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
-  "feedmill": { name: "Feedmill", shortName: "Feedmill", interactive: false },
-  "milk_processing_facility": { name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
-  "da_dairy_processing_center": { name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
-  "caretaker_house": { name: "Caretaker House", shortName: "Caretaker House", interactive: false },
-  "beef_cattle_building": { name: "Beef Cattle Shed", shortName: "Cattle Building", interactive: false },
-  "barn_house": { name: "Barn House", shortName: "Barn House", interactive: false },
-  "goat_house": { name: "Goat House", shortName: "Goat House", interactive: false },
-  "sheep_house": { name: "Sheep House", shortName: "Sheep House", interactive: false },
-  "agro-forestry_shed": { name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
-  "wood_workshoptech_voc_building": { name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false }
+  // Keys below use glbName so _findNode() can locate them precisely.
+  "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
+  "canteen": { glbName: "CAFETERIA", name: "Main Canteen", shortName: "Canteen", interactive: false },
+  "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
+  "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
+  "guard_house001": { glbName: "GUARD HOUSE.001", name: "Guard House (Gate)", shortName: "Guard House", interactive: false },
+  "green_house": { glbName: "GREEN HOUSE", name: "Green House", shortName: "Green House", interactive: false },
+  "micoriza_green_house": { glbName: "MICORIZA GREEN HOUSE", name: "Micoriza Green House", shortName: "Micoriza GH", interactive: false },
+  "mrf": { glbName: "MRF", name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
+  "feedmill": { glbName: "FEEDMILL", name: "Feedmill", shortName: "Feedmill", interactive: false },
+  "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
+  "caretaker_house": { glbName: "CARETAKER HOUSE", name: "Caretaker House", shortName: "Caretaker", interactive: false },
+  "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Beef Cattle Shed", shortName: "Cattle Shed", interactive: false },
+  "barn_house": { glbName: "BARN HOUSE", name: "Barn House", shortName: "Barn House", interactive: false },
+  "goat_house": { glbName: "GOAT HOUSE", name: "Goat House", shortName: "Goat House", interactive: false },
+  "sheep_house": { glbName: "SHEEP HOUSE", name: "Sheep House", shortName: "Sheep House", interactive: false },
+  "agro_forestry_shed": { glbName: "AGRO-FORESTRY SHED", name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
+  "wood_workshop": { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
+  "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", interactive: false },
+  "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", interactive: false },
+  "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", interactive: false },
+  "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
+  "bodega": { glbName: "BODEGA", name: "Bodega", shortName: "Bodega", interactive: false },
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -349,13 +366,13 @@ function _bootExperience() {
   experience = new Experience(canvas);
 
   // ── Wire up progress to new preloader bar + pct ──────────────────────────
-  const barEl  = document.getElementById('preloader-bar');
-  const pctEl  = document.getElementById('loading-progress');
+  const barEl = document.getElementById('preloader-bar');
+  const pctEl = document.getElementById('loading-progress');
 
   function _setProgress(pct) {
     const clamped = Math.min(100, Math.max(0, Math.round(pct)));
     if (barEl) barEl.style.width = clamped + '%';
-    if (pctEl) pctEl.textContent  = clamped + '%';
+    if (pctEl) pctEl.textContent = clamped + '%';
   }
 
   if (experience.resources) {
@@ -407,19 +424,29 @@ function _bootExperience() {
 // ── Node lookup helper ────────────────────────────────────────────────────────
 function _findNode(key) {
   if (!key) return null;
+
+  // 1️⃣ Priority: use the explicit glbName from BUILDING_DATA (exact, case-insensitive)
+  const data = BUILDING_DATA[key];
+  if (data && data.glbName) {
+    const glbKey = data.glbName.toLowerCase().trim();
+    if (meshIndex[glbKey]) return meshIndex[glbKey];
+  }
+
+  // 2️⃣ Direct lookup by the registry key itself (lowercased)
   const cleanKey = key.toLowerCase().trim();
   if (meshIndex[cleanKey]) return meshIndex[cleanKey];
 
+  // 3️⃣ Normalized exact match (strip punctuation/spaces)
   const normKey = cleanKey.replace(/[^a-z0-9]/g, '');
   if (!normKey) return null;
 
-  // Exact match after normalization (ignoring underscores, spaces, dashes)
   for (const [k, node] of Object.entries(meshIndex)) {
     const normK = k.replace(/[^a-z0-9]/g, '');
     if (normK === normKey) return node;
   }
 
-  // Partial / inclusion match (pick closest length match)
+  // 4️⃣ Partial / inclusion match (pick closest length match)
+
   let bestMatch = null;
   let bestLen = Infinity;
   for (const [k, node] of Object.entries(meshIndex)) {
@@ -600,7 +627,7 @@ function _openPanel(key) {
 
   // ── "View 3D Model" button (only for buildings with a model3d path) ──
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
-  const viewBtn     = document.getElementById('panel-view3d-btn');
+  const viewBtn = document.getElementById('panel-view3d-btn');
   if (viewBtnWrap && viewBtn) {
     if (data.model3d) {
       viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
@@ -658,9 +685,9 @@ function _createPins() {
 
     const el = document.createElement('div');
     el.className = 'bldg-pin';
-    
+
     const isInteractive = data.interactive !== false;
-    
+
     if (isInteractive) {
       el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
       el.innerHTML = `
@@ -699,7 +726,7 @@ function _updatePins() {
   pinList.forEach(({ worldPos, el, interactive }) => {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
-    
+
     // Zoom-based Level of Detail (LOD) filtering for static/non-interactive pins
     if (!interactive && zoom < 0.85) {
       el.style.display = 'none';
@@ -721,7 +748,7 @@ function _handleSearch(query) {
   const key = Object.keys(BUILDING_DATA).find(k =>
     BUILDING_DATA[k].interactive !== false &&
     (k.includes(query.toLowerCase()) ||
-    BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
+      BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
   );
   if (key) {
     _selectBuilding(key, true);

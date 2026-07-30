@@ -18,10 +18,10 @@ export default class Renderer {
       antialias: true,
     })
 
-    this.renderer.physicallyCorrectLights = true
-    this.renderer.outputEncoding = THREE.sRGBEncoding
+    this.renderer.useLegacyLights = false
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 2.5
+    this.renderer.toneMappingExposure = 1.0
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.renderer.setSize(this.sizes.width, this.sizes.height)

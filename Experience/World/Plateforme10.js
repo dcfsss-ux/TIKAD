@@ -8,7 +8,6 @@ export default class MapModel {
     this.resources = this.experience.resources;
     this.debug = this.experience.debug;
 
-    // Load your custom GLB model
     this.mapModel = this.resources.items.plateforme10;
     this.actualModel = this.mapModel.scene;
 
@@ -16,35 +15,37 @@ export default class MapModel {
   }
 
   setModel() {
-    // Log all mesh names — use these in main.js for the search/highlight feature
     console.log("=== GLB Mesh Names (use these for building search) ===");
     this.actualModel.traverse((child) => {
       if (child.isMesh) {
         console.log(" -", child.name);
 
-        // Disable frustum culling to ensure entire map is visible
+        // Disable frustum culling so the entire map stays visible
         child.frustumCulled = false;
 
-        // Ensure textures from the GLB display correctly
+        // GLTF spec: textures must not be flipped on Y axis
         if (child.material) {
           const mats = Array.isArray(child.material)
             ? child.material
             : [child.material];
           mats.forEach((mat) => {
-            if (mat.map) {
-              mat.map.flipY = false;
+            for (const key of Object.keys(mat)) {
+              const val = mat[key];
+              if (val && val.isTexture) {
+                val.flipY = false;
+                val.needsUpdate = true;
+              }
             }
           });
         }
       }
     });
 
-    // Add the model to the scene as-is (uses materials baked into the GLB)
     this.scene.add(this.actualModel);
     console.log("Custom GLB map model loaded successfully.");
   }
 
-  resize() {}
+  resize() { }
 
-  update() {}
+  update() { }
 }

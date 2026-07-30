@@ -29,11 +29,11 @@ export default class Environment {
 
   setLights() {
     // Bright ambient light so the entire model is evenly illuminated
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 3.0)
+    this.ambientLight = new THREE.AmbientLight(0xffffff, 1.2)
     this.scene.add(this.ambientLight)
 
     // Directional light from above to add subtle depth
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 2.0)
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
     this.directionalLight.position.set(5, 10, 5)
     this.scene.add(this.directionalLight)
   }
