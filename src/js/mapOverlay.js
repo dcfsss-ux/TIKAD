@@ -289,6 +289,7 @@ const BUILDING_DATA = {
       { icon: "👥", name: "Faculty Lounge & Offices", sub: "Floor 2" }
     ],
     contact: { phone: "(085) 341-2305", email: "oldadmin@csu.edu.ph" }
+  },
   "alumni_office": {
     glbName: "ALUMNI OFFICE",
     name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
@@ -319,14 +320,10 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "cas@csu.edu.ph" }
   },
   "sports_office": {
-<<<<<<< HEAD
     glbName: "ROTC OFFICE",
-    name: "Sports Office", shortName: "Sports", type: "Athletics & Sports", emoji: "🏆",
-=======
     name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
     supabaseId: 14,
     supabaseNames: ['PE Building', 'Sports Office'],
->>>>>>> 5fd2d8f5ddb9d19c5782c1e451e863c25a252f66
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
@@ -370,57 +367,39 @@ const BUILDING_DATA = {
 
 
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-<<<<<<< HEAD
+  // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
   // Keys below use glbName so _findNode() can locate them precisely.
-  "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
-  "canteen": { glbName: "CAFETERIA", name: "Main Canteen", shortName: "Canteen", interactive: false },
-  "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
-  "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
-  "guard_house001": { glbName: "GUARD HOUSE.001", name: "Guard House (Gate)", shortName: "Guard House", interactive: false },
-  "green_house": { glbName: "GREEN HOUSE", name: "Green House", shortName: "Green House", interactive: false },
-  "micoriza_green_house": { glbName: "MICORIZA GREEN HOUSE", name: "Micoriza Green House", shortName: "Micoriza GH", interactive: false },
-  "mrf": { glbName: "MRF", name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
-  "feedmill": { glbName: "FEEDMILL", name: "Feedmill", shortName: "Feedmill", interactive: false },
-  "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
-  "caretaker_house": { glbName: "CARETAKER HOUSE", name: "Caretaker House", shortName: "Caretaker", interactive: false },
-  "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Beef Cattle Shed", shortName: "Cattle Shed", interactive: false },
-  "barn_house": { glbName: "BARN HOUSE", name: "Barn House", shortName: "Barn House", interactive: false },
-  "goat_house": { glbName: "GOAT HOUSE", name: "Goat House", shortName: "Goat House", interactive: false },
-  "sheep_house": { glbName: "SHEEP HOUSE", name: "Sheep House", shortName: "Sheep House", interactive: false },
-  "agro_forestry_shed": { glbName: "AGRO-FORESTRY SHED", name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
-  "wood_workshop": { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
-  "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", interactive: false },
-  "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", interactive: false },
-  "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", interactive: false },
-  "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
-  "bodega": { glbName: "BODEGA", name: "Bodega", shortName: "Bodega", interactive: false },
-=======
-  "bbc_cafeteria": { name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
-  "canteen": { name: "Main Canteen", shortName: "Canteen", interactive: false },
-  "ced_canteen": { name: "CED Canteen", shortName: "CED Canteen", interactive: false },
-  "caa_canteen": { name: "CAA Canteen", shortName: "CAA Canteen", interactive: false },
-  "overpass": { name: "Campus Overpass", shortName: "Overpass", interactive: false },
-  "guard_house": { name: "Guard House", shortName: "Guard House", interactive: false },
-  "guard_house001": { name: "Guard House", shortName: "Guard House", interactive: false },
+  "bbc_cafeteria":          { glbName: "BBC CAFETERIA",            name: "BBC Cafeteria",           shortName: "BBC Cafeteria",   interactive: false },
+  "canteen":                { glbName: "CAFETERIA",                name: "Main Canteen",            shortName: "Canteen",        interactive: false },
+  "ced_canteen":            { glbName: "CED CANTEEN",              name: "CED Canteen",             shortName: "CED Canteen",    interactive: false },
+  "caa_canteen":            { glbName: "CAA CANTEEN",              name: "CAA Canteen",             shortName: "CAA Canteen",    interactive: false },
+  "overpass":               { glbName: "OVERPASS",                 name: "Campus Overpass",         shortName: "Overpass",       interactive: false },
+  "guard_house":            { glbName: "GUARD HOUSE",              name: "Guard House",             shortName: "Guard House",    interactive: false },
+  "guard_house001":         { glbName: "GUARD HOUSE.001",          name: "Guard House (Gate)",      shortName: "Guard House",    interactive: false },
 
-  "harrison_statue": { name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
-  "ochoa_statue": { name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
-  "green_house": { name: "Green House", shortName: "Green House", interactive: false },
-  "micoriza_green_house": { name: "Micoriza Green House", shortName: "Green House", interactive: false },
-  "church": { name: "Campus Chapel", shortName: "Chapel", interactive: false },
-  "eco_park_building": { name: "Eco Park", shortName: "Eco Park", interactive: false },
-  "reservoir": { name: "Water Reservoir", shortName: "Reservoir", interactive: false },
-  "mrf": { name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
-  "feedmill": { name: "Feedmill", shortName: "Feedmill", interactive: false },
-  "milk_processing_facility": { name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
-  "da_dairy_processing_center": { name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
-  "caretaker_house": { name: "Caretaker House", shortName: "Caretaker House", interactive: false },
-  "beef_cattle_building": { name: "Beef Cattle Shed", shortName: "Cattle Building", interactive: false },
-  "barn_house": { name: "Barn House", shortName: "Barn House", interactive: false },
-  "goat_house": { name: "Goat House", shortName: "Goat House", interactive: false },
-  "sheep_house": { name: "Sheep House", shortName: "Sheep House", interactive: false },
-  "agro-forestry_shed": { name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
-  "wood_workshoptech_voc_building": { name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
+  "harrison_statue":        { glbName: "HARRISON STATUE",          name: "Harrison Statue",         shortName: "Harrison Statue", interactive: false },
+  "ochoa_statue":           { glbName: "OCHOA STATUE",             name: "Ochoa Statue",            shortName: "Ochoa Statue",   interactive: false },
+  "green_house":            { glbName: "GREEN HOUSE",              name: "Green House",             shortName: "Green House",    interactive: false },
+  "micoriza_green_house":   { glbName: "MICORIZA GREEN HOUSE",     name: "Micoriza Green House",    shortName: "Micoriza GH",    interactive: false },
+  "church":                 { glbName: "CHAPEL",                   name: "Campus Chapel",           shortName: "Chapel",         interactive: false },
+  "eco_park_building":      { glbName: "ECO PARK",                 name: "Eco Park",                shortName: "Eco Park",       interactive: false },
+  "reservoir":              { glbName: "RESERVOIR",                name: "Water Reservoir",         shortName: "Reservoir",      interactive: false },
+  "mrf":                    { glbName: "MRF",                      name: "Materials Recovery Facility", shortName: "MRF",       interactive: false },
+  "feedmill":               { glbName: "FEEDMILL",                 name: "Feedmill",               shortName: "Feedmill",       interactive: false },
+  "milk_processing_facility": { glbName: "MILK PROCESSING FACILITY", name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
+  "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
+  "caretaker_house":        { glbName: "CARETAKER HOUSE",          name: "Caretaker House",         shortName: "Caretaker",      interactive: false },
+  "beef_cattle_building":   { glbName: "BEEF CATTLE BUILDING",     name: "Beef Cattle Shed",        shortName: "Cattle Shed",    interactive: false },
+  "barn_house":             { glbName: "BARN HOUSE",               name: "Barn House",              shortName: "Barn House",     interactive: false },
+  "goat_house":             { glbName: "GOAT HOUSE",               name: "Goat House",              shortName: "Goat House",     interactive: false },
+  "sheep_house":            { glbName: "SHEEP HOUSE",              name: "Sheep House",             shortName: "Sheep House",    interactive: false },
+  "agro_forestry_shed":     { glbName: "AGRO-FORESTRY SHED",       name: "Agro-Forestry Shed",     shortName: "Agro Shed",      interactive: false },
+  "wood_workshop":          { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
+  "oatc":                   { glbName: "OATC",                     name: "OATC",                   shortName: "OATC",           interactive: false },
+  "rotc":                   { glbName: "ROTC OFFICE",              name: "ROTC Office",             shortName: "ROTC",           interactive: false },
+  "bookstore":              { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS",    shortName: "Bookstore",      interactive: false },
+  "power_house":            { glbName: "POWER HOUSE",              name: "Power House",             shortName: "Power House",    interactive: false },
+  "bodega":                 { glbName: "BODEGA",                   name: "Bodega",                 shortName: "Bodega",         interactive: false },
 
   // ── ADDITIONAL CAMPUS STRUCTURES ──────────────────────────────────────────
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
@@ -481,7 +460,6 @@ const BUILDING_DATA = {
   "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
   "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", interactive: false },
   "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false }
->>>>>>> 5fd2d8f5ddb9d19c5782c1e451e863c25a252f66
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -905,15 +883,6 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
-<<<<<<< HEAD
-  if (viewBtnWrap && viewBtn) {
-    if (data.model3d) {
-      viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
-      viewBtnWrap.style.display = '';
-    } else {
-      viewBtnWrap.style.display = 'none';
-=======
-
   if (searchMode) {
     // Hide description section
     if (descWrap) descWrap.style.display = 'none';
@@ -940,12 +909,11 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     // ── "View 3D Model" button ──
     if (viewBtnWrap && viewBtn) {
       if (data.model3d) {
-        viewBtn.onclick = () => openBuildingViewer(data.model3d, buildingName);
+        viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
         viewBtnWrap.style.display = '';
       } else {
         viewBtnWrap.style.display = 'none';
       }
->>>>>>> 5fd2d8f5ddb9d19c5782c1e451e863c25a252f66
     }
   }
 
@@ -1040,13 +1008,8 @@ function _updatePins() {
     _projVec.copy(worldPos).project(cam);
     if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
 
-<<<<<<< HEAD
-    // Zoom-based Level of Detail (LOD) filtering for static/non-interactive pins
-    if (!interactive && zoom < 0.85) {
-=======
     // Zoom-based Level of Detail (LOD) — show static labels at any meaningful zoom
     if (!interactive && zoom < 0.3) {
->>>>>>> 5fd2d8f5ddb9d19c5782c1e451e863c25a252f66
       el.style.display = 'none';
       return;
     }
