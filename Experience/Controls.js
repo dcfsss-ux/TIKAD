@@ -57,6 +57,15 @@ export default class Controls {
     this.loadCameraState();
     this.syncViewToggleButtons();
     this.controls.addEventListener("end", () => this.saveCameraState());
+
+    // ── Render-on-demand: tell the renderer to redraw whenever controls move.
+    // OrbitControls fires "change" on every camera update, including the
+    // damping tail — so we stop rendering automatically once motion settles.
+    this.controls.addEventListener("change", () => {
+      if (this.experience.renderer) {
+        this.experience.renderer.requestRender()
+      }
+    })
   }
 
   applySensitivityProfile() {
