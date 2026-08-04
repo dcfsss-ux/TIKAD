@@ -14,15 +14,28 @@ import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.j
 
 
 
-// ── Building registry ─────────────────────────────────────────────────────────
-// glbName  = exact node/mesh name as it appears in the GLB (case-insensitive match).
-// The key is only used internally; glbName drives the 3-D lookup.
 const BUILDING_DATA = {
   "masawa_building": {
-    glbName: "MASAWA BUILDING",
-    name: "Masawa Building", shortName: "Masawa", type: "Academic Building", emoji: "🏫",
+    glbName: "MASAWA HALL",
+    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", type: "Academic Building", emoji: "🏫",
     supabaseId: 12,
-    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa'],
+    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
+    image: "/images/masawa.jpg",
+    logo: "/images/logo ccis.jpg",
+    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
+    desc: "Houses the College of Computing and Information Sciences (CCIS), offering undergraduate programs in Computer Science, Information Technology, and related fields. Equipped with modern computer labs and development studios.",
+    depts: [
+      { icon: "💻", name: "College of Computing & Information Sciences", sub: "All Floors" },
+      { icon: "🖥️", name: "Computer Labs 1–4", sub: "Floors 1–2" },
+      { icon: "🔐", name: "IT Resource Center", sub: "Floor 3" },
+    ],
+    contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
+  },
+  "masawa_hall": {
+    glbName: "MASAWA HALL",
+    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", type: "Academic Building", emoji: "🏫",
+    supabaseId: 12,
+    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
     image: "/images/masawa.jpg",
     logo: "/images/logo ccis.jpg",
     gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
@@ -69,8 +82,8 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
   },
-  "hiaraya_building": {
-    glbName: "HIRAYA BUILDING",
+  "hiraya_building": {
+    glbName: "Hiraya Building",
     name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
     supabaseId: 3,
     supabaseNames: ['Hiraya', 'Hiraya Building'],
@@ -261,8 +274,8 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
   },
   "csu_gym": {
-    glbName: "STATE-OF-THE ART SPORTS COMPLEX.001",
-    name: "University Gymnasium", shortName: "Gymnasium", type: "Under Construction", emoji: "🏟",
+    glbName: "Gymnasium",
+    name: "University Gymnasium", shortName: "Gymnasium", type: "Sports Complex", emoji: "🏟",
     supabaseId: 13,
     supabaseNames: ['CSU Gymnasium', 'University Gymnasium', 'Gym'],
     image: "/images/kinaadman.jpg",
@@ -369,37 +382,37 @@ const BUILDING_DATA = {
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
   // Keys below use glbName so _findNode() can locate them precisely.
-  "bbc_cafeteria":          { glbName: "BBC CAFETERIA",            name: "BBC Cafeteria",           shortName: "BBC Cafeteria",   interactive: false },
-  "canteen":                { glbName: "CAFETERIA",                name: "Main Canteen",            shortName: "Canteen",        interactive: false },
-  "ced_canteen":            { glbName: "CED CANTEEN",              name: "CED Canteen",             shortName: "CED Canteen",    interactive: false },
-  "caa_canteen":            { glbName: "CAA CANTEEN",              name: "CAA Canteen",             shortName: "CAA Canteen",    interactive: false },
-  "overpass":               { glbName: "OVERPASS",                 name: "Campus Overpass",         shortName: "Overpass",       interactive: false },
-  "guard_house":            { glbName: "GUARD HOUSE",              name: "Guard House",             shortName: "Guard House",    interactive: false },
-  "guard_house001":         { glbName: "GUARD HOUSE.001",          name: "Guard House (Gate)",      shortName: "Guard House",    interactive: false },
+  "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
+  "canteen": { glbName: "CAFETERIA", name: "Main Canteen", shortName: "Canteen", interactive: false },
+  "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", interactive: false },
+  "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", interactive: false },
+  "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
+  "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
+  "guard_house001": { glbName: "GUARD HOUSE.001", name: "Guard House (Gate)", shortName: "Guard House", interactive: false },
 
-  "harrison_statue":        { glbName: "HARRISON STATUE",          name: "Harrison Statue",         shortName: "Harrison Statue", interactive: false },
-  "ochoa_statue":           { glbName: "OCHOA STATUE",             name: "Ochoa Statue",            shortName: "Ochoa Statue",   interactive: false },
-  "green_house":            { glbName: "GREEN HOUSE",              name: "Green House",             shortName: "Green House",    interactive: false },
-  "micoriza_green_house":   { glbName: "MICORIZA GREEN HOUSE",     name: "Micoriza Green House",    shortName: "Micoriza GH",    interactive: false },
-  "church":                 { glbName: "CHAPEL",                   name: "Campus Chapel",           shortName: "Chapel",         interactive: false },
-  "eco_park_building":      { glbName: "ECO PARK",                 name: "Eco Park",                shortName: "Eco Park",       interactive: false },
-  "reservoir":              { glbName: "RESERVOIR",                name: "Water Reservoir",         shortName: "Reservoir",      interactive: false },
-  "mrf":                    { glbName: "MRF",                      name: "Materials Recovery Facility", shortName: "MRF",       interactive: false },
-  "feedmill":               { glbName: "FEEDMILL",                 name: "Feedmill",               shortName: "Feedmill",       interactive: false },
+  "harrison_statue": { glbName: "HARRISON STATUE", name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
+  "ochoa_statue": { glbName: "OCHOA STATUE", name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
+  "green_house": { glbName: "GREEN HOUSE", name: "Green House", shortName: "Green House", interactive: false },
+  "micoriza_green_house": { glbName: "MICORIZA GREEN HOUSE", name: "Micoriza Green House", shortName: "Micoriza GH", interactive: false },
+  "church": { glbName: "CHAPEL", name: "Campus Chapel", shortName: "Chapel", interactive: false },
+  "eco_park_building": { glbName: "ECO PARK", name: "Eco Park", shortName: "Eco Park", interactive: false },
+  "reservoir": { glbName: "RESERVOIR", name: "Water Reservoir", shortName: "Reservoir", interactive: false },
+  "mrf": { glbName: "MRF", name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
+  "feedmill": { glbName: "FEEDMILL", name: "Feedmill", shortName: "Feedmill", interactive: false },
   "milk_processing_facility": { glbName: "MILK PROCESSING FACILITY", name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
   "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
-  "caretaker_house":        { glbName: "CARETAKER HOUSE",          name: "Caretaker House",         shortName: "Caretaker",      interactive: false },
-  "beef_cattle_building":   { glbName: "BEEF CATTLE BUILDING",     name: "Beef Cattle Shed",        shortName: "Cattle Shed",    interactive: false },
-  "barn_house":             { glbName: "BARN HOUSE",               name: "Barn House",              shortName: "Barn House",     interactive: false },
-  "goat_house":             { glbName: "GOAT HOUSE",               name: "Goat House",              shortName: "Goat House",     interactive: false },
-  "sheep_house":            { glbName: "SHEEP HOUSE",              name: "Sheep House",             shortName: "Sheep House",    interactive: false },
-  "agro_forestry_shed":     { glbName: "AGRO-FORESTRY SHED",       name: "Agro-Forestry Shed",     shortName: "Agro Shed",      interactive: false },
-  "wood_workshop":          { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
-  "oatc":                   { glbName: "OATC",                     name: "OATC",                   shortName: "OATC",           interactive: false },
-  "rotc":                   { glbName: "ROTC OFFICE",              name: "ROTC Office",             shortName: "ROTC",           interactive: false },
-  "bookstore":              { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS",    shortName: "Bookstore",      interactive: false },
-  "power_house":            { glbName: "POWER HOUSE",              name: "Power House",             shortName: "Power House",    interactive: false },
-  "bodega":                 { glbName: "BODEGA",                   name: "Bodega",                 shortName: "Bodega",         interactive: false },
+  "caretaker_house": { glbName: "CARETAKER HOUSE", name: "Caretaker House", shortName: "Caretaker", interactive: false },
+  "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Beef Cattle Shed", shortName: "Cattle Shed", interactive: false },
+  "barn_house": { glbName: "BARN HOUSE", name: "Barn House", shortName: "Barn House", interactive: false },
+  "goat_house": { glbName: "GOAT HOUSE", name: "Goat House", shortName: "Goat House", interactive: false },
+  "sheep_house": { glbName: "SHEEP HOUSE", name: "Sheep House", shortName: "Sheep House", interactive: false },
+  "agro_forestry_shed": { glbName: "AGRO-FORESTRY SHED", name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
+  "wood_workshop": { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
+  "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", interactive: false },
+  "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", interactive: false },
+  "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", interactive: false },
+  "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
+  "bodega": { glbName: "BODEGA", name: "Bodega", shortName: "Bodega", interactive: false },
 
   // ── ADDITIONAL CAMPUS STRUCTURES ──────────────────────────────────────────
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
@@ -695,9 +708,7 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
 function _resetHighlight() {
   highlightedMeshes.forEach(child => {
     if (child.userData.origMat) {
-      child.material = Array.isArray(child.userData.origMat)
-        ? child.userData.origMat.map(m => m.clone())
-        : child.userData.origMat.clone();
+      child.material = child.userData.origMat;
     }
   });
   highlightedMeshes = [];
@@ -779,7 +790,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     // ── Rooms ──────────────────────────────────────────────────────────────
     (dbBuilding.ROOMS || []).forEach(r => {
       const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
-      const roomSub   = r.Room_number && r.Room_name ? r.Room_name : null;
+      const roomSub = r.Room_number && r.Room_name ? r.Room_name : null;
       const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
       const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
       const matchStyle = isMatched ? ' floor-item--matched' : '';
@@ -877,16 +888,16 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
 
   // ── Search mode: hide Description, Contact, and 3D button — show only header + floors ──
-  const descWrap  = document.querySelector('.panel-body > .panel-label:first-child');
-  const descEl    = document.getElementById('panel-desc');
-  const contactWrap  = document.getElementById('panel-contact-wrap');
+  const descWrap = document.querySelector('.panel-body > .panel-label:first-child');
+  const descEl = document.getElementById('panel-desc');
+  const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
   if (searchMode) {
     // Hide description section
     if (descWrap) descWrap.style.display = 'none';
-    if (descEl)   descEl.style.display   = 'none';
+    if (descEl) descEl.style.display = 'none';
     // Hide contact
     if (contactWrap) contactWrap.style.display = 'none';
     // Hide 3D button
@@ -894,7 +905,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   } else {
     // Normal mode — restore description
     if (descWrap) descWrap.style.display = '';
-    if (descEl)   descEl.style.display   = '';
+    if (descEl) descEl.style.display = '';
 
     // Contact
     if (contactWrap && contactContent && data.contact) {
@@ -1061,9 +1072,9 @@ function _findKeyByBuildingName(name) {
   let bestScore = 0;
 
   for (const [k, b] of Object.entries(BUILDING_DATA)) {
-    const keyWords  = normalize(k.replace(/_/g, ' ')).split(' ').filter(w => w.length > 2);
+    const keyWords = normalize(k.replace(/_/g, ' ')).split(' ').filter(w => w.length > 2);
     const nameWords = normalize(b.name).split(' ').filter(w => w.length > 2);
-    const allWords  = [...new Set([...keyWords, ...nameWords])];
+    const allWords = [...new Set([...keyWords, ...nameWords])];
 
     let score = 0;
     for (const qw of queryWords) {

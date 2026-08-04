@@ -16,11 +16,6 @@ export default class MapModel {
   }
 
   setModel() {
-    // Grab the WebGL renderer's max anisotropy once (hardware-dependent value)
-    const maxAniso = this.renderer
-      ? this.renderer.renderer.capabilities.getMaxAnisotropy()
-      : 4;
-
     console.log("=== GLB Mesh Names (use these for building search) ===");
     this.actualModel.traverse((child) => {
       if (child.isMesh) {
@@ -31,28 +26,8 @@ export default class MapModel {
           child.visible = false;
         }
 
-        // Disable frustum culling so the entire map stays visible
+        // Disable frustum culling so the entire campus map stays visible
         child.frustumCulled = false;
-
-        if (child.material) {
-          const mats = Array.isArray(child.material)
-            ? child.material
-            : [child.material];
-
-          mats.forEach((mat) => {
-            for (const key of Object.keys(mat)) {
-              const val = mat[key];
-              if (val && val.isTexture) {
-                val.flipY = false;
-                val.generateMipmaps = true;
-                val.minFilter = THREE.LinearMipmapLinearFilter;
-                val.magFilter = THREE.LinearFilter;
-                val.anisotropy = maxAniso;
-                val.needsUpdate = true;
-              }
-            }
-          });
-        }
       }
     });
 
