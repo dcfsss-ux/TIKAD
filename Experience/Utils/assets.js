@@ -2,6 +2,6 @@ export default [
   {
     name: "plateforme10",
     type: "glbModel",
-    path: "/models/3d-map.draco.glb",
+    path: "/models/3d-map.ktx2.glb",
   },
 ];

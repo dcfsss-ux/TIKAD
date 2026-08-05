@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 
 export default class Environment {
   constructor() {
@@ -28,14 +29,24 @@ export default class Environment {
   }
 
   setLights() {
-    // Bright ambient light so the entire model is evenly illuminated
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 3.0)
+    // With useLegacyLights = false (physically correct mode), intensities must
+    // be much lower than legacy values to avoid blowing materials to white.
+    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
     this.scene.add(this.ambientLight)
 
     // Directional light from above to add subtle depth
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 2.0)
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
     this.directionalLight.position.set(5, 10, 5)
     this.scene.add(this.directionalLight)
+
+    // Neutral grey envmap so PBR materials have a reflection source
+    // and colours/textures render correctly instead of appearing white.
+    const pmrem = new THREE.PMREMGenerator(this.experience.renderer.renderer)
+    pmrem.compileEquirectangularShader()
+    const neutralEnv = pmrem.fromScene(new RoomEnvironment()).texture
+    this.scene.environment = neutralEnv
+    this.scene.environmentIntensity = 0.6
+    pmrem.dispose()
   }
 
   resize() {}

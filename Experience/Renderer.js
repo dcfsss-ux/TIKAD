@@ -28,19 +28,15 @@ export default class Renderer {
       powerPreference: 'high-performance',
     })
 
-    // outputEncoding is deprecated in r152+; use outputColorSpace instead.
+    this.renderer.useLegacyLights = false
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 2.5
+    this.renderer.toneMappingExposure = 0.85
 
-    // ── Shadows OFF ────────────────────────────────────────────────────────────
-    // The campus map GLB has no castShadow/receiveShadow mesh flags set, so
-    // the shadow pass was running every frame for zero visual benefit.
+    // Shadows OFF for performance
     this.renderer.shadowMap.enabled = false
 
-    // ── Pixel ratio cap ────────────────────────────────────────────────────────
-    // Cap at 1.5 on mobile (not 2) — the campus map is top-down and the
-    // extra sharpness is imperceptible at arm's length, but the cost is 2.25×.
+    // Cap at 1.5 on mobile (not 2)
     const isMobile = this.sizes.device === 'mobile'
     const maxPixelRatio = isMobile ? 1.5 : Math.min(window.devicePixelRatio, 2)
     this.renderer.setPixelRatio(maxPixelRatio)

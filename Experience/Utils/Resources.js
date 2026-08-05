@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { EventEmitter } from "events";
 import Experience from "../Experience.js";
 
@@ -38,9 +39,17 @@ export default class Resources extends EventEmitter {
     this.loaders = {};
     this.loaders.textureLoader = new THREE.TextureLoader(this.loadingManager);
     this.loaders.gltfLoader = new GLTFLoader(this.loadingManager);
+
+    // Draco Loader Setup
     this.loaders.dracoLoader = new DRACOLoader(this.loadingManager);
     this.loaders.dracoLoader.setDecoderPath("/draco/");
     this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader);
+
+    // KTX2 Loader Setup (local transcoder fallback)
+    this.loaders.ktx2Loader = new KTX2Loader(this.loadingManager)
+      .setTranscoderPath("/basis/")
+      .detectSupport(this.renderer.renderer);
+    this.loaders.gltfLoader.setKTX2Loader(this.loaders.ktx2Loader);
   }
 
   startLoading() {
@@ -50,9 +59,21 @@ export default class Resources extends EventEmitter {
           this.singleAssetLoaded(asset, file);
         });
       } else if (asset.type === "glbModel") {
-        this.loaders.gltfLoader.load(asset.path, (file) => {
-          this.singleAssetLoaded(asset, file);
-        });
+        this.loaders.gltfLoader.load(
+          asset.path,
+          (file) => {
+            this.singleAssetLoaded(asset, file);
+          },
+          (progress) => {
+            if (progress.total) {
+              const pct = ((progress.loaded / progress.total) * 100).toFixed(1);
+              console.log(`Loading ${asset.name}: ${pct}% (${(progress.loaded / 1024 / 1024).toFixed(0)} MB / ${(progress.total / 1024 / 1024).toFixed(0)} MB)`);
+            }
+          },
+          (error) => {
+            console.error(`❌ Failed to load ${asset.name} from ${asset.path}:`, error);
+          }
+        );
       }
     }
   }
