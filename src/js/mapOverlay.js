@@ -208,6 +208,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)",
+    model3d: "/models/map/CAA%20Building.glb",
     desc: "College of Agriculture and Forestry. Equipped with laboratories for soil studies, plant sciences, and research spaces supporting campus agricultural farms.",
     depts: [
       { icon: "🌱", name: "Agricultural Science Dept", sub: "Floor 1" },
@@ -383,7 +384,7 @@ const BUILDING_DATA = {
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
   // Keys below use glbName so _findNode() can locate them precisely.
   "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
-  "canteen": { glbName: "CAFETERIA", name: "Main Canteen", shortName: "Canteen", interactive: false },
+  "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", interactive: false },
   "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", interactive: false },
   "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", interactive: false },
   "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
@@ -472,15 +473,83 @@ const BUILDING_DATA = {
   "rotc_office": { name: "ROTC Office", shortName: "ROTC Office", interactive: false },
   "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
   "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", interactive: false },
-  "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false }
+  "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false },
+  "cas_canteen": { name: "CAS Canteen", shortName: "CAS Canteen", interactive: false },
+  "ced_lsg_office": { name: "CED LSG Office", shortName: "CED LSG", interactive: false },
+  "ttlo": { name: "TTLO Office", shortName: "TTLO", interactive: false },
+  "caa": { name: "CAA Complex", shortName: "CAA Complex", interactive: false },
+  "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false }
+};
+
+// ── Building → individual GLB path map ───────────────────────────────────────
+// All individual building and landmark GLB models from /models/map/
+// All files are Draco-compressed in-place via scripts/compress-map-buildings.mjs
+const BUILDING_GLB_MAP = {
+  // ── Main academic & admin buildings ──────────────────────────────────────
+  'masawa_building':             '/models/map/masawa%20compress.glb',
+  'masawa_hall':                 '/models/map/masawa%20compress.glb',
+  'hinang_building':             '/models/map/hinang.glb',
+  'kinaadman_hall':              '/models/map/kh%20comp.glb',
+  'hiraya_building':             '/models/map/hiraya.glb',
+  'new_administrative_bldg':     '/models/map/new%20admin%20-.glb',
+  'old_administrative_building': '/models/map/old%20admin%20-.glb',
+  'state-of-the-art-library':    '/models/map/STATE-OF-THE-ART-LIBRARY.glb',
+  'batok_hall':                  '/models/map/batok%20hall%20-.glb',
+  'ced_building':                '/models/map/CED%20-.glb',
+  'caa_building':                '/models/map/CAA%20Building.glb',
+  'caa':                         '/models/map/CAA%20Building.glb',
+  'dost':                        '/models/map/DOST%20-.glb',
+  'alumni_office':               '/models/map/ALUMNI%20OFFICE%20-.glb',
+  'csu_student_center':          '/models/map/CSU%20STUDENT%20CENTER.glb',
+  'executive_house':             '/models/map/executive%20house%20-.glb',
+  'old_cas':                     '/models/map/Old%20CAS.glb',
+  'kalinaw':                     '/models/map/KALINAW.glb',
+  'csu_gym':                     '/models/map/GYMNASIUM.glb',
+  'sports_office':               '/models/map/Sports%20Office.glb',
+  'food_innovation_center':      '/models/map/Food%20Innovation%20Center.glb',
+  'food_technology_center':      '/models/map/Food_Technology_Center.glb',
+  'amante_building':             '/models/map/AMANTE%20BUILDING.glb',
+  'milk_processing_facility':    '/models/map/Milk%20Processing%20Facility.glb',
+  'eco_park_building':           '/models/map/ECO%20Park%20Building.glb',
+  'ccard_office':                '/models/map/CCARD%20OFFICE.glb',
+  'church':                      '/models/map/Church.glb',
+  'Villares':                    '/models/map/Villares%20Center.glb',
+
+  // ── Facilities, canteens & support structures ─────────────────────────────
+  'power_house':                 '/models/map/powerhouse%20-.glb',
+  'motorpool':                   '/models/map/motorpool.glb',
+  'ched_lgu':                    '/models/map/ched_lgu%20-.glb',
+  'bio_diagnostic_laboratory':   '/models/map/bio%20diagnostic%20labtoratory%20-.glb',
+  'overpass':                    '/models/map/overpass%20and%20guardhouse.glb',
+  'gas_station':                 '/models/map/gas%20station%20na%20guba%20-.glb',
+  'cas_covered_court':           '/models/map/CAS%20COVERED%20COURT%20-.glb',
+  'bbc_cafeteria':               '/models/map/BBC%20CAFE.glb',
+  'cas_canteen':                 '/models/map/CAS%20CANTEEN%20-.glb',
+  'ced_canteen':                 '/models/map/ced%20canteen%20-.glb',
+  'ced_lsg_office':              '/models/map/CED%20LSG%20OFFICE%20-.glb',
+  'ttlo':                        '/models/map/TTLO%20-.glb',
+  'basta_didto_tumoy':           '/models/map/BASTA%20DIDTO%20TUMOY.glb',
+  'boffo_canteen':               '/models/map/BOFFO%20CANTEEN.glb',
+  'caa_canteen':                 '/models/map/CAA%20Canteen.glb',
+  'front_ccis_canteen':          '/models/map/Front_CCIS_Canteen.glb',
+  'cofes_annex':                 '/models/map/COFES%20annex.glb',
+  'eco_lodge':                   '/models/map/ECO%20lodge.glb',
+  'emb_machine':                 '/models/map/EMB%20machine.glb',
+  'gents_dormitory':             '/models/map/GENT\'S%20dorm.glb',
+  'oatc':                        '/models/map/OATC.glb',
+  'old_farm_mechanization_center': '/models/map/OLD%20Farm%20Mechanization.glb',
+  'rotc_office':                 '/models/map/ROTC%20OFFICE.glb',
+  'bookstore_and_orgms_office':  '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
+  'agri-workshop_2':             '/models/map/Agri%20Workshop%202.glb',
+  'annex_3':                     '/models/map/ANNEX%203.glb',
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let experience = null;   // Three.js Experience singleton
-let worldReady = false;  // true once GLB is loaded & meshes indexed
+let worldReady = false;  // true once ground base is loaded
 
-const meshIndex = {};       // lowercased mesh name → THREE.Mesh
-const pinList = [];       // { key, worldPos, el }
+const meshIndex = {};       // lowercased mesh name → THREE.Object3D (from individual GLBs)
+const pinList = [];         // { key, worldPos, el }
 const _projVec = new THREE.Vector3();
 const _box = new THREE.Box3();
 
@@ -540,7 +609,8 @@ function _bootExperience() {
     worldReady = true;
     _setProgress(100);
 
-    // Hide preloader with a short delay so the bar reaches 100% visually
+    // Ground base is ready — hide the preloader immediately.
+    // Buildings will stream in progressively in the background.
     const preloader = document.getElementById('tikad-preloader');
     if (preloader) {
       setTimeout(() => {
@@ -550,33 +620,49 @@ function _bootExperience() {
       }, 400);
     }
 
-    // Index all nodes (both Groups/Object3Ds and Meshes) from the GLB
-    experience.scene.traverse((node) => {
-      if (!node.name) return;
-      const key = node.name.toLowerCase().trim();
-      if (key) {
-        meshIndex[key] = node;
-      }
-      if (node.isMesh && node.material) {
-        if (!node.userData.origMat) {
-          node.userData.origMat = Array.isArray(node.material)
-            ? node.material.map(m => m.clone())
-            : node.material.clone();
-        }
-      }
-    });
-    // TEMP DEBUG: log all mesh keys and highlight ones NOT yet in BUILDING_DATA
-    const knownKeys = Object.keys(BUILDING_DATA).map(k => k.toLowerCase().trim());
-    const allKeys = Object.keys(meshIndex).sort();
-    const unknownKeys = allKeys.filter(k => !knownKeys.some(kk => k.includes(kk) || kk.includes(k)));
-    console.log('[GIYA] ALL scene node keys:\n' + allKeys.join('\n'));
-    console.log('[GIYA] UNLABELED nodes (not in BUILDING_DATA):\n' + unknownKeys.join('\n'));
+    // Build chips and start pin-update loop immediately (buildings will
+    // register their own pins as they arrive via 'buildingloaded')
     _buildChips();
-    _createPins();
-
-    // Pin position update every frame
     experience.time.on('update', _updatePins);
+
+    // ── Progressive building loading ───────────────────────────────────────
+    // Wire up the 'buildingloaded' handler BEFORE kicking off loads so we
+    // don't miss any that resolve synchronously from cache.
+    experience.world.on('buildingloaded', ({ key, scene }) => {
+      _registerBuildingScene(key, scene);
+    });
+
+    // Kick off all building loads. They stream in independently.
+    Object.entries(BUILDING_GLB_MAP).forEach(([key, path]) => {
+      experience.world.loadBuildingGLB(path, key);
+    });
   });
+}
+
+// ── Register a freshly-loaded building GLB into meshIndex + create its pin ───
+function _registerBuildingScene(buildingKey, buildingScene) {
+  // Index every named node in this building's GLB
+  buildingScene.traverse((node) => {
+    if (!node.name) return;
+    const k = node.name.toLowerCase().trim();
+    if (k) meshIndex[k] = node;
+
+    // Cache original materials for highlight reset
+    if (node.isMesh && node.material && !node.userData.origMat) {
+      node.userData.origMat = Array.isArray(node.material)
+        ? node.material.map(m => m.clone())
+        : node.material.clone();
+    }
+  });
+
+  // Also index by the building key itself so _findNode() can resolve it directly
+  const cleanKey = buildingKey.toLowerCase().trim();
+  if (!meshIndex[cleanKey]) meshIndex[cleanKey] = buildingScene;
+
+  // Create the 3D pin for this building now that its geometry is in the scene
+  _createPinForKey(buildingKey);
+
+  console.log(`[GIYA] Building registered: "${buildingKey}" (${Object.keys(meshIndex).length} total nodes indexed)`);
 }
 
 // ── Node lookup helper ────────────────────────────────────────────────────────
@@ -953,60 +1039,71 @@ function _closePanel() {
 
 // ── 3D Pin markers ────────────────────────────────────────────────────────────
 
-function _createPins() {
+/**
+ * _createPinForKey(key)
+ * Creates the DOM pin element for a single building key and appends it to the
+ * #mapPins container. Called by _registerBuildingScene() as each GLB arrives.
+ */
+function _createPinForKey(key) {
   const container = document.getElementById('mapPins');
   if (!container) return;
-  container.innerHTML = '';
-  pinList.length = 0;
 
-  Object.entries(BUILDING_DATA).forEach(([key, data]) => {
-    const node = _findNode(key);
+  const data = BUILDING_DATA[key];
+  if (!data) return;
 
-    if (!node) {
-      console.warn(`[GIYA Map] Pin creation skipped: No 3D model node found for "${key}" (${data.name})`);
-      return;
-    }
+  // Don't create duplicate pins for the same key
+  if (pinList.some(p => p.key === key)) return;
 
-    const worldPos = new THREE.Vector3();
-    _box.setFromObject(node);
-    _box.getCenter(worldPos);
+  const node = _findNode(key);
+  if (!node) {
+    console.warn(`[GIYA Map] Pin creation skipped: No 3D node for "${key}" (${data.name})`);
+    return;
+  }
 
-    // Elevate the pin to float cleanly above the top of the building's bounding box
-    const height = _box.max.y - _box.min.y;
-    worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
+  const worldPos = new THREE.Vector3();
+  _box.setFromObject(node);
+  _box.getCenter(worldPos);
 
-    const el = document.createElement('div');
-    el.className = 'bldg-pin';
+  // Elevate the pin above the building's top face
+  const height = _box.max.y - _box.min.y;
+  worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
 
-    const isInteractive = data.interactive !== false;
+  const el = document.createElement('div');
+  el.className = 'bldg-pin';
 
-    if (isInteractive) {
-      el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
-      el.innerHTML = `
-        <div class="pin-label">${data.abbrev || data.shortName || data.name.split(' ')[0]}</div>
-      `;
+  const isInteractive = data.interactive !== false;
 
-      el.addEventListener('click', () => {
-        // Remove active state from all pins
-        pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
-        // Add active state to clicked pin
-        el.querySelector('.pin-label')?.classList.add('active-pin');
-        const input = document.getElementById('map-search');
-        if (input) input.value = data.name;
-        _selectBuilding(key, true);
-      });
-    } else {
-      // Non-interactive / static labels (e.g. Canteens, ATMs, Chapels)
-      el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
-      el.innerHTML = `
-        <div class="pin-label-static">${data.shortName || data.name}</div>
-      `;
-    }
+  if (isInteractive) {
+    el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
+    el.innerHTML = `
+      <div class="pin-label">${data.abbrev || data.shortName || data.name.split(' ')[0]}</div>
+    `;
+    el.addEventListener('click', () => {
+      pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
+      el.querySelector('.pin-label')?.classList.add('active-pin');
+      const input = document.getElementById('map-search');
+      if (input) input.value = data.name;
+      _selectBuilding(key, true);
+    });
+  } else {
+    el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
+    el.innerHTML = `
+      <div class="pin-label-static">${data.shortName || data.name}</div>
+    `;
+  }
 
-    container.appendChild(el);
-    pinList.push({ key, worldPos, el, interactive: isInteractive });
-  });
+  container.appendChild(el);
+  pinList.push({ key, worldPos, el, interactive: isInteractive });
 }
+
+/**
+ * _createPins() — legacy stub kept for safety.
+ * With progressive loading, pins are created individually via _createPinForKey().
+ */
+function _createPins() {
+  // No-op: pins now created one-at-a-time in _registerBuildingScene()
+}
+
 
 function _updatePins() {
   if (!experience || !worldReady) return;
