@@ -31,11 +31,11 @@ export default class Environment {
   setLights() {
     // With useLegacyLights = false (physically correct mode), intensities must
     // be much lower than legacy values to avoid blowing materials to white.
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+    this.ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
     this.scene.add(this.ambientLight)
 
     // Directional light from above to add subtle depth
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 2.0)
     this.directionalLight.position.set(5, 10, 5)
     this.scene.add(this.directionalLight)
 
@@ -45,7 +45,7 @@ export default class Environment {
     pmrem.compileEquirectangularShader()
     const neutralEnv = pmrem.fromScene(new RoomEnvironment()).texture
     this.scene.environment = neutralEnv
-    this.scene.environmentIntensity = 0.6
+    this.scene.environmentIntensity = 1.0
     pmrem.dispose()
   }
 

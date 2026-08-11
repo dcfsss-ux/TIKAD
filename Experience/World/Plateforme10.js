@@ -1,7 +1,14 @@
 import * as THREE from "three";
 import Experience from "../Experience.js";
 
-export default class MapModel {
+/**
+ * Plateforme10.js — Campus Ground Base
+ *
+ * Renders only the lightweight campus ground / road platform model
+ * (campusBase). Individual buildings are loaded progressively by
+ * World.loadBuildingGLB() after this base is ready.
+ */
+export default class MapBase {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
@@ -9,32 +16,48 @@ export default class MapModel {
     this.debug = this.experience.debug;
     this.renderer = this.experience.renderer;
 
-    this.mapModel = this.resources.items.plateforme10;
-    this.actualModel = this.mapModel.scene;
+    this.baseModel = this.resources.items.campusBase;
+    this.actualModel = this.baseModel.scene;
 
     this.setModel();
   }
 
   setModel() {
-    console.log("=== GLB Mesh Names (use these for building search) ===");
     this.actualModel.traverse((child) => {
       if (child.isMesh) {
-        console.log(" -", child.name);
-
-        // Hide Meshy_AI artifacts/objects (like the texturized object on FIC)
+        // Hide any Meshy_AI artifacts
         if (child.name && child.name.includes("Meshy_AI")) {
           child.visible = false;
         }
 
-        // Disable frustum culling so the entire campus map stays visible
+        // Disable frustum culling so the ground base stays visible at all angles
         child.frustumCulled = false;
+
+        // ── Fix textures from Blender GLB export ────────────────────────────
+        const mats = Array.isArray(child.material) ? child.material : [child.material];
+        mats.forEach((mat) => {
+          if (!mat) return;
+          const textureMaps = [
+            'map', 'emissiveMap', 'normalMap', 'roughnessMap',
+            'metalnessMap', 'aoMap', 'lightMap',
+          ];
+          textureMaps.forEach((slot) => {
+            const tex = mat[slot];
+            if (!tex) return;
+            tex.flipY = false;
+            if (slot === 'map' || slot === 'emissiveMap') {
+              tex.colorSpace = THREE.SRGBColorSpace;
+            }
+            tex.needsUpdate = true;
+          });
+          mat.needsUpdate = true;
+        });
       }
     });
 
     this.scene.add(this.actualModel);
-    console.log("Custom GLB map model loaded successfully.");
+    console.log("[MapBase] Campus ground base loaded.");
 
-    // Force a render now that the model is in the scene
     if (this.renderer) {
       this.renderer.requestRender();
     }

@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
-import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { EventEmitter } from "events";
 import Experience from "../Experience.js";
 
@@ -9,7 +8,6 @@ export default class Resources extends EventEmitter {
   constructor(assets) {
     super();
     this.experience = new Experience();
-    this.renderer = this.experience.renderer;
 
     this.assets = assets;
 
@@ -45,11 +43,6 @@ export default class Resources extends EventEmitter {
     this.loaders.dracoLoader.setDecoderPath("/draco/");
     this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader);
 
-    // KTX2 Loader Setup (local transcoder fallback)
-    this.loaders.ktx2Loader = new KTX2Loader(this.loadingManager)
-      .setTranscoderPath("/basis/")
-      .detectSupport(this.renderer.renderer);
-    this.loaders.gltfLoader.setKTX2Loader(this.loaders.ktx2Loader);
   }
 
   startLoading() {

@@ -19,8 +19,11 @@ yarn-error.log*
 .idea/
 *.swp
 *.swo
+*.exe
+gltfpack-native/
 
 # OS files
 .DS_Store
 Thumbs.db
 /.venv
+
