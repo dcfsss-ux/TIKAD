@@ -479,6 +479,7 @@ const BUILDING_DATA = {
   "ced_lsg_office": { name: "CED LSG Office", shortName: "CED LSG", interactive: false },
   "ttlo": { name: "TTLO Office", shortName: "TTLO", interactive: false },
   "caa": { name: "CAA Complex", shortName: "CAA Complex", interactive: false },
+  "carabao_center": { name: "Carabao Center", shortName: "Carabao Ctr.", interactive: false },
   "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false }
 };
 
@@ -573,6 +574,7 @@ const BUILDING_GLB_MAP = {
   'vermi_house':                 '/models/map/VERMI%20HOUSE.glb',
   'hostel':                      '/models/map/HOSTEL.glb',
   'university_hostel':             '/models/map/HOSTEL.glb',
+  'carabao_center':              '/models/map/Carabao%20Center.glb',
   'auxiliary_buildings':         '/models/map/auxillary%20buildings.glb',
 };
 
