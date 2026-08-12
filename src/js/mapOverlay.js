@@ -255,6 +255,7 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)",
+    model3d: "/models/map/HOSTEL.glb",
     desc: "Campus hostel facility providing lodging services, conference spaces, and visitor suites for incoming guests and scholars.",
     depts: [
       { icon: "🛏️", name: "Guest Accommodations", sub: "Floors 1–2" },
@@ -486,8 +487,8 @@ const BUILDING_DATA = {
 // All files are Draco-compressed in-place via scripts/compress-map-buildings.mjs
 const BUILDING_GLB_MAP = {
   // ── Main academic & admin buildings ──────────────────────────────────────
-  'masawa_building':             '/models/map/masawa%20compress.glb',
-  'masawa_hall':                 '/models/map/masawa%20compress.glb',
+  'masawa_building':             '/models/map/masawa%20building.glb',
+  'masawa_hall':                 '/models/map/masawa%20building.glb',
   'hinang_building':             '/models/map/hinang.glb',
   'kinaadman_hall':              '/models/map/kh%20comp.glb',
   'hiraya_building':             '/models/map/hiraya.glb',
@@ -514,6 +515,7 @@ const BUILDING_GLB_MAP = {
   'ccard_office':                '/models/map/CCARD%20OFFICE.glb',
   'church':                      '/models/map/Church.glb',
   'Villares':                    '/models/map/Villares%20Center.glb',
+  'villares':                    '/models/map/Villares%20Center.glb',
 
   // ── Facilities, canteens & support structures ─────────────────────────────
   'power_house':                 '/models/map/powerhouse%20-.glb',
@@ -528,7 +530,6 @@ const BUILDING_GLB_MAP = {
   'ced_canteen':                 '/models/map/ced%20canteen%20-.glb',
   'ced_lsg_office':              '/models/map/CED%20LSG%20OFFICE%20-.glb',
   'ttlo':                        '/models/map/TTLO%20-.glb',
-  'basta_didto_tumoy':           '/models/map/BASTA%20DIDTO%20TUMOY.glb',
   'boffo_canteen':               '/models/map/BOFFO%20CANTEEN.glb',
   'caa_canteen':                 '/models/map/CAA%20Canteen.glb',
   'front_ccis_canteen':          '/models/map/Front_CCIS_Canteen.glb',
@@ -542,6 +543,37 @@ const BUILDING_GLB_MAP = {
   'bookstore_and_orgms_office':  '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
   'agri-workshop_2':             '/models/map/Agri%20Workshop%202.glb',
   'annex_3':                     '/models/map/ANNEX%203.glb',
+
+  // ── Additional campus structures & agricultural facilities ─────────────────
+  'agro_forestry_shed':          '/models/map/AGRO-FORESTRY%20SHED.glb',
+  'annex_2_old_ladies_dorm':     '/models/map/ANNEX%202%20(OLD%20LADIES%20DORM).glb',
+  'barn_house':                  '/models/map/BARN%20HOUSE.glb',
+  'beef_cattle_building':        '/models/map/BEEF%20CATTLE%20BUILDING.glb',
+  'bodega':                      '/models/map/BODEGA.glb',
+  'caa_layering_house':          '/models/map/CAA%20LAYERING%20HOUSE.glb',
+  'caa_diagnostic_laboratory':   '/models/map/CAA%20diagnostic%20laboratory.glb',
+  'caraga_black_native_chicken': '/models/map/CARAGA%20BLACK%20NATIVE%20CHICKEN.glb',
+  'caretaker_house':             '/models/map/CARETAKER%20HOUSE.glb',
+  'catching_coral':              '/models/map/CATCHING%20CORAL.glb',
+  'farm_nursery':                '/models/map/FARM%20NURSERY.glb',
+  'feedmill':                    '/models/map/FEEDMILL.glb',
+  'gents_dormitory_under_cons':  '/models/map/GENTS\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
+  'goat_house':                  '/models/map/GOAT%20HOUSE.glb',
+  'green_house':                 '/models/map/Green%20House.glb',
+  'hardening_area':              '/models/map/HARDENNING%20AREA.glb',
+  'ladies_dormitory_under_cons': '/models/map/LADIES\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
+  'mechanical_dryer':            '/models/map/MECHANICAL%20DRYER.glb',
+  'micoriza_green_house':        '/models/map/MICORIZA%20GREEN%20HOUSE.glb',
+  'old_ccaarrd_building':        '/models/map/OLD%20CCAARRD%20BUILDING.glb',
+  'rooting_recovery':            '/models/map/ROOTING%20RECOVERY.glb',
+  'school_of_medicine_under_cons':'/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb',
+  'sheep_house':                 '/models/map/SHEEP%20HOUSE.glb',
+  'tech_voc_building':           '/models/map/TECH%20VOC%20BUILDING.glb',
+  'tissue_culture_lab':          '/models/map/Tissue%20Culture%20Lab.glb',
+  'vermi_house':                 '/models/map/VERMI%20HOUSE.glb',
+  'hostel':                      '/models/map/HOSTEL.glb',
+  'university_hostel':             '/models/map/HOSTEL.glb',
+  'auxiliary_buildings':         '/models/map/auxillary%20buildings.glb',
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
