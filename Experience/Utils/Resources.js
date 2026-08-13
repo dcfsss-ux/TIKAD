@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { KTX2Loader } from "three/examples/jsm/loaders/KTX2Loader.js";
 import { EventEmitter } from "events";
 import Experience from "../Experience.js";
 
@@ -15,6 +16,11 @@ export default class Resources extends EventEmitter {
     this.queue = this.assets.length;
     this.loaded = 0;
     this.loadingProgress = document.querySelector(".loading-progress");
+    if (!this.loadingProgress) {
+      this.loadingProgress = document.createElement('div');
+      this.loadingProgress.className = 'loading-progress';
+      document.body.appendChild(this.loadingProgress);
+    }
 
     this.setLoadingManager();
     this.setLoaders();
@@ -42,6 +48,12 @@ export default class Resources extends EventEmitter {
     this.loaders.dracoLoader = new DRACOLoader(this.loadingManager);
     this.loaders.dracoLoader.setDecoderPath("/draco/");
     this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader);
+
+    // KTX2 Loader Setup
+    this.loaders.ktx2Loader = new KTX2Loader(this.loadingManager);
+    this.loaders.ktx2Loader.setTranscoderPath("/basis/");
+    this.loaders.ktx2Loader.detectSupport(this.experience.renderer.renderer);
+    this.loaders.gltfLoader.setKTX2Loader(this.loaders.ktx2Loader);
 
   }
 

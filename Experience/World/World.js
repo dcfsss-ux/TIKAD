@@ -3,6 +3,7 @@ import Experience from "../Experience.js"
 import { EventEmitter } from 'events'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
 
 import Environment from './Environment.js'
 import Plateforme10 from './Plateforme10.js'
@@ -22,8 +23,16 @@ export default class World extends EventEmitter {
     this._dracoLoader = new DRACOLoader()
     this._dracoLoader.setDecoderPath('/draco/')
 
+    // KTX2Loader decodes KHR_texture_basisu (ETC1S/UASTC) textures embedded
+    // in compressed GLBs. detectSupport() picks the optimal GPU target format
+    // (ASTC, BC7, ETC2, PVRTC…) for the current device.
+    this._ktx2Loader = new KTX2Loader()
+      .setTranscoderPath('/basis/')
+      .detectSupport(this.experience.renderer.renderer)
+
     this._gltfLoader = new GLTFLoader()
     this._gltfLoader.setDRACOLoader(this._dracoLoader)
+    this._gltfLoader.setKTX2Loader(this._ktx2Loader)
 
     this._loadedBuildings = {}   // key → THREE.Object3D, prevents double-loading
 
