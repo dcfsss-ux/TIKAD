@@ -330,17 +330,17 @@ export default class Controls {
       is2D: this.is2D,
       saved3DState: this.saved3DState
         ? {
-            position: this.saved3DState.position.toArray(),
-            target: this.saved3DState.target.toArray(),
-            zoom: this.saved3DState.zoom,
-          }
+          position: this.saved3DState.position.toArray(),
+          target: this.saved3DState.target.toArray(),
+          zoom: this.saved3DState.zoom,
+        }
         : null,
     };
 
     window.localStorage.setItem("cameraState", JSON.stringify(state));
   }
 
-  resize() {}
+  resize() { }
 
   update() {
     this.controls.update();

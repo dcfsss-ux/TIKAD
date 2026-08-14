@@ -10,7 +10,7 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.js';
+import { getBuildingByNameOrKey, searchCampusEntities, fetchBuildingSeals } from './supabaseClient.js';
 
 
 
@@ -450,7 +450,21 @@ const BUILDING_DATA = {
   "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
   "ccard_office": { name: "CCARD Office", shortName: "CCARD Office", interactive: false },
   "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
-  "ched_lgu": { name: "CHED-LGU Building", shortName: "CHED-LGU", interactive: false },
+  "ched_lgu": {
+    glbName: "CHED_LGU -",
+    name: "CHED-LGU Building", shortName: "CHED-LGU", abbrev: "CHED-LGU", type: "Government Satellite Office", emoji: "🏛",
+    supabaseId: null,
+    supabaseNames: ['CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED'],
+    image: "/images/kinaadman.jpg",
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/CHED.png",
+    gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)",
+    desc: "The Commission on Higher Education (CHED) satellite office within the CSU campus. Serves as a coordination point between the university and the national higher education regulatory body.",
+    depts: [
+      { icon: "🏛", name: "CHED Regional Office", sub: "Ground Floor" },
+      { icon: "📋", name: "Higher Education Coordination Desk", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2300", email: "ched@csu.edu.ph" }
+  },
   "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
   "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
   "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
@@ -489,96 +503,96 @@ const BUILDING_DATA = {
 // All files are Draco-compressed in-place via scripts/compress-map-buildings.mjs
 const BUILDING_GLB_MAP = {
   // ── Main academic & admin buildings ──────────────────────────────────────
-  'masawa_building':             '/models/map/masawa%20building.glb',
-  'masawa_hall':                 '/models/map/masawa%20building.glb',
-  'hinang_building':             '/models/map/hinang.glb',
-  'kinaadman_hall':              '/models/map/kh%20comp.glb',
-  'hiraya_building':             '/models/map/hiraya.glb',
-  'new_administrative_bldg':     '/models/map/new%20admin%20-.glb',
+  'masawa_building': '/models/map/masawa%20building.glb',
+  'masawa_hall': '/models/map/masawa%20building.glb',
+  'hinang_building': '/models/map/hinang.glb',
+  'kinaadman_hall': '/models/map/kh%20comp.glb',
+  'hiraya_building': '/models/map/hiraya.glb',
+  'new_administrative_bldg': '/models/map/new%20admin%20-.glb',
   'old_administrative_building': '/models/map/old%20admin%20-.glb',
-  'state-of-the-art-library':    '/models/map/STATE-OF-THE-ART-LIBRARY.glb',
-  'batok_hall':                  '/models/map/batok%20hall%20-.glb',
-  'ced_building':                '/models/map/CED%20-.glb',
-  'caa_building':                '/models/map/CAA%20Building.glb',
-  'caa':                         '/models/map/CAA%20Building.glb',
-  'dost':                        '/models/map/DOST%20-.glb',
-  'alumni_office':               '/models/map/ALUMNI%20OFFICE%20-.glb',
-  'csu_student_center':          '/models/map/CSU%20STUDENT%20CENTER.glb',
-  'executive_house':             '/models/map/executive%20house%20-.glb',
-  'old_cas':                     '/models/map/Old%20CAS.glb',
-  'kalinaw':                     '/models/map/KALINAW.glb',
-  'csu_gym':                     '/models/map/GYMNASIUM.glb',
-  'sports_office':               '/models/map/Sports%20Office.glb',
-  'food_innovation_center':      '/models/map/Food%20Innovation%20Center.glb',
-  'food_technology_center':      '/models/map/Food_Technology_Center.glb',
-  'amante_building':             '/models/map/AMANTE%20BUILDING.glb',
-  'milk_processing_facility':    '/models/map/Milk%20Processing%20Facility.glb',
-  'eco_park_building':           '/models/map/ECO%20Park%20Building.glb',
-  'ccard_office':                '/models/map/CCARD%20OFFICE.glb',
-  'church':                      '/models/map/Church.glb',
-  'Villares':                    '/models/map/Villares%20Center.glb',
-  'villares':                    '/models/map/Villares%20Center.glb',
+  'state-of-the-art-library': '/models/map/STATE-OF-THE-ART-LIBRARY.glb',
+  'batok_hall': '/models/map/batok%20hall%20-.glb',
+  'ced_building': '/models/map/CED%20-.glb',
+  'caa_building': '/models/map/CAA%20Building.glb',
+  'caa': '/models/map/CAA%20Building.glb',
+  'dost': '/models/map/DOST%20-.glb',
+  'alumni_office': '/models/map/ALUMNI%20OFFICE%20-.glb',
+  'csu_student_center': '/models/map/CSU%20STUDENT%20CENTER.glb',
+  'executive_house': '/models/map/executive%20house%20-.glb',
+  'old_cas': '/models/map/Old%20CAS.glb',
+  'kalinaw': '/models/map/KALINAW.glb',
+  'csu_gym': '/models/map/GYMNASIUM.glb',
+  'sports_office': '/models/map/Sports%20Office.glb',
+  'food_innovation_center': '/models/map/Food%20Innovation%20Center.glb',
+  'food_technology_center': '/models/map/Food_Technology_Center.glb',
+  'amante_building': '/models/map/AMANTE%20BUILDING.glb',
+  'milk_processing_facility': '/models/map/Milk%20Processing%20Facility.glb',
+  'eco_park_building': '/models/map/ECO%20Park%20Building.glb',
+  'ccard_office': '/models/map/CCARD%20OFFICE.glb',
+  'church': '/models/map/Church.glb',
+  'Villares': '/models/map/Villares%20Center.glb',
+  'villares': '/models/map/Villares%20Center.glb',
 
   // ── Facilities, canteens & support structures ─────────────────────────────
-  'power_house':                 '/models/map/powerhouse%20-.glb',
-  'motorpool':                   '/models/map/motorpool.glb',
-  'ched_lgu':                    '/models/map/ched_lgu%20-.glb',
-  'bio_diagnostic_laboratory':   '/models/map/bio%20diagnostic%20labtoratory%20-.glb',
-  'overpass':                    '/models/map/overpass%20and%20guardhouse.glb',
-  'gas_station':                 '/models/map/gas%20station%20na%20guba%20-.glb',
-  'cas_covered_court':           '/models/map/CAS%20COVERED%20COURT%20-.glb',
-  'bbc_cafeteria':               '/models/map/BBC%20CAFE.glb',
-  'cas_canteen':                 '/models/map/CAS%20CANTEEN%20-.glb',
-  'ced_canteen':                 '/models/map/ced%20canteen%20-.glb',
-  'ced_lsg_office':              '/models/map/CED%20LSG%20OFFICE%20-.glb',
-  'ttlo':                        '/models/map/TTLO%20-.glb',
-  'boffo_canteen':               '/models/map/BOFFO%20CANTEEN.glb',
-  'caa_canteen':                 '/models/map/CAA%20Canteen.glb',
-  'front_ccis_canteen':          '/models/map/Front_CCIS_Canteen.glb',
-  'cofes_annex':                 '/models/map/COFES%20annex.glb',
-  'eco_lodge':                   '/models/map/ECO%20lodge.glb',
-  'emb_machine':                 '/models/map/EMB%20machine.glb',
-  'gents_dormitory':             '/models/map/GENT\'S%20dorm.glb',
-  'oatc':                        '/models/map/OATC.glb',
+  'power_house': '/models/map/powerhouse%20-.glb',
+  'motorpool': '/models/map/motorpool.glb',
+  'ched_lgu': '/models/map/ched_lgu%20-.glb',
+  'bio_diagnostic_laboratory': '/models/map/bio%20diagnostic%20labtoratory%20-.glb',
+  'overpass': '/models/map/overpass%20and%20guardhouse.glb',
+  'gas_station': '/models/map/gas%20station%20na%20guba%20-.glb',
+  'cas_covered_court': '/models/map/CAS%20COVERED%20COURT%20-.glb',
+  'bbc_cafeteria': '/models/map/BBC%20CAFE.glb',
+  'cas_canteen': '/models/map/CAS%20CANTEEN%20-.glb',
+  'ced_canteen': '/models/map/ced%20canteen%20-.glb',
+  'ced_lsg_office': '/models/map/CED%20LSG%20OFFICE%20-.glb',
+  'ttlo': '/models/map/TTLO%20-.glb',
+  'boffo_canteen': '/models/map/BOFFO%20CANTEEN.glb',
+  'caa_canteen': '/models/map/CAA%20Canteen.glb',
+  'front_ccis_canteen': '/models/map/Front_CCIS_Canteen.glb',
+  'cofes_annex': '/models/map/COFES%20annex.glb',
+  'eco_lodge': '/models/map/ECO%20lodge.glb',
+  'emb_machine': '/models/map/EMB%20machine.glb',
+  'gents_dormitory': '/models/map/GENT\'S%20dorm.glb',
+  'oatc': '/models/map/OATC.glb',
   'old_farm_mechanization_center': '/models/map/OLD%20Farm%20Mechanization.glb',
-  'rotc_office':                 '/models/map/ROTC%20OFFICE.glb',
-  'bookstore_and_orgms_office':  '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
-  'agri-workshop_2':             '/models/map/Agri%20Workshop%202.glb',
-  'annex_3':                     '/models/map/ANNEX%203.glb',
+  'rotc_office': '/models/map/ROTC%20OFFICE.glb',
+  'bookstore_and_orgms_office': '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
+  'agri-workshop_2': '/models/map/Agri%20Workshop%202.glb',
+  'annex_3': '/models/map/ANNEX%203.glb',
 
   // ── Additional campus structures & agricultural facilities ─────────────────
-  'agro_forestry_shed':          '/models/map/AGRO-FORESTRY%20SHED.glb',
-  'annex_2_old_ladies_dorm':     '/models/map/ANNEX%202%20(OLD%20LADIES%20DORM).glb',
-  'barn_house':                  '/models/map/BARN%20HOUSE.glb',
-  'beef_cattle_building':        '/models/map/BEEF%20CATTLE%20BUILDING.glb',
-  'bodega':                      '/models/map/BODEGA.glb',
-  'caa_layering_house':          '/models/map/CAA%20LAYERING%20HOUSE.glb',
-  'caa_swine_laboratory':        '/models/map/CAA%20SWINE%20LABORATORY.glb',
-  'caa_diagnostic_laboratory':   '/models/map/CAA%20diagnostic%20laboratory.glb',
+  'agro_forestry_shed': '/models/map/AGRO-FORESTRY%20SHED.glb',
+  'annex_2_old_ladies_dorm': '/models/map/ANNEX%202%20(OLD%20LADIES%20DORM).glb',
+  'barn_house': '/models/map/BARN%20HOUSE.glb',
+  'beef_cattle_building': '/models/map/BEEF%20CATTLE%20BUILDING.glb',
+  'bodega': '/models/map/BODEGA.glb',
+  'caa_layering_house': '/models/map/CAA%20LAYERING%20HOUSE.glb',
+  'caa_swine_laboratory': '/models/map/CAA%20SWINE%20LABORATORY.glb',
+  'caa_diagnostic_laboratory': '/models/map/CAA%20diagnostic%20laboratory.glb',
   'caraga_black_native_chicken': '/models/map/CARAGA%20BLACK%20NATIVE%20CHICKEN.glb',
-  'chicken_coop':                '/models/map/Chicken%20Coop.glb',
-  'caretaker_house':             '/models/map/CARETAKER%20HOUSE.glb',
-  'catching_coral':              '/models/map/CATCHING%20CORAL.glb',
-  'farm_nursery':                '/models/map/FARM%20NURSERY.glb',
-  'feedmill':                    '/models/map/FEEDMILL.glb',
-  'gents_dormitory_under_cons':  '/models/map/GENTS\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
-  'goat_house':                  '/models/map/GOAT%20HOUSE.glb',
-  'green_house':                 '/models/map/Green%20House.glb',
-  'hardening_area':              '/models/map/HARDENNING%20AREA.glb',
+  'chicken_coop': '/models/map/Chicken%20Coop.glb',
+  'caretaker_house': '/models/map/CARETAKER%20HOUSE.glb',
+  'catching_coral': '/models/map/CATCHING%20CORAL.glb',
+  'farm_nursery': '/models/map/FARM%20NURSERY.glb',
+  'feedmill': '/models/map/FEEDMILL.glb',
+  'gents_dormitory_under_cons': '/models/map/GENTS\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
+  'goat_house': '/models/map/GOAT%20HOUSE.glb',
+  'green_house': '/models/map/Green%20House.glb',
+  'hardening_area': '/models/map/HARDENNING%20AREA.glb',
   'ladies_dormitory_under_cons': '/models/map/LADIES\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
-  'mechanical_dryer':            '/models/map/MECHANICAL%20DRYER.glb',
-  'micoriza_green_house':        '/models/map/MICORIZA%20GREEN%20HOUSE.glb',
-  'old_ccaarrd_building':        '/models/map/OLD%20CCAARRD%20BUILDING.glb',
-  'rooting_recovery':            '/models/map/ROOTING%20RECOVERY.glb',
-  'school_of_medicine_under_cons':'/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb',
-  'sheep_house':                 '/models/map/SHEEP%20HOUSE.glb',
-  'tech_voc_building':           '/models/map/TECH%20VOC%20BUILDING.glb',
-  'tissue_culture_lab':          '/models/map/Tissue%20Culture%20Lab.glb',
-  'vermi_house':                 '/models/map/VERMI%20HOUSE.glb',
-  'hostel':                      '/models/map/HOSTEL.glb',
-  'university_hostel':             '/models/map/HOSTEL.glb',
-  'carabao_center':              '/models/map/Carabao%20Center.glb',
-  'auxiliary_buildings':         '/models/map/auxillary%20buildings.glb',
+  'mechanical_dryer': '/models/map/MECHANICAL%20DRYER.glb',
+  'micoriza_green_house': '/models/map/MICORIZA%20GREEN%20HOUSE.glb',
+  'old_ccaarrd_building': '/models/map/OLD%20CCAARRD%20BUILDING.glb',
+  'rooting_recovery': '/models/map/ROOTING%20RECOVERY.glb',
+  'school_of_medicine_under_cons': '/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb',
+  'sheep_house': '/models/map/SHEEP%20HOUSE.glb',
+  'tech_voc_building': '/models/map/TECH%20VOC%20BUILDING.glb',
+  'tissue_culture_lab': '/models/map/Tissue%20Culture%20Lab.glb',
+  'vermi_house': '/models/map/VERMI%20HOUSE.glb',
+  'hostel': '/models/map/HOSTEL.glb',
+  'university_hostel': '/models/map/HOSTEL.glb',
+  'carabao_center': '/models/map/Carabao%20Center.glb',
+  'auxiliary_buildings': '/models/map/auxillary%20buildings.glb',
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -661,6 +675,9 @@ function _bootExperience() {
     // register their own pins as they arrive via 'buildingloaded')
     _buildChips();
     experience.time.on('update', _updatePins);
+
+    // Fetch college seals live from Supabase buildings table
+    _loadSupabaseSeals();
 
     // ── Progressive building loading ───────────────────────────────────────
     // Wire up the 'buildingloaded' handler BEFORE kicking off loads so we
@@ -1077,6 +1094,41 @@ function _closePanel() {
 // ── 3D Pin markers ────────────────────────────────────────────────────────────
 
 /**
+/**
+/**
+ * createBuildingPin(building)
+ * Renders a separated building marker with stacked circular seal badge (Logo_URL)
+ * and compact name label, or text-only label fallback when Logo_URL is NULL.
+ * @param {Object} building - { name, Logo_URL }
+ */
+function createBuildingPin(building) {
+  const marker = document.createElement('div');
+  marker.className = 'building-marker';
+
+  if (building.Logo_URL) {
+    const iconWrap = document.createElement('div');
+    iconWrap.className = 'marker-icon';
+
+    const img = document.createElement('img');
+    img.src = building.Logo_URL;
+    img.alt = `${building.name} college seal`;
+    img.onerror = () => {
+      iconWrap.remove();
+    }; // fall back to text-only label if the image fails to load
+
+    iconWrap.appendChild(img);
+    marker.appendChild(iconWrap);
+  }
+
+  const label = document.createElement('span');
+  label.className = 'marker-label';
+  label.textContent = building.name;
+  marker.appendChild(label);
+
+  return marker;
+}
+
+/**
  * _createPinForKey(key)
  * Creates the DOM pin element for a single building key and appends it to the
  * #mapPins container. Called by _registerBuildingScene() as each GLB arrives.
@@ -1112,12 +1164,20 @@ function _createPinForKey(key) {
 
   if (isInteractive) {
     el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
-    el.innerHTML = `
-      <div class="pin-label">${data.abbrev || data.shortName || data.name.split(' ')[0]}</div>
-    `;
+
+    const buildingName = data.abbrev || data.shortName || data.name.split(' ')[0];
+    const logoUrl = data.Logo_URL || null;
+
+    const pinEl = createBuildingPin({
+      name: buildingName,
+      Logo_URL: logoUrl
+    });
+
+    el.appendChild(pinEl);
+
     el.addEventListener('click', () => {
-      pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
-      el.querySelector('.pin-label')?.classList.add('active-pin');
+      pinList.forEach(p => p.el.querySelector('.building-marker, .building-pin, .pin-label')?.classList.remove('active-pin'));
+      pinEl.classList.add('active-pin');
       const input = document.getElementById('map-search');
       if (input) input.value = data.name;
       _selectBuilding(key, true);
@@ -1130,7 +1190,64 @@ function _createPinForKey(key) {
   }
 
   container.appendChild(el);
-  pinList.push({ key, worldPos, el, interactive: isInteractive });
+  pinList.push({ key, worldPos, el, interactive: isInteractive, data });
+}
+
+/**
+ * Loads building seals (Logo_URL) live from Supabase buildings table and updates active pins
+ */
+async function _loadSupabaseSeals() {
+  try {
+    const buildings = await fetchBuildingSeals();
+    if (!buildings || buildings.length === 0) return;
+
+    console.log(`[Supabase] Loaded ${buildings.length} building records with college seals.`);
+
+    buildings.forEach(b => {
+      const logoUrl = b.Logo_URL || b.logo_url || null;
+      if (!logoUrl) return;
+
+      const dbId = b.id || b.Building_ID;
+      const dbName = (b.name || b.Building_name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      Object.keys(BUILDING_DATA).forEach(k => {
+        const item = BUILDING_DATA[k];
+        let match = false;
+
+        if (item.supabaseId && dbId && item.supabaseId === dbId) {
+          match = true;
+        } else if (item.supabaseNames && Array.isArray(item.supabaseNames)) {
+          match = item.supabaseNames.some(alias => alias.toLowerCase().replace(/[^a-z0-9]/g, '') === dbName);
+        } else {
+          const itemName = (item.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          match = dbName && itemName && (dbName === itemName || dbName.includes(itemName) || itemName.includes(dbName));
+        }
+
+        if (match) {
+          item.Logo_URL = logoUrl;
+
+          // Update existing live pin element with the newly fetched seal
+          const existing = pinList.find(p => p.key === k);
+          if (existing && existing.interactive) {
+            const oldMarkerEl = existing.el.querySelector('.building-marker, .building-pin');
+            if (oldMarkerEl) {
+              const buildingName = item.abbrev || item.shortName || item.name.split(' ')[0];
+              const newMarkerEl = createBuildingPin({
+                name: buildingName,
+                Logo_URL: logoUrl
+              });
+              if (oldMarkerEl.classList.contains('active-pin')) {
+                newMarkerEl.classList.add('active-pin');
+              }
+              existing.el.replaceChild(newMarkerEl, oldMarkerEl);
+            }
+          }
+        }
+      });
+    });
+  } catch (err) {
+    console.error('Error updating building seals from Supabase:', err);
+  }
 }
 
 /**
@@ -1141,7 +1258,11 @@ function _createPins() {
   // No-op: pins now created one-at-a-time in _registerBuildingScene()
 }
 
-
+/**
+ * _updatePins()
+ * Project 3D world coordinates to 2D screen positions and perform
+ * screen-space collision avoidance for dense building clusters.
+ */
 function _updatePins() {
   if (!experience || !worldReady) return;
   const cam = experience.camera.orthographicCamera;
@@ -1149,20 +1270,80 @@ function _updatePins() {
   const H = experience.sizes.height;
   const zoom = cam.zoom;
 
-  pinList.forEach(({ worldPos, el, interactive }) => {
-    _projVec.copy(worldPos).project(cam);
-    if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
+  const visiblePins = [];
 
-    // Zoom-based Level of Detail (LOD) — show static labels at any meaningful zoom
-    if (!interactive && zoom < 0.3) {
-      el.style.display = 'none';
+  pinList.forEach((pin) => {
+    _projVec.copy(pin.worldPos).project(cam);
+    if (_projVec.z > 1) {
+      pin.el.style.visibility = 'hidden';
       return;
     }
 
-    el.style.display = '';
-    el.style.visibility = 'visible';
-    el.style.left = ((_projVec.x * 0.5 + 0.5) * W) + 'px';
-    el.style.top = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
+    if (!pin.interactive && zoom < 0.3) {
+      pin.el.style.display = 'none';
+      return;
+    }
+
+    pin.el.style.display = '';
+    pin.el.style.visibility = 'visible';
+
+    const screenX = (_projVec.x * 0.5 + 0.5) * W;
+    const screenY = (_projVec.y * -0.5 + 0.5) * H;
+
+    pin.screenX = screenX;
+    pin.screenY = screenY;
+    pin.offsetY = 0;
+
+    if (pin.interactive) {
+      visiblePins.push(pin);
+    } else {
+      pin.el.style.left = screenX + 'px';
+      pin.el.style.top = screenY + 'px';
+    }
+  });
+
+  // ── Overlap handling / Collision avoidance for dense building clusters ──
+  const COLLISION_DIST_X = 42; // px horizontal threshold
+  const COLLISION_DIST_Y = 36; // px vertical threshold
+  const STAGGER_STEP = 26;     // px vertical offset shift
+
+  const clusters = [];
+
+  visiblePins.forEach(pin => {
+    let placed = false;
+    for (const cluster of clusters) {
+      const isNear = cluster.some(other =>
+        Math.abs(pin.screenX - other.screenX) < COLLISION_DIST_X &&
+        Math.abs(pin.screenY - other.screenY) < COLLISION_DIST_Y
+      );
+      if (isNear) {
+        cluster.push(pin);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      clusters.push([pin]);
+    }
+  });
+
+  clusters.forEach(cluster => {
+    if (cluster.length <= 1) return;
+
+    // Sort cluster pins from top to bottom
+    cluster.sort((a, b) => a.screenY - b.screenY);
+
+    const totalShift = (cluster.length - 1) * STAGGER_STEP;
+    const startOffset = -totalShift / 2;
+
+    cluster.forEach((pin, idx) => {
+      pin.offsetY = startOffset + idx * STAGGER_STEP;
+    });
+  });
+
+  visiblePins.forEach(pin => {
+    pin.el.style.left = pin.screenX + 'px';
+    pin.el.style.top = (pin.screenY + pin.offsetY) + 'px';
   });
 }
 
