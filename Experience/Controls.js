@@ -40,6 +40,11 @@ export default class Controls {
       this.camera.orthographicCamera,
       this.canvas,
     );
+    this.controls.mouseButtons = {
+      LEFT: THREE.MOUSE.ROTATE,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: THREE.MOUSE.PAN,
+    };
     this.controls.enableDamping = true;
     this.controls.dampingFactor = this.sensitivity.mode3D.dampingFactor;
     this.controls.enableZoom = true;
@@ -66,6 +71,119 @@ export default class Controls {
         this.experience.renderer.requestRender()
       }
     })
+
+    this.setupHintAndCursorFeedback();
+  }
+
+  setupHintAndCursorFeedback() {
+    const hintCard = document.getElementById("controls-hint-legend");
+    const zoneLeft = document.getElementById("hint-zone-left");
+    const zoneRight = document.getElementById("hint-zone-right");
+    const zoneMiddle = document.getElementById("hint-zone-middle");
+    const itemLeft = document.getElementById("hint-item-left");
+    const itemRight = document.getElementById("hint-item-right");
+    const itemMiddle = document.getElementById("hint-item-middle");
+
+    let hasInteractedWithCamera = false;
+    let initialTimerExpired = false;
+    let isHovered = false;
+    let activeZone = null;
+    let wheelTimeout = null;
+
+    const setOpacityState = () => {
+      if (!hintCard) return;
+      if (isHovered) {
+        hintCard.style.opacity = "1";
+      } else if (hasInteractedWithCamera || initialTimerExpired) {
+        hintCard.style.opacity = "0.3";
+      } else {
+        hintCard.style.opacity = "1";
+      }
+    };
+
+    // Initial 4-second full-opacity timer for first-time visual hint
+    if (hintCard) {
+      hintCard.style.opacity = "1";
+      setTimeout(() => {
+        initialTimerExpired = true;
+        setOpacityState();
+      }, 4000);
+
+      hintCard.addEventListener("mouseenter", () => {
+        isHovered = true;
+        setOpacityState();
+      });
+
+      hintCard.addEventListener("mouseleave", () => {
+        isHovered = false;
+        setOpacityState();
+      });
+    }
+
+    // Camera interaction detection via OrbitControls 'start' event
+    this.controls.addEventListener("start", () => {
+      hasInteractedWithCamera = true;
+      setOpacityState();
+    });
+
+    // Helper to highlight glyph zone and corresponding label item
+    const setActiveZone = (zone) => {
+      activeZone = zone;
+      [zoneLeft, zoneRight, zoneMiddle].forEach((el) => el?.classList.remove("active"));
+      [itemLeft, itemRight, itemMiddle].forEach((el) => el?.classList.remove("active"));
+
+      if (zone === "left") {
+        zoneLeft?.classList.add("active");
+        itemLeft?.classList.add("active");
+      } else if (zone === "right") {
+        zoneRight?.classList.add("active");
+        itemRight?.classList.add("active");
+      } else if (zone === "middle") {
+        zoneMiddle?.classList.add("active");
+        itemMiddle?.classList.add("active");
+      }
+    };
+
+    // Cursor feedback & active zone highlighting on mouse drag
+    if (this.canvas) {
+      this.canvas.addEventListener("mousedown", (e) => {
+        if (e.button === 0) {
+          this.canvas.style.cursor = "grab";
+          setActiveZone("left");
+        } else if (e.button === 2) {
+          this.canvas.style.cursor = "move";
+          setActiveZone("right");
+        } else if (e.button === 1) {
+          this.canvas.style.cursor = "ns-resize";
+          setActiveZone("middle");
+        }
+      });
+
+      // Reset cursor and highlights on mouse release
+      window.addEventListener("mouseup", () => {
+        this.canvas.style.cursor = "default";
+        if (activeZone !== null) {
+          setActiveZone(null);
+        }
+      });
+
+      // Scroll feedback for middle wheel zoom
+      this.canvas.addEventListener(
+        "wheel",
+        () => {
+          this.canvas.style.cursor = "ns-resize";
+          setActiveZone("middle");
+          if (wheelTimeout) clearTimeout(wheelTimeout);
+          wheelTimeout = setTimeout(() => {
+            if (this.canvas.style.cursor === "ns-resize") {
+              this.canvas.style.cursor = "default";
+            }
+            setActiveZone(null);
+          }, 250);
+        },
+        { passive: true }
+      );
+    }
   }
 
   applySensitivityProfile() {
