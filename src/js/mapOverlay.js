@@ -819,13 +819,9 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
 
   if (openPanel) _openPanel(key, highlightRoom, searchMode);
 
-  // Automatically open or close the 3D building viewer based on suppress3dViewer
-  const data = BUILDING_DATA[key];
-  if (!suppress3dViewer && data && data.model3d) {
-    openBuildingViewer(data.model3d, data.name);
-  } else {
-    closeBuildingViewer();
-  }
+  // Close any open 3D viewer modal when selecting a new building.
+  // The live 3D preview will ONLY open when the user manually clicks "View 3D Model" in the info panel.
+  closeBuildingViewer();
 }
 
 function _resetHighlight() {
@@ -848,22 +844,20 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  // Fetch live Supabase building record:
-  // Prefer direct ID lookup (supabaseId) to avoid name-matching failures.
-  let dbBuilding = null;
-  if (data.supabaseId) {
-    const { getBuildingDetails } = await import('./supabaseClient.js');
-    dbBuilding = await getBuildingDetails(data.supabaseId);
-    console.log(`[Panel] Direct ID lookup for "${key}" (ID ${data.supabaseId}):`, dbBuilding?.Building_name || 'null');
-  } else {
-    dbBuilding = await getBuildingByNameOrKey(key);
+  // 1️⃣ Show panel INSTANTLY with local static data (zero network delay)
+  const panel = document.getElementById('info-panel');
+  if (panel) {
+    panel.style.display = 'block';
+    requestAnimationFrame(() => {
+      panel.classList.remove('panel-hidden');
+    });
   }
 
-  const buildingName = dbBuilding?.Building_name || data.name;
-  const buildingDesc = dbBuilding?.Description || data.desc;
-  const buildingImg = dbBuilding?.Image_URL || data.image || '/images/kinaadman.jpg';
+  const buildingName = data.name;
+  const buildingDesc = data.desc || '';
+  const buildingImg = data.image || '/images/kinaadman.jpg';
 
-  // Set the building logo in the image overlay
+  // Set building logo
   const iconEl = document.getElementById('panel-icon');
   if (iconEl) {
     if (data.logo) {
@@ -875,162 +869,88 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     }
   }
 
-  // Hide the emoji icon overlapping the building photo
   const imgIconEl = document.getElementById('panel-img-icon');
   if (imgIconEl) imgIconEl.style.display = 'none';
 
   set('panel-name', buildingName);
-  set('panel-type', data.type);
+  set('panel-type', data.type || 'Building');
   set('panel-desc', buildingDesc);
 
-  // Set the building image dynamically from Supabase Storage or local image
   const imgEl = document.getElementById('panel-img-bg');
   if (imgEl) {
     imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // ── Floor-grouped accordion for ROOMS / OFFICES / FACILITIES ─────────────
+  // Populate local fallback departments immediately formatted into floor accordions
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
 
-  let departmentsHTML = '';
-  const hasSupabaseData = dbBuilding && (
-    dbBuilding.ROOMS?.length > 0 ||
-    dbBuilding.OFFICES?.length > 0 ||
-    dbBuilding.FACILITIES?.length > 0
-  );
+  if (deptsWrap && deptsList) {
+    if (data.depts?.length) {
+      const localFloorMap = {};
+      data.depts.forEach(d => {
+        let f = 1;
+        if (d.sub) {
+          const match = d.sub.match(/Floor\s*(\d+)/i);
+          if (match) f = parseInt(match[1], 10);
+          else if (/ground/i.test(d.sub)) f = 1;
+        }
+        if (!localFloorMap[f]) localFloorMap[f] = [];
+        localFloorMap[f].push(`
+          <li class="panel-facility-item">
+            <span class="panel-facility-check">${d.icon || '🏢'}</span>
+            <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
+          </li>`);
+      });
 
-  if (hasSupabaseData) {
-    // Collect all items keyed by floor number
-    const floorMap = {};
-
-    const addToFloor = (floor, html) => {
-      const f = floor || 1;
-      if (!floorMap[f]) floorMap[f] = [];
-      floorMap[f].push(html);
-    };
-
-    // ── Rooms ──────────────────────────────────────────────────────────────
-    (dbBuilding.ROOMS || []).forEach(r => {
-      const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
-      const roomSub = r.Room_number && r.Room_name ? r.Room_name : null;
-      const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(r.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
-          <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Offices ────────────────────────────────────────────────────────────
-    (dbBuilding.OFFICES || []).forEach(o => {
-      const officeSub = o.Abbreviations || o.Room_number || null;
-      const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(o.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
-          <span class="floor-item-label"><strong>${o.Office_name}</strong>${officeSub ? ` <span class="floor-item-sub">${officeSub}</span>` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Facilities ─────────────────────────────────────────────────────────
-    (dbBuilding.FACILITIES || []).forEach(f => {
-      const facilitySub = f.Abbreviations || f.Room_number || null;
-      const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(f.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
-          <span class="floor-item-label"><strong>${f.Facility_name}</strong>${facilitySub ? ` <span class="floor-item-sub">${facilitySub}</span>` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Render one <details> accordion per floor, sorted ──────────────────
-    const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
-    departmentsHTML = sortedFloors.map(floor => {
-      const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
-      const openAttr = hasMatch ? ' open' : '';
-      const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
-      const itemCount = floorMap[floor].length;
-      return `
-        <details class="floor-accordion"${openAttr}>
+      const sortedLocalFloors = Object.keys(localFloorMap).map(Number).sort((a, b) => a - b);
+      const fallbackHTML = sortedLocalFloors.map((floor, idx) => `
+        <details class="floor-accordion"${idx === 0 ? ' open' : ''}>
           <summary class="floor-accordion-header">
             <span class="floor-accordion-icon">▶</span>
             <span class="floor-accordion-title">Floor ${floor}</span>
-            <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
-            ${matchIndicator}
+            <span class="floor-accordion-count">${localFloorMap[floor].length} item${localFloorMap[floor].length !== 1 ? 's' : ''}</span>
           </summary>
           <ul class="floor-accordion-list">
-            ${floorMap[floor].join('')}
+            ${localFloorMap[floor].join('')}
           </ul>
-        </details>`;
-    }).join('');
+        </details>`).join('');
 
-  } else if (data.depts?.length) {
-    // Fallback: local hardcoded departments (no Supabase data)
-    departmentsHTML = data.depts.map(d => `
-      <li class="panel-facility-item">
-        <span class="panel-facility-check">${d.icon || '🏢'}</span>
-        <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
-      </li>`).join('');
-  }
+      deptsList.innerHTML = fallbackHTML;
+      deptsWrap.style.display = '';
 
-  if (deptsWrap && deptsList && departmentsHTML) {
-    deptsList.innerHTML = departmentsHTML;
-    deptsWrap.style.display = '';
-
-    // Wire up the rotating arrow animation for each accordion
-    deptsList.querySelectorAll('.floor-accordion').forEach(el => {
-      el.addEventListener('toggle', () => {
-        const icon = el.querySelector('.floor-accordion-icon');
-        if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
+      deptsList.querySelectorAll('.floor-accordion').forEach(el => {
+        el.addEventListener('toggle', () => {
+          const icon = el.querySelector('.floor-accordion-icon');
+          if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
+        });
+        if (el.open) {
+          const icon = el.querySelector('.floor-accordion-icon');
+          if (icon) icon.style.transform = 'rotate(90deg)';
+        }
       });
-      // Set initial state for already-open accordions (matched)
-      if (el.open) {
-        const icon = el.querySelector('.floor-accordion-icon');
-        if (icon) icon.style.transform = 'rotate(90deg)';
-      }
-    });
-  } else if (deptsWrap) {
-    deptsWrap.style.display = 'none';
+    } else {
+      deptsWrap.style.display = 'none';
+    }
   }
 
-
-  // ── Search mode: hide Description, Contact, and 3D button — show only header + floors ──
+  // Search mode & Contact visibility
   const descWrap = document.querySelector('.panel-body > .panel-label:first-child');
   const descEl = document.getElementById('panel-desc');
   const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
+
   if (searchMode) {
-    // Hide description section
     if (descWrap) descWrap.style.display = 'none';
     if (descEl) descEl.style.display = 'none';
-    // Hide contact
     if (contactWrap) contactWrap.style.display = 'none';
-    // Hide 3D button
     if (viewBtnWrap) viewBtnWrap.style.display = 'none';
   } else {
-    // Normal mode — restore description
     if (descWrap) descWrap.style.display = '';
     if (descEl) descEl.style.display = '';
 
-    // Contact
     if (contactWrap && contactContent && data.contact) {
       contactContent.innerHTML =
         (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
@@ -1040,7 +960,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       contactWrap.style.display = 'none';
     }
 
-    // ── "View 3D Model" button ──
+    // ── "View 3D Model" button (only opens live 3D viewer when clicked) ──
     if (viewBtnWrap && viewBtn) {
       if (data.model3d) {
         viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
@@ -1051,11 +971,120 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     }
   }
 
-  // Show panel (uses existing TIKAD #info-panel CSS)
-  const panel = document.getElementById('info-panel');
-  if (panel) {
-    panel.classList.remove('panel-hidden');
-    panel.style.display = 'block';
+  // 2️⃣ Asynchronously fetch live Supabase building record to enhance details in background
+  try {
+    let dbBuilding = null;
+    if (data.supabaseId) {
+      const { getBuildingDetails } = await import('./supabaseClient.js');
+      dbBuilding = await getBuildingDetails(data.supabaseId);
+    } else {
+      dbBuilding = await getBuildingByNameOrKey(key);
+    }
+
+    if (dbBuilding) {
+      if (dbBuilding.Building_name) set('panel-name', dbBuilding.Building_name);
+      if (dbBuilding.Description) set('panel-desc', dbBuilding.Description);
+      if (dbBuilding.Image_URL && imgEl) {
+        imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
+      }
+
+      const hasSupabaseData = (
+        dbBuilding.ROOMS?.length > 0 ||
+        dbBuilding.OFFICES?.length > 0 ||
+        dbBuilding.FACILITIES?.length > 0
+      );
+
+      if (hasSupabaseData && deptsWrap && deptsList) {
+        const floorMap = {};
+        const addToFloor = (floor, html) => {
+          const f = floor || 1;
+          if (!floorMap[f]) floorMap[f] = [];
+          floorMap[f].push(html);
+        };
+
+        (dbBuilding.ROOMS || []).forEach(r => {
+          const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
+          const roomSub = r.Room_number && r.Room_name ? r.Room_name : null;
+          const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
+          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+          const matchStyle = isMatched ? ' floor-item--matched' : '';
+          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+          addToFloor(r.Floor, `
+            <li class="floor-item${matchStyle}">
+              <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
+              <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
+              ${badge}
+            </li>`);
+        });
+
+        (dbBuilding.OFFICES || []).forEach(o => {
+          const officeSub = o.Abbreviations || o.Room_number || null;
+          const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
+          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+          const matchStyle = isMatched ? ' floor-item--matched' : '';
+          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+          addToFloor(o.Floor, `
+            <li class="floor-item${matchStyle}">
+              <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
+              <span class="floor-item-label"><strong>${o.Office_name}</strong>${officeSub ? ` <span class="floor-item-sub">${officeSub}</span>` : ''}</span>
+              ${badge}
+            </li>`);
+        });
+
+        (dbBuilding.FACILITIES || []).forEach(f => {
+          const facilitySub = f.Abbreviations || f.Room_number || null;
+          const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
+          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+          const matchStyle = isMatched ? ' floor-item--matched' : '';
+          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+
+          addToFloor(f.Floor, `
+            <li class="floor-item${matchStyle}">
+              <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
+              <span class="floor-item-label"><strong>${f.Facility_name}</strong>${facilitySub ? ` <span class="floor-item-sub">${facilitySub}</span>` : ''}</span>
+              ${badge}
+            </li>`);
+        });
+
+        const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+        const departmentsHTML = sortedFloors.map(floor => {
+          const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
+          const openAttr = hasMatch ? ' open' : '';
+          const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
+          const itemCount = floorMap[floor].length;
+          return `
+            <details class="floor-accordion"${openAttr}>
+              <summary class="floor-accordion-header">
+                <span class="floor-accordion-icon">▶</span>
+                <span class="floor-accordion-title">Floor ${floor}</span>
+                <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
+                ${matchIndicator}
+              </summary>
+              <ul class="floor-accordion-list">
+                ${floorMap[floor].join('')}
+              </ul>
+            </details>`;
+        }).join('');
+
+        deptsList.innerHTML = departmentsHTML;
+        deptsWrap.style.display = '';
+
+        deptsList.querySelectorAll('.floor-accordion').forEach(el => {
+          el.addEventListener('toggle', () => {
+            const icon = el.querySelector('.floor-accordion-icon');
+            if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
+          });
+          if (el.open) {
+            const icon = el.querySelector('.floor-accordion-icon');
+            if (icon) icon.style.transform = 'rotate(90deg)';
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('[Panel] Could not load live Supabase record:', err);
   }
 }
 
@@ -1452,6 +1481,63 @@ export function initMapOverlay() {
     btn3D.addEventListener('click', () => {
       if (experience && experience.controls) {
         experience.controls.setViewMode('3D');
+      }
+    });
+  }
+
+  // ── Raycast click handler for 3D building models on the canvas ────────────
+  const canvas = document.querySelector('.experience-canvas');
+  if (canvas) {
+    let pointerDownPos = { x: 0, y: 0 };
+
+    canvas.addEventListener('pointerdown', e => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('pointerup', e => {
+      // Ignore dragging / camera orbit rotation
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 6) return;
+      if (!experience || !experience.camera || !worldReady) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouse = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      );
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, experience.camera.orthographicCamera);
+
+      const meshes = [];
+      Object.values(meshIndex).forEach(node => {
+        if (!node) return;
+        if (node.isMesh) meshes.push(node);
+        else if (node.traverse) {
+          node.traverse(child => { if (child.isMesh) meshes.push(child); });
+        }
+      });
+
+      const intersects = raycaster.intersectObjects(meshes, false);
+      if (intersects.length > 0) {
+        const hitMesh = intersects[0].object;
+        for (const [key, bData] of Object.entries(BUILDING_DATA)) {
+          if (bData.interactive === false) continue;
+          const node = _findNode(key);
+          if (node) {
+            let matched = false;
+            if (node === hitMesh) matched = true;
+            else if (node.traverse) {
+              node.traverse(child => { if (child === hitMesh) matched = true; });
+            }
+            if (matched) {
+              _selectBuilding(key, true);
+              const input = document.getElementById('map-search');
+              if (input) input.value = bData.name;
+              break;
+            }
+          }
+        }
       }
     });
   }
