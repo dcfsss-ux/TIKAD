@@ -16,21 +16,27 @@ export default class MapBase {
     this.debug = this.experience.debug;
     this.renderer = this.experience.renderer;
 
-    this.baseModel = this.resources.items.campusBase;
-    this.actualModel = this.baseModel.scene;
+    this.modelsToLoad = [
+      { name: "campusBase", item: this.resources.items.campusBase },
+      { name: "trees", item: this.resources.items.trees },
+      { name: "easterEgg", item: this.resources.items.easterEgg },
+    ];
 
-    this.setModel();
+    this.setModels();
   }
 
-  setModel() {
-    this.actualModel.traverse((child) => {
+  setupModel(gltf, label) {
+    if (!gltf || !gltf.scene) return;
+    const modelScene = gltf.scene;
+
+    modelScene.traverse((child) => {
       if (child.isMesh) {
         // Hide any Meshy_AI artifacts
         if (child.name && child.name.includes("Meshy_AI")) {
           child.visible = false;
         }
 
-        // Disable frustum culling so the ground base stays visible at all angles
+        // Disable frustum culling so objects stay visible at all angles
         child.frustumCulled = false;
 
         // ── Fix textures from Blender GLB export ────────────────────────────
@@ -55,8 +61,16 @@ export default class MapBase {
       }
     });
 
-    this.scene.add(this.actualModel);
-    console.log("[MapBase] Campus ground base loaded.");
+    this.scene.add(modelScene);
+    console.log(`[MapBase] Loaded ${label}`);
+  }
+
+  setModels() {
+    this.modelsToLoad.forEach(({ name, item }) => {
+      if (item) {
+        this.setupModel(item, name);
+      }
+    });
 
     if (this.renderer) {
       this.renderer.requestRender();

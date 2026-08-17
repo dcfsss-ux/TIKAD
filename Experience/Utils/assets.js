@@ -7,4 +7,15 @@ export default [
     type: "glbModel",
     path: "/models/map/platform%20with%20rocky%20road.glb",
   },
+  {
+    name: "trees",
+    type: "glbModel",
+    path: "/models/map/trees.glb",
+  },
+  {
+    name: "easterEgg",
+    type: "glbModel",
+    path: "/models/map/easter%20egg.glb",
+  },
 ];
+
