@@ -205,5 +205,43 @@ export async function searchCampusEntities(query) {
   };
 }
 
+/**
+ * Fetch building data with college seal URLs (Logo_URL) from Supabase.
+ * Queries 'buildings' or 'BUILDINGS' table including Logo_URL.
+ */
+export async function fetchBuildingSeals() {
+  try {
+    // Primary query: lower-case 'buildings' table as per schema, with fallback to 'BUILDINGS'
+    let { data: buildings, error } = await supabase
+      .from('buildings')
+      .select('id, name, Logo_URL');
+
+    if (error || !buildings || buildings.length === 0) {
+      const res = await supabase
+        .from('BUILDINGS')
+        .select('Building_ID, Building_name, Logo_URL');
+      if (!res.error && res.data && res.data.length > 0) {
+        buildings = res.data.map(b => ({
+          id: b.Building_ID,
+          name: b.Building_name,
+          Logo_URL: b.Logo_URL
+        }));
+        error = null;
+      }
+    }
+
+    if (error) {
+      console.error('Failed to load buildings:', error);
+      return [];
+    }
+
+    return buildings || [];
+  } catch (err) {
+    console.error('Failed to load buildings:', err);
+    return [];
+  }
+}
+
+
 
 

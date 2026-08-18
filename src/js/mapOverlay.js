@@ -10,7 +10,7 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { getBuildingByNameOrKey, searchCampusEntities } from './supabaseClient.js';
+import { getBuildingByNameOrKey, searchCampusEntities, fetchBuildingSeals } from './supabaseClient.js';
 
 
 
@@ -31,22 +31,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
   },
-  "masawa_hall": {
-    glbName: "MASAWA HALL",
-    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", type: "Academic Building", emoji: "🏫",
-    supabaseId: 12,
-    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
-    image: "/images/masawa.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
-    desc: "Houses the College of Computing and Information Sciences (CCIS), offering undergraduate programs in Computer Science, Information Technology, and related fields. Equipped with modern computer labs and development studios.",
-    depts: [
-      { icon: "💻", name: "College of Computing & Information Sciences", sub: "All Floors" },
-      { icon: "🖥️", name: "Computer Labs 1–4", sub: "Floors 1–2" },
-      { icon: "🔐", name: "IT Resource Center", sub: "Floor 3" },
-    ],
-    contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
-  },
+
   "hinang_building": {
     glbName: "HINANG BUILDING",
     name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
@@ -171,6 +156,7 @@ const BUILDING_DATA = {
   "csu_student_center": {
     glbName: "CSU STUDENT CENTER",
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
+    interactive: false,
     supabaseId: 19,
     supabaseNames: ['Student Center', 'CSU Student Center'],
     image: "/images/kinaadman.jpg",
@@ -234,6 +220,7 @@ const BUILDING_DATA = {
   "food_innovation_center": {
     glbName: "FOOD INNOVATION CENTER",
     name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
+    interactive: false,
     supabaseId: 18,
     supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
     image: "/images/kinaadman.jpg",
@@ -250,6 +237,7 @@ const BUILDING_DATA = {
   "hostel": {
     glbName: "UNIVERSITY HOSTEL",
     name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
+    interactive: false,
     supabaseId: 16,
     supabaseNames: ['Hostel', 'University Hostel'],
     image: "/images/kinaadman.jpg",
@@ -308,6 +296,7 @@ const BUILDING_DATA = {
   "alumni_office": {
     glbName: "ALUMNI OFFICE",
     name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
+    interactive: false,
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
@@ -322,6 +311,7 @@ const BUILDING_DATA = {
   "old_cas": {
     glbName: "OLD CAS BUILDING",
     name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
+    interactive: false,
     supabaseId: 20,
     supabaseNames: ['Old CAS', 'Old CAS Building'],
     image: "/images/kinaadman.jpg",
@@ -337,6 +327,7 @@ const BUILDING_DATA = {
   "sports_office": {
     glbName: "ROTC OFFICE",
     name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
+    interactive: false,
     supabaseId: 14,
     supabaseNames: ['PE Building', 'Sports Office'],
     image: "/images/kinaadman.jpg",
@@ -420,6 +411,7 @@ const BUILDING_DATA = {
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
   "alumni_office": {
     name: "Alumni Center", shortName: "Alumni Center", type: "Administrative Unit", emoji: "🎓",
+    interactive: false,
     supabaseId: 17,
     supabaseNames: ['Alumni Center', 'Alumni Office'],
     image: "/images/kinaadman.jpg",
@@ -450,7 +442,21 @@ const BUILDING_DATA = {
   "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
   "ccard_office": { name: "CCARD Office", shortName: "CCARD Office", interactive: false },
   "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
-  "ched_lgu": { name: "CHED-LGU Building", shortName: "CHED-LGU", interactive: false },
+  "ched_lgu": {
+    glbName: "CHED_LGU -",
+    name: "CHED-LGU Building", shortName: "CHED-LGU", abbrev: "CHED-LGU", type: "Government Satellite Office", emoji: "🏛",
+    supabaseId: null,
+    supabaseNames: ['CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED'],
+    image: "/images/kinaadman.jpg",
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/CHED.png",
+    gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)",
+    desc: "The Commission on Higher Education (CHED) satellite office within the CSU campus. Serves as a coordination point between the university and the national higher education regulatory body.",
+    depts: [
+      { icon: "🏛", name: "CHED Regional Office", sub: "Ground Floor" },
+      { icon: "📋", name: "Higher Education Coordination Desk", sub: "Floor 1" }
+    ],
+    contact: { phone: "(085) 341-2300", email: "ched@csu.edu.ph" }
+  },
   "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
   "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
   "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
@@ -489,96 +495,96 @@ const BUILDING_DATA = {
 // All files are Draco-compressed in-place via scripts/compress-map-buildings.mjs
 const BUILDING_GLB_MAP = {
   // ── Main academic & admin buildings ──────────────────────────────────────
-  'masawa_building':             '/models/map/masawa%20building.glb',
-  'masawa_hall':                 '/models/map/masawa%20building.glb',
-  'hinang_building':             '/models/map/hinang.glb',
-  'kinaadman_hall':              '/models/map/kh%20comp.glb',
-  'hiraya_building':             '/models/map/hiraya.glb',
-  'new_administrative_bldg':     '/models/map/new%20admin%20-.glb',
+  'masawa_building': '/models/map/masawa%20building.glb',
+
+  'hinang_building': '/models/map/hinang.glb',
+  'kinaadman_hall': '/models/map/kh%20comp.glb',
+  'hiraya_building': '/models/map/hiraya.glb',
+  'new_administrative_bldg': '/models/map/new%20admin%20-.glb',
   'old_administrative_building': '/models/map/old%20admin%20-.glb',
-  'state-of-the-art-library':    '/models/map/STATE-OF-THE-ART-LIBRARY.glb',
-  'batok_hall':                  '/models/map/batok%20hall%20-.glb',
-  'ced_building':                '/models/map/CED%20-.glb',
-  'caa_building':                '/models/map/CAA%20Building.glb',
-  'caa':                         '/models/map/CAA%20Building.glb',
-  'dost':                        '/models/map/DOST%20-.glb',
-  'alumni_office':               '/models/map/ALUMNI%20OFFICE%20-.glb',
-  'csu_student_center':          '/models/map/CSU%20STUDENT%20CENTER.glb',
-  'executive_house':             '/models/map/executive%20house%20-.glb',
-  'old_cas':                     '/models/map/Old%20CAS.glb',
-  'kalinaw':                     '/models/map/KALINAW.glb',
-  'csu_gym':                     '/models/map/GYMNASIUM.glb',
-  'sports_office':               '/models/map/Sports%20Office.glb',
-  'food_innovation_center':      '/models/map/Food%20Innovation%20Center.glb',
-  'food_technology_center':      '/models/map/Food_Technology_Center.glb',
-  'amante_building':             '/models/map/AMANTE%20BUILDING.glb',
-  'milk_processing_facility':    '/models/map/Milk%20Processing%20Facility.glb',
-  'eco_park_building':           '/models/map/ECO%20Park%20Building.glb',
-  'ccard_office':                '/models/map/CCARD%20OFFICE.glb',
-  'church':                      '/models/map/Church.glb',
-  'Villares':                    '/models/map/Villares%20Center.glb',
-  'villares':                    '/models/map/Villares%20Center.glb',
+  'state-of-the-art-library': '/models/map/STATE-OF-THE-ART-LIBRARY.glb',
+  'batok_hall': '/models/map/batok%20hall%20-.glb',
+  'ced_building': '/models/map/CED%20-.glb',
+  'caa_building': '/models/map/CAA%20Building.glb',
+  'caa': '/models/map/CAA%20Building.glb',
+  'dost': '/models/map/DOST%20-.glb',
+  'alumni_office': '/models/map/ALUMNI%20OFFICE%20-.glb',
+  'csu_student_center': '/models/map/CSU%20STUDENT%20CENTER.glb',
+  'executive_house': '/models/map/executive%20house%20-.glb',
+  'old_cas': '/models/map/Old%20CAS.glb',
+  'kalinaw': '/models/map/KALINAW.glb',
+  'csu_gym': '/models/map/GYMNASIUM.glb',
+  'sports_office': '/models/map/Sports%20Office.glb',
+  'food_innovation_center': '/models/map/Food%20Innovation%20Center.glb',
+  'food_technology_center': '/models/map/Food_Technology_Center.glb',
+  'amante_building': '/models/map/AMANTE%20BUILDING.glb',
+  'milk_processing_facility': '/models/map/Milk%20Processing%20Facility.glb',
+  'eco_park_building': '/models/map/ECO%20Park%20Building.glb',
+  'ccard_office': '/models/map/CCARD%20OFFICE.glb',
+  'church': '/models/map/Church.glb',
+  'Villares': '/models/map/Villares%20Center.glb',
+  'villares': '/models/map/Villares%20Center.glb',
 
   // ── Facilities, canteens & support structures ─────────────────────────────
-  'power_house':                 '/models/map/powerhouse%20-.glb',
-  'motorpool':                   '/models/map/motorpool.glb',
-  'ched_lgu':                    '/models/map/ched_lgu%20-.glb',
-  'bio_diagnostic_laboratory':   '/models/map/bio%20diagnostic%20labtoratory%20-.glb',
-  'overpass':                    '/models/map/overpass%20and%20guardhouse.glb',
-  'gas_station':                 '/models/map/gas%20station%20na%20guba%20-.glb',
-  'cas_covered_court':           '/models/map/CAS%20COVERED%20COURT%20-.glb',
-  'bbc_cafeteria':               '/models/map/BBC%20CAFE.glb',
-  'cas_canteen':                 '/models/map/CAS%20CANTEEN%20-.glb',
-  'ced_canteen':                 '/models/map/ced%20canteen%20-.glb',
-  'ced_lsg_office':              '/models/map/CED%20LSG%20OFFICE%20-.glb',
-  'ttlo':                        '/models/map/TTLO%20-.glb',
-  'boffo_canteen':               '/models/map/BOFFO%20CANTEEN.glb',
-  'caa_canteen':                 '/models/map/CAA%20Canteen.glb',
-  'front_ccis_canteen':          '/models/map/Front_CCIS_Canteen.glb',
-  'cofes_annex':                 '/models/map/COFES%20annex.glb',
-  'eco_lodge':                   '/models/map/ECO%20lodge.glb',
-  'emb_machine':                 '/models/map/EMB%20machine.glb',
-  'gents_dormitory':             '/models/map/GENT\'S%20dorm.glb',
-  'oatc':                        '/models/map/OATC.glb',
+  'power_house': '/models/map/powerhouse%20-.glb',
+  'motorpool': '/models/map/motorpool.glb',
+  'ched_lgu': '/models/map/ched_lgu%20-.glb',
+  'bio_diagnostic_laboratory': '/models/map/bio%20diagnostic%20labtoratory%20-.glb',
+  'overpass': '/models/map/overpass%20and%20guardhouse.glb',
+  'gas_station': '/models/map/gas%20station%20na%20guba%20-.glb',
+  'cas_covered_court': '/models/map/CAS%20COVERED%20COURT%20-.glb',
+  'bbc_cafeteria': '/models/map/BBC%20CAFE.glb',
+  'cas_canteen': '/models/map/CAS%20CANTEEN%20-.glb',
+  'ced_canteen': '/models/map/ced%20canteen%20-.glb',
+  'ced_lsg_office': '/models/map/CED%20LSG%20OFFICE%20-.glb',
+  'ttlo': '/models/map/TTLO%20-.glb',
+  'boffo_canteen': '/models/map/BOFFO%20CANTEEN.glb',
+  'caa_canteen': '/models/map/CAA%20Canteen.glb',
+  'front_ccis_canteen': '/models/map/Front_CCIS_Canteen.glb',
+  'cofes_annex': '/models/map/COFES%20annex.glb',
+  'eco_lodge': '/models/map/ECO%20lodge.glb',
+  'emb_machine': '/models/map/EMB%20machine.glb',
+  'gents_dormitory': '/models/map/GENT\'S%20dorm.glb',
+  'oatc': '/models/map/OATC.glb',
   'old_farm_mechanization_center': '/models/map/OLD%20Farm%20Mechanization.glb',
-  'rotc_office':                 '/models/map/ROTC%20OFFICE.glb',
-  'bookstore_and_orgms_office':  '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
-  'agri-workshop_2':             '/models/map/Agri%20Workshop%202.glb',
-  'annex_3':                     '/models/map/ANNEX%203.glb',
+  'rotc_office': '/models/map/ROTC%20OFFICE.glb',
+  'bookstore_and_orgms_office': '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
+  'agri-workshop_2': '/models/map/Agri%20Workshop%202.glb',
+  'annex_3': '/models/map/ANNEX%203.glb',
 
   // ── Additional campus structures & agricultural facilities ─────────────────
-  'agro_forestry_shed':          '/models/map/AGRO-FORESTRY%20SHED.glb',
-  'annex_2_old_ladies_dorm':     '/models/map/ANNEX%202%20(OLD%20LADIES%20DORM).glb',
-  'barn_house':                  '/models/map/BARN%20HOUSE.glb',
-  'beef_cattle_building':        '/models/map/BEEF%20CATTLE%20BUILDING.glb',
-  'bodega':                      '/models/map/BODEGA.glb',
-  'caa_layering_house':          '/models/map/CAA%20LAYERING%20HOUSE.glb',
-  'caa_swine_laboratory':        '/models/map/CAA%20SWINE%20LABORATORY.glb',
-  'caa_diagnostic_laboratory':   '/models/map/CAA%20diagnostic%20laboratory.glb',
+  'agro_forestry_shed': '/models/map/AGRO-FORESTRY%20SHED.glb',
+  'annex_2_old_ladies_dorm': '/models/map/ANNEX%202%20(OLD%20LADIES%20DORM).glb',
+  'barn_house': '/models/map/BARN%20HOUSE.glb',
+  'beef_cattle_building': '/models/map/BEEF%20CATTLE%20BUILDING.glb',
+  'bodega': '/models/map/BODEGA.glb',
+  'caa_layering_house': '/models/map/CAA%20LAYERING%20HOUSE.glb',
+  'caa_swine_laboratory': '/models/map/CAA%20SWINE%20LABORATORY.glb',
+  'caa_diagnostic_laboratory': '/models/map/CAA%20diagnostic%20laboratory.glb',
   'caraga_black_native_chicken': '/models/map/CARAGA%20BLACK%20NATIVE%20CHICKEN.glb',
-  'chicken_coop':                '/models/map/Chicken%20Coop.glb',
-  'caretaker_house':             '/models/map/CARETAKER%20HOUSE.glb',
-  'catching_coral':              '/models/map/CATCHING%20CORAL.glb',
-  'farm_nursery':                '/models/map/FARM%20NURSERY.glb',
-  'feedmill':                    '/models/map/FEEDMILL.glb',
-  'gents_dormitory_under_cons':  '/models/map/GENTS\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
-  'goat_house':                  '/models/map/GOAT%20HOUSE.glb',
-  'green_house':                 '/models/map/Green%20House.glb',
-  'hardening_area':              '/models/map/HARDENNING%20AREA.glb',
+  'chicken_coop': '/models/map/Chicken%20Coop.glb',
+  'caretaker_house': '/models/map/CARETAKER%20HOUSE.glb',
+  'catching_coral': '/models/map/CATCHING%20CORAL.glb',
+  'farm_nursery': '/models/map/FARM%20NURSERY.glb',
+  'feedmill': '/models/map/FEEDMILL.glb',
+  'gents_dormitory_under_cons': '/models/map/GENTS\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
+  'goat_house': '/models/map/GOAT%20HOUSE.glb',
+  'green_house': '/models/map/Green%20House.glb',
+  'hardening_area': '/models/map/HARDENNING%20AREA.glb',
   'ladies_dormitory_under_cons': '/models/map/LADIES\'%20DORMITORY%20(%20UNDER%20CONS.).glb',
-  'mechanical_dryer':            '/models/map/MECHANICAL%20DRYER.glb',
-  'micoriza_green_house':        '/models/map/MICORIZA%20GREEN%20HOUSE.glb',
-  'old_ccaarrd_building':        '/models/map/OLD%20CCAARRD%20BUILDING.glb',
-  'rooting_recovery':            '/models/map/ROOTING%20RECOVERY.glb',
-  'school_of_medicine_under_cons':'/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb',
-  'sheep_house':                 '/models/map/SHEEP%20HOUSE.glb',
-  'tech_voc_building':           '/models/map/TECH%20VOC%20BUILDING.glb',
-  'tissue_culture_lab':          '/models/map/Tissue%20Culture%20Lab.glb',
-  'vermi_house':                 '/models/map/VERMI%20HOUSE.glb',
-  'hostel':                      '/models/map/HOSTEL.glb',
-  'university_hostel':             '/models/map/HOSTEL.glb',
-  'carabao_center':              '/models/map/Carabao%20Center.glb',
-  'auxiliary_buildings':         '/models/map/auxillary%20buildings.glb',
+  'mechanical_dryer': '/models/map/MECHANICAL%20DRYER.glb',
+  'micoriza_green_house': '/models/map/MICORIZA%20GREEN%20HOUSE.glb',
+  'old_ccaarrd_building': '/models/map/OLD%20CCAARRD%20BUILDING.glb',
+  'rooting_recovery': '/models/map/ROOTING%20RECOVERY.glb',
+  'school_of_medicine_under_cons': '/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb',
+  'sheep_house': '/models/map/SHEEP%20HOUSE.glb',
+  'tech_voc_building': '/models/map/TECH%20VOC%20BUILDING.glb',
+  'tissue_culture_lab': '/models/map/Tissue%20Culture%20Lab.glb',
+  'vermi_house': '/models/map/VERMI%20HOUSE.glb',
+  'hostel': '/models/map/HOSTEL.glb',
+  'university_hostel': '/models/map/HOSTEL.glb',
+  'carabao_center': '/models/map/Carabao%20Center.glb',
+  'auxiliary_buildings': '/models/map/auxillary%20buildings.glb',
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -661,6 +667,9 @@ function _bootExperience() {
     // register their own pins as they arrive via 'buildingloaded')
     _buildChips();
     experience.time.on('update', _updatePins);
+
+    // Fetch college seals live from Supabase buildings table
+    _loadSupabaseSeals();
 
     // ── Progressive building loading ───────────────────────────────────────
     // Wire up the 'buildingloaded' handler BEFORE kicking off loads so we
@@ -819,13 +828,9 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
 
   if (openPanel) _openPanel(key, highlightRoom, searchMode);
 
-  // Automatically open or close the 3D building viewer based on suppress3dViewer
-  const data = BUILDING_DATA[key];
-  if (!suppress3dViewer && data && data.model3d) {
-    openBuildingViewer(data.model3d, data.name);
-  } else {
-    closeBuildingViewer();
-  }
+  // Close any open 3D viewer modal when selecting a new building.
+  // The live 3D preview will ONLY open when the user manually clicks "View 3D Model" in the info panel.
+  closeBuildingViewer();
 }
 
 function _resetHighlight() {
@@ -839,6 +844,198 @@ function _resetHighlight() {
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
 }
 
+// ── Dynamic Floor Tabs & Rooms Helper Functions ────────────────────────────────
+
+function renderFloorTabs(floors, activeFloorNumber) {
+  return floors.map(f => `
+    <button class="floor-tab${f.number === activeFloorNumber ? ' active' : ''}" data-floor="${f.number}">
+      Floor ${f.number}
+    </button>
+  `).join('');
+}
+
+function renderFloorRooms(floor) {
+  if (!floor || !floor.rooms || floor.rooms.length === 0) {
+    return `<div class="room-row" style="color:#9ca3af; justify-content:center; padding:12px;">No listed facilities on Floor ${floor?.number || 1}</div>`;
+  }
+  const iconMap = { office: 'briefcase', hall: 'building', lab: 'flask', restroom: 'toilet', storage: 'box' };
+
+  return floor.rooms.map(room => {
+    let iconContent = '';
+    if (room.iconHtml) {
+      iconContent = room.iconHtml;
+    } else if (room.icon) {
+      iconContent = room.icon.startsWith('<') ? room.icon : `<span>${room.icon}</span>`;
+    } else if (room.type && iconMap[room.type]) {
+      iconContent = `<i class="ti ti-${iconMap[room.type]}" aria-hidden="true"></i>`;
+    } else {
+      iconContent = `<i class="mdi mdi-door" aria-hidden="true"></i>`;
+    }
+
+    const codeBadge = room.code ? `<span class="room-code">${room.code}</span>` : '';
+    const subText = room.sub ? `<span class="room-sub">${room.sub}</span>` : '';
+    const matchBadge = room.isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+    const matchedClass = room.isMatched ? ' room-row--matched' : '';
+
+    return `
+      <div class="room-row${matchedClass}">
+        <span class="room-icon">${iconContent}</span>
+        <span class="room-name"><strong>${room.name}</strong>${subText}</span>
+        ${codeBadge}
+        ${matchBadge}
+      </div>
+    `;
+  }).join('');
+}
+
+function setActiveFloor(floorNumber, floors, container) {
+  container.querySelectorAll('.floor-tab').forEach(tab => {
+    tab.classList.toggle('active', Number(tab.dataset.floor) === floorNumber);
+  });
+
+  const roomsContainer = container.querySelector('.rooms-list');
+  if (roomsContainer) {
+    roomsContainer.style.opacity = '0';
+    setTimeout(() => {
+      const floor = floors.find(f => f.number === floorNumber);
+      roomsContainer.innerHTML = renderFloorRooms(floor);
+      roomsContainer.style.opacity = '1';
+    }, 150);
+  }
+}
+
+function renderFloorSection(floors, container) {
+  if (!floors || floors.length === 0) {
+    container.innerHTML = `<div class="room-row" style="color:#9ca3af; justify-content:center;">No floor details available</div>`;
+    return;
+  }
+
+  // Default selection: select floor containing a search match, or lowest floor number
+  const matchedFloorObj = floors.find(f => f.rooms.some(r => r.isMatched));
+  const activeFloorNumber = matchedFloorObj ? matchedFloorObj.number : floors[0].number;
+  const activeFloorObj = floors.find(f => f.number === activeFloorNumber) || floors[0];
+
+  container.innerHTML = `
+    <div class="floor-tabs-row">
+      ${renderFloorTabs(floors, activeFloorNumber)}
+    </div>
+    <div class="rooms-list">
+      ${renderFloorRooms(activeFloorObj)}
+    </div>
+  `;
+
+  container.querySelectorAll('.floor-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      setActiveFloor(Number(tab.dataset.floor), floors, container);
+    });
+  });
+}
+
+function parseLocalFloors(depts, highlightRoom = null) {
+  const floorMap = {};
+
+  depts.forEach(d => {
+    let assignedFloors = [];
+    if (d.sub) {
+      const rangeMatch = d.sub.match(/Floors?\s*(\d+)\s*[-–]\s*(\d+)/i);
+      if (rangeMatch) {
+        const start = parseInt(rangeMatch[1], 10);
+        const end = parseInt(rangeMatch[2], 10);
+        for (let f = start; f <= end; f++) assignedFloors.push(f);
+      } else {
+        const singleMatch = d.sub.match(/Floor\s*(\d+)/i);
+        if (singleMatch) assignedFloors.push(parseInt(singleMatch[1], 10));
+        else if (/ground/i.test(d.sub)) assignedFloors.push(1);
+      }
+    }
+    if (assignedFloors.length === 0) assignedFloors.push(1);
+
+    const isMatched = highlightRoom && `${d.name} ${d.sub || ''}`.toLowerCase().includes(highlightRoom.toLowerCase());
+
+    assignedFloors.forEach(f => {
+      if (!floorMap[f]) floorMap[f] = [];
+      floorMap[f].push({
+        name: d.name,
+        sub: d.sub || '',
+        icon: d.icon || '🏢',
+        isMatched
+      });
+    });
+  });
+
+  const sortedFloorNums = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+  if (sortedFloorNums.length === 0) sortedFloorNums.push(1);
+
+  return sortedFloorNums.map(num => ({
+    number: num,
+    rooms: floorMap[num] || []
+  }));
+}
+
+function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
+  const floorMap = {};
+
+  const addToFloor = (floorNum, roomObj) => {
+    const f = parseInt(floorNum, 10) || 1;
+    if (!floorMap[f]) floorMap[f] = [];
+    floorMap[f].push(roomObj);
+  };
+
+  (dbBuilding.ROOMS || []).forEach(r => {
+    const name = r.Room_number && r.Room_name ? r.Room_number : (r.Room_name || r.Room_number || 'Unnamed Room');
+    const sub = r.Room_number && r.Room_name ? r.Room_name : '';
+    const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(r.Floor, {
+      name,
+      sub,
+      code: r.Room_number || '',
+      type: 'room',
+      iconHtml: '<i class="mdi mdi-door"></i>',
+      isMatched
+    });
+  });
+
+  (dbBuilding.OFFICES || []).forEach(o => {
+    const sub = o.Abbreviations || o.Room_number || '';
+    const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(o.Floor, {
+      name: o.Office_name,
+      sub,
+      code: o.Abbreviations || '',
+      type: 'office',
+      iconHtml: '<i class="mdi mdi-briefcase-outline"></i>',
+      isMatched
+    });
+  });
+
+  (dbBuilding.FACILITIES || []).forEach(f => {
+    const sub = f.Abbreviations || f.Room_number || '';
+    const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(f.Floor, {
+      name: f.Facility_name,
+      sub,
+      code: f.Abbreviations || '',
+      type: 'facility',
+      iconHtml: '<i class="mdi mdi-domain"></i>',
+      isMatched
+    });
+  });
+
+  const sortedFloorNums = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+  if (sortedFloorNums.length === 0) sortedFloorNums.push(1);
+
+  return sortedFloorNums.map(num => ({
+    number: num,
+    rooms: floorMap[num] || []
+  }));
+}
+
 // ── Info panel ────────────────────────────────────────────────────────────────
 
 async function _openPanel(key, highlightRoom = null, searchMode = false) {
@@ -848,22 +1045,20 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
 
-  // Fetch live Supabase building record:
-  // Prefer direct ID lookup (supabaseId) to avoid name-matching failures.
-  let dbBuilding = null;
-  if (data.supabaseId) {
-    const { getBuildingDetails } = await import('./supabaseClient.js');
-    dbBuilding = await getBuildingDetails(data.supabaseId);
-    console.log(`[Panel] Direct ID lookup for "${key}" (ID ${data.supabaseId}):`, dbBuilding?.Building_name || 'null');
-  } else {
-    dbBuilding = await getBuildingByNameOrKey(key);
+  // 1️⃣ Show panel INSTANTLY with local static data (zero network delay)
+  const panel = document.getElementById('info-panel');
+  if (panel) {
+    panel.style.display = 'block';
+    requestAnimationFrame(() => {
+      panel.classList.remove('panel-hidden');
+    });
   }
 
-  const buildingName = dbBuilding?.Building_name || data.name;
-  const buildingDesc = dbBuilding?.Description || data.desc;
-  const buildingImg = dbBuilding?.Image_URL || data.image || '/images/kinaadman.jpg';
+  const buildingName = data.name;
+  const buildingDesc = data.desc || '';
+  const buildingImg = data.image || '/images/kinaadman.jpg';
 
-  // Set the building logo in the image overlay
+  // Set building logo
   const iconEl = document.getElementById('panel-icon');
   if (iconEl) {
     if (data.logo) {
@@ -875,162 +1070,49 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     }
   }
 
-  // Hide the emoji icon overlapping the building photo
   const imgIconEl = document.getElementById('panel-img-icon');
   if (imgIconEl) imgIconEl.style.display = 'none';
 
   set('panel-name', buildingName);
-  set('panel-type', data.type);
+  set('panel-type', data.type || 'Building');
   set('panel-desc', buildingDesc);
 
-  // Set the building image dynamically from Supabase Storage or local image
   const imgEl = document.getElementById('panel-img-bg');
   if (imgEl) {
     imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // ── Floor-grouped accordion for ROOMS / OFFICES / FACILITIES ─────────────
+  // Populate local fallback departments formatted into dynamic floor tabs
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
 
-  let departmentsHTML = '';
-  const hasSupabaseData = dbBuilding && (
-    dbBuilding.ROOMS?.length > 0 ||
-    dbBuilding.OFFICES?.length > 0 ||
-    dbBuilding.FACILITIES?.length > 0
-  );
-
-  if (hasSupabaseData) {
-    // Collect all items keyed by floor number
-    const floorMap = {};
-
-    const addToFloor = (floor, html) => {
-      const f = floor || 1;
-      if (!floorMap[f]) floorMap[f] = [];
-      floorMap[f].push(html);
-    };
-
-    // ── Rooms ──────────────────────────────────────────────────────────────
-    (dbBuilding.ROOMS || []).forEach(r => {
-      const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
-      const roomSub = r.Room_number && r.Room_name ? r.Room_name : null;
-      const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(r.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
-          <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Offices ────────────────────────────────────────────────────────────
-    (dbBuilding.OFFICES || []).forEach(o => {
-      const officeSub = o.Abbreviations || o.Room_number || null;
-      const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(o.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
-          <span class="floor-item-label"><strong>${o.Office_name}</strong>${officeSub ? ` <span class="floor-item-sub">${officeSub}</span>` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Facilities ─────────────────────────────────────────────────────────
-    (dbBuilding.FACILITIES || []).forEach(f => {
-      const facilitySub = f.Abbreviations || f.Room_number || null;
-      const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
-      const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-      const matchStyle = isMatched ? ' floor-item--matched' : '';
-      const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-      addToFloor(f.Floor, `
-        <li class="floor-item${matchStyle}">
-          <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
-          <span class="floor-item-label"><strong>${f.Facility_name}</strong>${facilitySub ? ` <span class="floor-item-sub">${facilitySub}</span>` : ''}</span>
-          ${badge}
-        </li>`);
-    });
-
-    // ── Render one <details> accordion per floor, sorted ──────────────────
-    const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
-    departmentsHTML = sortedFloors.map(floor => {
-      const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
-      const openAttr = hasMatch ? ' open' : '';
-      const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
-      const itemCount = floorMap[floor].length;
-      return `
-        <details class="floor-accordion"${openAttr}>
-          <summary class="floor-accordion-header">
-            <span class="floor-accordion-icon">▶</span>
-            <span class="floor-accordion-title">Floor ${floor}</span>
-            <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
-            ${matchIndicator}
-          </summary>
-          <ul class="floor-accordion-list">
-            ${floorMap[floor].join('')}
-          </ul>
-        </details>`;
-    }).join('');
-
-  } else if (data.depts?.length) {
-    // Fallback: local hardcoded departments (no Supabase data)
-    departmentsHTML = data.depts.map(d => `
-      <li class="panel-facility-item">
-        <span class="panel-facility-check">${d.icon || '🏢'}</span>
-        <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
-      </li>`).join('');
+  if (deptsWrap && deptsList) {
+    if (data.depts?.length) {
+      const floors = parseLocalFloors(data.depts, highlightRoom);
+      renderFloorSection(floors, deptsList);
+      deptsWrap.style.display = '';
+    } else {
+      deptsWrap.style.display = 'none';
+    }
   }
 
-  if (deptsWrap && deptsList && departmentsHTML) {
-    deptsList.innerHTML = departmentsHTML;
-    deptsWrap.style.display = '';
-
-    // Wire up the rotating arrow animation for each accordion
-    deptsList.querySelectorAll('.floor-accordion').forEach(el => {
-      el.addEventListener('toggle', () => {
-        const icon = el.querySelector('.floor-accordion-icon');
-        if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
-      });
-      // Set initial state for already-open accordions (matched)
-      if (el.open) {
-        const icon = el.querySelector('.floor-accordion-icon');
-        if (icon) icon.style.transform = 'rotate(90deg)';
-      }
-    });
-  } else if (deptsWrap) {
-    deptsWrap.style.display = 'none';
-  }
-
-
-  // ── Search mode: hide Description, Contact, and 3D button — show only header + floors ──
+  // Search mode & Contact visibility
   const descWrap = document.querySelector('.panel-body > .panel-label:first-child');
   const descEl = document.getElementById('panel-desc');
   const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
+
   if (searchMode) {
-    // Hide description section
     if (descWrap) descWrap.style.display = 'none';
     if (descEl) descEl.style.display = 'none';
-    // Hide contact
     if (contactWrap) contactWrap.style.display = 'none';
-    // Hide 3D button
     if (viewBtnWrap) viewBtnWrap.style.display = 'none';
   } else {
-    // Normal mode — restore description
     if (descWrap) descWrap.style.display = '';
     if (descEl) descEl.style.display = '';
 
-    // Contact
     if (contactWrap && contactContent && data.contact) {
       contactContent.innerHTML =
         (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
@@ -1040,7 +1122,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       contactWrap.style.display = 'none';
     }
 
-    // ── "View 3D Model" button ──
+    // ── "View 3D Model" button (only opens live 3D viewer when clicked) ──
     if (viewBtnWrap && viewBtn) {
       if (data.model3d) {
         viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
@@ -1051,11 +1133,37 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     }
   }
 
-  // Show panel (uses existing TIKAD #info-panel CSS)
-  const panel = document.getElementById('info-panel');
-  if (panel) {
-    panel.classList.remove('panel-hidden');
-    panel.style.display = 'block';
+  // 2️⃣ Asynchronously fetch live Supabase building record to enhance details in background
+  try {
+    let dbBuilding = null;
+    if (data.supabaseId) {
+      const { getBuildingDetails } = await import('./supabaseClient.js');
+      dbBuilding = await getBuildingDetails(data.supabaseId);
+    } else {
+      dbBuilding = await getBuildingByNameOrKey(key);
+    }
+
+    if (dbBuilding) {
+      if (dbBuilding.Building_name) set('panel-name', dbBuilding.Building_name);
+      if (dbBuilding.Description) set('panel-desc', dbBuilding.Description);
+      if (dbBuilding.Image_URL && imgEl) {
+        imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
+      }
+
+      const hasSupabaseData = (
+        dbBuilding.ROOMS?.length > 0 ||
+        dbBuilding.OFFICES?.length > 0 ||
+        dbBuilding.FACILITIES?.length > 0
+      );
+
+      if (hasSupabaseData && deptsWrap && deptsList) {
+        const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
+        renderFloorSection(floors, deptsList);
+        deptsWrap.style.display = '';
+      }
+    }
+  } catch (err) {
+    console.warn('[Panel] Could not load live Supabase record:', err);
   }
 }
 
@@ -1075,6 +1183,41 @@ function _closePanel() {
 }
 
 // ── 3D Pin markers ────────────────────────────────────────────────────────────
+
+/**
+/**
+/**
+ * createBuildingPin(building)
+ * Renders a separated building marker with stacked circular seal badge (Logo_URL)
+ * and compact name label, or text-only label fallback when Logo_URL is NULL.
+ * @param {Object} building - { name, Logo_URL }
+ */
+function createBuildingPin(building) {
+  const marker = document.createElement('div');
+  marker.className = 'building-marker';
+
+  if (building.Logo_URL) {
+    const iconWrap = document.createElement('div');
+    iconWrap.className = 'marker-icon';
+
+    const img = document.createElement('img');
+    img.src = building.Logo_URL;
+    img.alt = `${building.name} college seal`;
+    img.onerror = () => {
+      iconWrap.remove();
+    }; // fall back to text-only label if the image fails to load
+
+    iconWrap.appendChild(img);
+    marker.appendChild(iconWrap);
+  }
+
+  const label = document.createElement('span');
+  label.className = 'marker-label';
+  label.textContent = building.name;
+  marker.appendChild(label);
+
+  return marker;
+}
 
 /**
  * _createPinForKey(key)
@@ -1112,12 +1255,20 @@ function _createPinForKey(key) {
 
   if (isInteractive) {
     el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
-    el.innerHTML = `
-      <div class="pin-label">${data.abbrev || data.shortName || data.name.split(' ')[0]}</div>
-    `;
+
+    const buildingName = data.abbrev || data.shortName || data.name.split(' ')[0];
+    const logoUrl = data.Logo_URL || null;
+
+    const pinEl = createBuildingPin({
+      name: buildingName,
+      Logo_URL: logoUrl
+    });
+
+    el.appendChild(pinEl);
+
     el.addEventListener('click', () => {
-      pinList.forEach(p => p.el.querySelector('.pin-label')?.classList.remove('active-pin'));
-      el.querySelector('.pin-label')?.classList.add('active-pin');
+      pinList.forEach(p => p.el.querySelector('.building-marker, .building-pin, .pin-label')?.classList.remove('active-pin'));
+      pinEl.classList.add('active-pin');
       const input = document.getElementById('map-search');
       if (input) input.value = data.name;
       _selectBuilding(key, true);
@@ -1130,7 +1281,64 @@ function _createPinForKey(key) {
   }
 
   container.appendChild(el);
-  pinList.push({ key, worldPos, el, interactive: isInteractive });
+  pinList.push({ key, worldPos, el, interactive: isInteractive, data });
+}
+
+/**
+ * Loads building seals (Logo_URL) live from Supabase buildings table and updates active pins
+ */
+async function _loadSupabaseSeals() {
+  try {
+    const buildings = await fetchBuildingSeals();
+    if (!buildings || buildings.length === 0) return;
+
+    console.log(`[Supabase] Loaded ${buildings.length} building records with college seals.`);
+
+    buildings.forEach(b => {
+      const logoUrl = b.Logo_URL || b.logo_url || null;
+      if (!logoUrl) return;
+
+      const dbId = b.id || b.Building_ID;
+      const dbName = (b.name || b.Building_name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      Object.keys(BUILDING_DATA).forEach(k => {
+        const item = BUILDING_DATA[k];
+        let match = false;
+
+        if (item.supabaseId && dbId && item.supabaseId === dbId) {
+          match = true;
+        } else if (item.supabaseNames && Array.isArray(item.supabaseNames)) {
+          match = item.supabaseNames.some(alias => alias.toLowerCase().replace(/[^a-z0-9]/g, '') === dbName);
+        } else {
+          const itemName = (item.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          match = dbName && itemName && (dbName === itemName || dbName.includes(itemName) || itemName.includes(dbName));
+        }
+
+        if (match) {
+          item.Logo_URL = logoUrl;
+
+          // Update existing live pin element with the newly fetched seal
+          const existing = pinList.find(p => p.key === k);
+          if (existing && existing.interactive) {
+            const oldMarkerEl = existing.el.querySelector('.building-marker, .building-pin');
+            if (oldMarkerEl) {
+              const buildingName = item.abbrev || item.shortName || item.name.split(' ')[0];
+              const newMarkerEl = createBuildingPin({
+                name: buildingName,
+                Logo_URL: logoUrl
+              });
+              if (oldMarkerEl.classList.contains('active-pin')) {
+                newMarkerEl.classList.add('active-pin');
+              }
+              existing.el.replaceChild(newMarkerEl, oldMarkerEl);
+            }
+          }
+        }
+      });
+    });
+  } catch (err) {
+    console.error('Error updating building seals from Supabase:', err);
+  }
 }
 
 /**
@@ -1141,7 +1349,11 @@ function _createPins() {
   // No-op: pins now created one-at-a-time in _registerBuildingScene()
 }
 
-
+/**
+ * _updatePins()
+ * Project 3D world coordinates to 2D screen positions and perform
+ * screen-space collision avoidance for dense building clusters.
+ */
 function _updatePins() {
   if (!experience || !worldReady) return;
   const cam = experience.camera.orthographicCamera;
@@ -1149,20 +1361,80 @@ function _updatePins() {
   const H = experience.sizes.height;
   const zoom = cam.zoom;
 
-  pinList.forEach(({ worldPos, el, interactive }) => {
-    _projVec.copy(worldPos).project(cam);
-    if (_projVec.z > 1) { el.style.visibility = 'hidden'; return; }
+  const visiblePins = [];
 
-    // Zoom-based Level of Detail (LOD) — show static labels at any meaningful zoom
-    if (!interactive && zoom < 0.3) {
-      el.style.display = 'none';
+  pinList.forEach((pin) => {
+    _projVec.copy(pin.worldPos).project(cam);
+    if (_projVec.z > 1) {
+      pin.el.style.visibility = 'hidden';
       return;
     }
 
-    el.style.display = '';
-    el.style.visibility = 'visible';
-    el.style.left = ((_projVec.x * 0.5 + 0.5) * W) + 'px';
-    el.style.top = ((_projVec.y * -0.5 + 0.5) * H) + 'px';
+    if (!pin.interactive && zoom < 0.3) {
+      pin.el.style.display = 'none';
+      return;
+    }
+
+    pin.el.style.display = '';
+    pin.el.style.visibility = 'visible';
+
+    const screenX = (_projVec.x * 0.5 + 0.5) * W;
+    const screenY = (_projVec.y * -0.5 + 0.5) * H;
+
+    pin.screenX = screenX;
+    pin.screenY = screenY;
+    pin.offsetY = 0;
+
+    if (pin.interactive) {
+      visiblePins.push(pin);
+    } else {
+      pin.el.style.left = screenX + 'px';
+      pin.el.style.top = screenY + 'px';
+    }
+  });
+
+  // ── Overlap handling / Collision avoidance for dense building clusters ──
+  const COLLISION_DIST_X = 42; // px horizontal threshold
+  const COLLISION_DIST_Y = 36; // px vertical threshold
+  const STAGGER_STEP = 26;     // px vertical offset shift
+
+  const clusters = [];
+
+  visiblePins.forEach(pin => {
+    let placed = false;
+    for (const cluster of clusters) {
+      const isNear = cluster.some(other =>
+        Math.abs(pin.screenX - other.screenX) < COLLISION_DIST_X &&
+        Math.abs(pin.screenY - other.screenY) < COLLISION_DIST_Y
+      );
+      if (isNear) {
+        cluster.push(pin);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      clusters.push([pin]);
+    }
+  });
+
+  clusters.forEach(cluster => {
+    if (cluster.length <= 1) return;
+
+    // Sort cluster pins from top to bottom
+    cluster.sort((a, b) => a.screenY - b.screenY);
+
+    const totalShift = (cluster.length - 1) * STAGGER_STEP;
+    const startOffset = -totalShift / 2;
+
+    cluster.forEach((pin, idx) => {
+      pin.offsetY = startOffset + idx * STAGGER_STEP;
+    });
+  });
+
+  visiblePins.forEach(pin => {
+    pin.el.style.left = pin.screenX + 'px';
+    pin.el.style.top = (pin.screenY + pin.offsetY) + 'px';
   });
 }
 
@@ -1452,6 +1724,63 @@ export function initMapOverlay() {
     btn3D.addEventListener('click', () => {
       if (experience && experience.controls) {
         experience.controls.setViewMode('3D');
+      }
+    });
+  }
+
+  // ── Raycast click handler for 3D building models on the canvas ────────────
+  const canvas = document.querySelector('.experience-canvas');
+  if (canvas) {
+    let pointerDownPos = { x: 0, y: 0 };
+
+    canvas.addEventListener('pointerdown', e => {
+      pointerDownPos = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('pointerup', e => {
+      // Ignore dragging / camera orbit rotation
+      const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+      if (dist > 6) return;
+      if (!experience || !experience.camera || !worldReady) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouse = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1
+      );
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, experience.camera.orthographicCamera);
+
+      const meshes = [];
+      Object.values(meshIndex).forEach(node => {
+        if (!node) return;
+        if (node.isMesh) meshes.push(node);
+        else if (node.traverse) {
+          node.traverse(child => { if (child.isMesh) meshes.push(child); });
+        }
+      });
+
+      const intersects = raycaster.intersectObjects(meshes, false);
+      if (intersects.length > 0) {
+        const hitMesh = intersects[0].object;
+        for (const [key, bData] of Object.entries(BUILDING_DATA)) {
+          if (bData.interactive === false) continue;
+          const node = _findNode(key);
+          if (node) {
+            let matched = false;
+            if (node === hitMesh) matched = true;
+            else if (node.traverse) {
+              node.traverse(child => { if (child === hitMesh) matched = true; });
+            }
+            if (matched) {
+              _selectBuilding(key, true);
+              const input = document.getElementById('map-search');
+              if (input) input.value = bData.name;
+              break;
+            }
+          }
+        }
       }
     });
   }
