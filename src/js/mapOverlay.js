@@ -31,22 +31,7 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
   },
-  "masawa_hall": {
-    glbName: "MASAWA HALL",
-    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", type: "Academic Building", emoji: "🏫",
-    supabaseId: 12,
-    supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
-    image: "/images/masawa.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
-    desc: "Houses the College of Computing and Information Sciences (CCIS), offering undergraduate programs in Computer Science, Information Technology, and related fields. Equipped with modern computer labs and development studios.",
-    depts: [
-      { icon: "💻", name: "College of Computing & Information Sciences", sub: "All Floors" },
-      { icon: "🖥️", name: "Computer Labs 1–4", sub: "Floors 1–2" },
-      { icon: "🔐", name: "IT Resource Center", sub: "Floor 3" },
-    ],
-    contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
-  },
+
   "hinang_building": {
     glbName: "HINANG BUILDING",
     name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
@@ -171,6 +156,7 @@ const BUILDING_DATA = {
   "csu_student_center": {
     glbName: "CSU STUDENT CENTER",
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
+    interactive: false,
     supabaseId: 19,
     supabaseNames: ['Student Center', 'CSU Student Center'],
     image: "/images/kinaadman.jpg",
@@ -234,6 +220,7 @@ const BUILDING_DATA = {
   "food_innovation_center": {
     glbName: "FOOD INNOVATION CENTER",
     name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
+    interactive: false,
     supabaseId: 18,
     supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
     image: "/images/kinaadman.jpg",
@@ -250,6 +237,7 @@ const BUILDING_DATA = {
   "hostel": {
     glbName: "UNIVERSITY HOSTEL",
     name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
+    interactive: false,
     supabaseId: 16,
     supabaseNames: ['Hostel', 'University Hostel'],
     image: "/images/kinaadman.jpg",
@@ -308,6 +296,7 @@ const BUILDING_DATA = {
   "alumni_office": {
     glbName: "ALUMNI OFFICE",
     name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
+    interactive: false,
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
@@ -322,6 +311,7 @@ const BUILDING_DATA = {
   "old_cas": {
     glbName: "OLD CAS BUILDING",
     name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
+    interactive: false,
     supabaseId: 20,
     supabaseNames: ['Old CAS', 'Old CAS Building'],
     image: "/images/kinaadman.jpg",
@@ -337,6 +327,7 @@ const BUILDING_DATA = {
   "sports_office": {
     glbName: "ROTC OFFICE",
     name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
+    interactive: false,
     supabaseId: 14,
     supabaseNames: ['PE Building', 'Sports Office'],
     image: "/images/kinaadman.jpg",
@@ -420,6 +411,7 @@ const BUILDING_DATA = {
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
   "alumni_office": {
     name: "Alumni Center", shortName: "Alumni Center", type: "Administrative Unit", emoji: "🎓",
+    interactive: false,
     supabaseId: 17,
     supabaseNames: ['Alumni Center', 'Alumni Office'],
     image: "/images/kinaadman.jpg",
@@ -504,7 +496,7 @@ const BUILDING_DATA = {
 const BUILDING_GLB_MAP = {
   // ── Main academic & admin buildings ──────────────────────────────────────
   'masawa_building': '/models/map/masawa%20building.glb',
-  'masawa_hall': '/models/map/masawa%20building.glb',
+
   'hinang_building': '/models/map/hinang.glb',
   'kinaadman_hall': '/models/map/kh%20comp.glb',
   'hiraya_building': '/models/map/hiraya.glb',
@@ -852,6 +844,198 @@ function _resetHighlight() {
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
 }
 
+// ── Dynamic Floor Tabs & Rooms Helper Functions ────────────────────────────────
+
+function renderFloorTabs(floors, activeFloorNumber) {
+  return floors.map(f => `
+    <button class="floor-tab${f.number === activeFloorNumber ? ' active' : ''}" data-floor="${f.number}">
+      Floor ${f.number}
+    </button>
+  `).join('');
+}
+
+function renderFloorRooms(floor) {
+  if (!floor || !floor.rooms || floor.rooms.length === 0) {
+    return `<div class="room-row" style="color:#9ca3af; justify-content:center; padding:12px;">No listed facilities on Floor ${floor?.number || 1}</div>`;
+  }
+  const iconMap = { office: 'briefcase', hall: 'building', lab: 'flask', restroom: 'toilet', storage: 'box' };
+
+  return floor.rooms.map(room => {
+    let iconContent = '';
+    if (room.iconHtml) {
+      iconContent = room.iconHtml;
+    } else if (room.icon) {
+      iconContent = room.icon.startsWith('<') ? room.icon : `<span>${room.icon}</span>`;
+    } else if (room.type && iconMap[room.type]) {
+      iconContent = `<i class="ti ti-${iconMap[room.type]}" aria-hidden="true"></i>`;
+    } else {
+      iconContent = `<i class="mdi mdi-door" aria-hidden="true"></i>`;
+    }
+
+    const codeBadge = room.code ? `<span class="room-code">${room.code}</span>` : '';
+    const subText = room.sub ? `<span class="room-sub">${room.sub}</span>` : '';
+    const matchBadge = room.isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+    const matchedClass = room.isMatched ? ' room-row--matched' : '';
+
+    return `
+      <div class="room-row${matchedClass}">
+        <span class="room-icon">${iconContent}</span>
+        <span class="room-name"><strong>${room.name}</strong>${subText}</span>
+        ${codeBadge}
+        ${matchBadge}
+      </div>
+    `;
+  }).join('');
+}
+
+function setActiveFloor(floorNumber, floors, container) {
+  container.querySelectorAll('.floor-tab').forEach(tab => {
+    tab.classList.toggle('active', Number(tab.dataset.floor) === floorNumber);
+  });
+
+  const roomsContainer = container.querySelector('.rooms-list');
+  if (roomsContainer) {
+    roomsContainer.style.opacity = '0';
+    setTimeout(() => {
+      const floor = floors.find(f => f.number === floorNumber);
+      roomsContainer.innerHTML = renderFloorRooms(floor);
+      roomsContainer.style.opacity = '1';
+    }, 150);
+  }
+}
+
+function renderFloorSection(floors, container) {
+  if (!floors || floors.length === 0) {
+    container.innerHTML = `<div class="room-row" style="color:#9ca3af; justify-content:center;">No floor details available</div>`;
+    return;
+  }
+
+  // Default selection: select floor containing a search match, or lowest floor number
+  const matchedFloorObj = floors.find(f => f.rooms.some(r => r.isMatched));
+  const activeFloorNumber = matchedFloorObj ? matchedFloorObj.number : floors[0].number;
+  const activeFloorObj = floors.find(f => f.number === activeFloorNumber) || floors[0];
+
+  container.innerHTML = `
+    <div class="floor-tabs-row">
+      ${renderFloorTabs(floors, activeFloorNumber)}
+    </div>
+    <div class="rooms-list">
+      ${renderFloorRooms(activeFloorObj)}
+    </div>
+  `;
+
+  container.querySelectorAll('.floor-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      setActiveFloor(Number(tab.dataset.floor), floors, container);
+    });
+  });
+}
+
+function parseLocalFloors(depts, highlightRoom = null) {
+  const floorMap = {};
+
+  depts.forEach(d => {
+    let assignedFloors = [];
+    if (d.sub) {
+      const rangeMatch = d.sub.match(/Floors?\s*(\d+)\s*[-–]\s*(\d+)/i);
+      if (rangeMatch) {
+        const start = parseInt(rangeMatch[1], 10);
+        const end = parseInt(rangeMatch[2], 10);
+        for (let f = start; f <= end; f++) assignedFloors.push(f);
+      } else {
+        const singleMatch = d.sub.match(/Floor\s*(\d+)/i);
+        if (singleMatch) assignedFloors.push(parseInt(singleMatch[1], 10));
+        else if (/ground/i.test(d.sub)) assignedFloors.push(1);
+      }
+    }
+    if (assignedFloors.length === 0) assignedFloors.push(1);
+
+    const isMatched = highlightRoom && `${d.name} ${d.sub || ''}`.toLowerCase().includes(highlightRoom.toLowerCase());
+
+    assignedFloors.forEach(f => {
+      if (!floorMap[f]) floorMap[f] = [];
+      floorMap[f].push({
+        name: d.name,
+        sub: d.sub || '',
+        icon: d.icon || '🏢',
+        isMatched
+      });
+    });
+  });
+
+  const sortedFloorNums = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+  if (sortedFloorNums.length === 0) sortedFloorNums.push(1);
+
+  return sortedFloorNums.map(num => ({
+    number: num,
+    rooms: floorMap[num] || []
+  }));
+}
+
+function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
+  const floorMap = {};
+
+  const addToFloor = (floorNum, roomObj) => {
+    const f = parseInt(floorNum, 10) || 1;
+    if (!floorMap[f]) floorMap[f] = [];
+    floorMap[f].push(roomObj);
+  };
+
+  (dbBuilding.ROOMS || []).forEach(r => {
+    const name = r.Room_number && r.Room_name ? r.Room_number : (r.Room_name || r.Room_number || 'Unnamed Room');
+    const sub = r.Room_number && r.Room_name ? r.Room_name : '';
+    const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(r.Floor, {
+      name,
+      sub,
+      code: r.Room_number || '',
+      type: 'room',
+      iconHtml: '<i class="mdi mdi-door"></i>',
+      isMatched
+    });
+  });
+
+  (dbBuilding.OFFICES || []).forEach(o => {
+    const sub = o.Abbreviations || o.Room_number || '';
+    const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(o.Floor, {
+      name: o.Office_name,
+      sub,
+      code: o.Abbreviations || '',
+      type: 'office',
+      iconHtml: '<i class="mdi mdi-briefcase-outline"></i>',
+      isMatched
+    });
+  });
+
+  (dbBuilding.FACILITIES || []).forEach(f => {
+    const sub = f.Abbreviations || f.Room_number || '';
+    const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
+    const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
+
+    addToFloor(f.Floor, {
+      name: f.Facility_name,
+      sub,
+      code: f.Abbreviations || '',
+      type: 'facility',
+      iconHtml: '<i class="mdi mdi-domain"></i>',
+      isMatched
+    });
+  });
+
+  const sortedFloorNums = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
+  if (sortedFloorNums.length === 0) sortedFloorNums.push(1);
+
+  return sortedFloorNums.map(num => ({
+    number: num,
+    rooms: floorMap[num] || []
+  }));
+}
+
 // ── Info panel ────────────────────────────────────────────────────────────────
 
 async function _openPanel(key, highlightRoom = null, searchMode = false) {
@@ -898,54 +1082,15 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
-  // Populate local fallback departments immediately formatted into floor accordions
+  // Populate local fallback departments formatted into dynamic floor tabs
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
 
   if (deptsWrap && deptsList) {
     if (data.depts?.length) {
-      const localFloorMap = {};
-      data.depts.forEach(d => {
-        let f = 1;
-        if (d.sub) {
-          const match = d.sub.match(/Floor\s*(\d+)/i);
-          if (match) f = parseInt(match[1], 10);
-          else if (/ground/i.test(d.sub)) f = 1;
-        }
-        if (!localFloorMap[f]) localFloorMap[f] = [];
-        localFloorMap[f].push(`
-          <li class="panel-facility-item">
-            <span class="panel-facility-check">${d.icon || '🏢'}</span>
-            <span><strong>${d.name}</strong>${d.sub ? ` · ${d.sub}` : ''}</span>
-          </li>`);
-      });
-
-      const sortedLocalFloors = Object.keys(localFloorMap).map(Number).sort((a, b) => a - b);
-      const fallbackHTML = sortedLocalFloors.map((floor, idx) => `
-        <details class="floor-accordion"${idx === 0 ? ' open' : ''}>
-          <summary class="floor-accordion-header">
-            <span class="floor-accordion-icon">▶</span>
-            <span class="floor-accordion-title">Floor ${floor}</span>
-            <span class="floor-accordion-count">${localFloorMap[floor].length} item${localFloorMap[floor].length !== 1 ? 's' : ''}</span>
-          </summary>
-          <ul class="floor-accordion-list">
-            ${localFloorMap[floor].join('')}
-          </ul>
-        </details>`).join('');
-
-      deptsList.innerHTML = fallbackHTML;
+      const floors = parseLocalFloors(data.depts, highlightRoom);
+      renderFloorSection(floors, deptsList);
       deptsWrap.style.display = '';
-
-      deptsList.querySelectorAll('.floor-accordion').forEach(el => {
-        el.addEventListener('toggle', () => {
-          const icon = el.querySelector('.floor-accordion-icon');
-          if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
-        });
-        if (el.open) {
-          const icon = el.querySelector('.floor-accordion-icon');
-          if (icon) icon.style.transform = 'rotate(90deg)';
-        }
-      });
     } else {
       deptsWrap.style.display = 'none';
     }
@@ -1012,92 +1157,9 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       );
 
       if (hasSupabaseData && deptsWrap && deptsList) {
-        const floorMap = {};
-        const addToFloor = (floor, html) => {
-          const f = floor || 1;
-          if (!floorMap[f]) floorMap[f] = [];
-          floorMap[f].push(html);
-        };
-
-        (dbBuilding.ROOMS || []).forEach(r => {
-          const roomLabel = r.Room_number || r.Room_name || 'Unnamed Room';
-          const roomSub = r.Room_number && r.Room_name ? r.Room_name : null;
-          const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
-          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-          const matchStyle = isMatched ? ' floor-item--matched' : '';
-          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-          addToFloor(r.Floor, `
-            <li class="floor-item${matchStyle}">
-              <span class="floor-item-icon"><i class="mdi mdi-door"></i></span>
-              <span class="floor-item-label"><strong>${roomLabel}</strong>${roomSub ? ` — ${roomSub}` : ''}</span>
-              ${badge}
-            </li>`);
-        });
-
-        (dbBuilding.OFFICES || []).forEach(o => {
-          const officeSub = o.Abbreviations || o.Room_number || null;
-          const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
-          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-          const matchStyle = isMatched ? ' floor-item--matched' : '';
-          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-          addToFloor(o.Floor, `
-            <li class="floor-item${matchStyle}">
-              <span class="floor-item-icon"><i class="mdi mdi-briefcase-outline"></i></span>
-              <span class="floor-item-label"><strong>${o.Office_name}</strong>${officeSub ? ` <span class="floor-item-sub">${officeSub}</span>` : ''}</span>
-              ${badge}
-            </li>`);
-        });
-
-        (dbBuilding.FACILITIES || []).forEach(f => {
-          const facilitySub = f.Abbreviations || f.Room_number || null;
-          const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
-          const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
-          const matchStyle = isMatched ? ' floor-item--matched' : '';
-          const badge = isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
-
-          addToFloor(f.Floor, `
-            <li class="floor-item${matchStyle}">
-              <span class="floor-item-icon"><i class="mdi mdi-domain"></i></span>
-              <span class="floor-item-label"><strong>${f.Facility_name}</strong>${facilitySub ? ` <span class="floor-item-sub">${facilitySub}</span>` : ''}</span>
-              ${badge}
-            </li>`);
-        });
-
-        const sortedFloors = Object.keys(floorMap).map(Number).sort((a, b) => a - b);
-        const departmentsHTML = sortedFloors.map(floor => {
-          const hasMatch = highlightRoom && floorMap[floor].some(html => html.includes('floor-item--matched'));
-          const openAttr = hasMatch ? ' open' : '';
-          const matchIndicator = hasMatch ? `<span class="floor-header-badge">Match</span>` : '';
-          const itemCount = floorMap[floor].length;
-          return `
-            <details class="floor-accordion"${openAttr}>
-              <summary class="floor-accordion-header">
-                <span class="floor-accordion-icon">▶</span>
-                <span class="floor-accordion-title">Floor ${floor}</span>
-                <span class="floor-accordion-count">${itemCount} item${itemCount !== 1 ? 's' : ''}</span>
-                ${matchIndicator}
-              </summary>
-              <ul class="floor-accordion-list">
-                ${floorMap[floor].join('')}
-              </ul>
-            </details>`;
-        }).join('');
-
-        deptsList.innerHTML = departmentsHTML;
+        const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
+        renderFloorSection(floors, deptsList);
         deptsWrap.style.display = '';
-
-        deptsList.querySelectorAll('.floor-accordion').forEach(el => {
-          el.addEventListener('toggle', () => {
-            const icon = el.querySelector('.floor-accordion-icon');
-            if (icon) icon.style.transform = el.open ? 'rotate(90deg)' : 'rotate(0deg)';
-          });
-          if (el.open) {
-            const icon = el.querySelector('.floor-accordion-icon');
-            if (icon) icon.style.transform = 'rotate(90deg)';
-          }
-        });
       }
     }
   } catch (err) {

@@ -464,171 +464,123 @@
   font-weight: 700;
 }
 
-/* ── Floor accordion ──────────────────────────────────────────────────────── */
-.floor-accordion {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  margin-bottom: 6px;
-  overflow: hidden;
-  background: #fff;
-  transition: box-shadow 0.2s;
+/* ── Dynamic Floor Tabs ─────────────────────────────────────────────────── */
+.floor-tabs-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 12px;
+  padding: 4px 2px;
 }
 
-.floor-accordion[open] {
-  box-shadow: 0 2px 10px rgba(0, 100, 0, 0.08);
-}
-
-.floor-accordion summary {
-  list-style: none;
-}
-
-.floor-accordion summary::-webkit-details-marker {
+.floor-tabs-row::-webkit-scrollbar {
   display: none;
 }
 
-.floor-accordion-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 13px;
-  cursor: pointer;
-  background: #f0faf0;
-  border-bottom: 1px solid transparent;
-  user-select: none;
-  transition: background 0.15s;
-}
-
-.floor-accordion[open] .floor-accordion-header {
-  background: #e6f4e6;
-  border-bottom-color: #c8e6c8;
-}
-
-.floor-accordion-header:hover {
-  background: #ddf0dd;
-}
-
-.floor-accordion-icon {
-  font-size: 10px;
-  color: #009900;
-  font-weight: 700;
-  transition: transform 0.2s ease;
+.floor-tab {
   flex-shrink: 0;
-}
-
-.floor-accordion-title {
+  min-width: 72px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 0.5px solid #d1d5db;
+  background: #f9fafb;
+  color: #4b5563;
   font-size: 12px;
-  font-weight: 700;
-  color: #003300;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  flex: 1;
-}
-
-.floor-accordion-count {
-  font-size: 11px;
   font-weight: 600;
-  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 200ms, border-color 200ms, transform 150ms, color 200ms, box-shadow 200ms;
+}
+
+.floor-tab:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.floor-tab.active {
   background: #009900;
-  padding: 2px 8px;
-  border-radius: 20px;
-  flex-shrink: 0;
+  color: #ffffff;
+  border-color: #008000;
+  transform: scale(1.04);
+  box-shadow: 0 3px 10px rgba(0, 153, 0, 0.25);
 }
 
-.floor-header-badge {
-  font-size: 10px;
-  font-weight: 700;
-  color: #000;
-  background: #eddd53;
-  padding: 2px 7px;
-  border-radius: 20px;
-  flex-shrink: 0;
+.floor-tab:active {
+  transform: scale(0.97);
 }
 
-/* ── Floor accordion list ─────────────────────────────────────────────────── */
-.floor-accordion-list {
-  list-style: none;
-  padding: 6px 0;
-  margin: 0;
+/* ── Rooms list & transition ────────────────────────────────────────────────── */
+.rooms-list {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  transition: opacity 150ms ease-in-out;
+  opacity: 1;
 }
 
-.floor-item {
+.room-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 13px;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
   font-size: 13px;
   color: #374151;
-  border-bottom: 1px solid #f3f4f6;
-  transition: background 0.12s;
+  transition: background 150ms, border-color 150ms, box-shadow 150ms;
 }
 
-.floor-item:last-child {
-  border-bottom: none;
-}
-
-.floor-item:hover {
+.room-row:hover {
   background: #f9fafb;
+  border-color: #d1d5db;
 }
 
-.floor-item--matched {
-  background: rgba(237, 221, 83, 0.18) !important;
-  border-left: 3px solid #eddd53;
+.room-row--matched {
+  background: rgba(237, 221, 83, 0.15) !important;
+  border-color: #eddd53 !important;
+  border-left: 4px solid #eddd53 !important;
 }
 
-.floor-item-icon {
+.room-icon {
   font-size: 16px;
-  color: #15803d;
+  color: #009900;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
+  width: 22px;
+  height: 22px;
 }
 
-.floor-item-label {
+.room-name {
   flex: 1;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #1f2937;
 }
 
-.floor-item-link {
-  font-size: 13px;
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 0.15s;
-  flex-shrink: 0;
+.room-name strong {
+  font-weight: 600;
 }
 
-.floor-item-link:hover {
-  opacity: 1;
-}
-
-.floor-item-sub {
+.room-sub {
   font-size: 11px;
   color: #6b7280;
   font-weight: 400;
   margin-left: 4px;
 }
 
-/* ── Status dot ─────────────────────────────────────────────────────────── */
-.floor-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.room-code {
+  font-size: 11px;
+  color: #4b5563;
+  font-weight: 600;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 2px 7px;
+  border-radius: 5px;
   flex-shrink: 0;
-}
-
-.dot--green {
-  background: #22c55e;
-}
-
-.dot--red {
-  background: #ef4444;
-}
-
-.dot--grey {
-  background: #9ca3af;
 }
 
 /* ── Match badge ────────────────────────────────────────────────────────── */
