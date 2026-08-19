@@ -194,7 +194,6 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo cegs.jpg",
     gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)",
-    model3d: "/models/map/CAA%20Building.glb",
     desc: "College of Agriculture and Forestry. Equipped with laboratories for soil studies, plant sciences, and research spaces supporting campus agricultural farms.",
     depts: [
       { icon: "🌱", name: "Agricultural Science Dept", sub: "Floor 1" },
@@ -349,7 +348,6 @@ const BUILDING_DATA = {
     image: "/images/kinaadman.jpg",
     logo: "/images/logo chass.jpg",
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
-    model3d: "/models/sports_office.draco.glb",
     desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
     depts: [
       { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
@@ -590,6 +588,7 @@ const BUILDING_GLB_MAP = {
 // ── State ─────────────────────────────────────────────────────────────────────
 let experience = null;   // Three.js Experience singleton
 let worldReady = false;  // true once ground base is loaded
+let showAllUnclickable = false; // toggle state for unclickable buildings & labels
 
 const meshIndex = {};       // lowercased mesh name → THREE.Object3D (from individual GLBs)
 const pinList = [];         // { key, worldPos, el }
@@ -761,19 +760,24 @@ function _buildChips() {
   if (!bar) return;
   bar.innerHTML = '';
   Object.entries(BUILDING_DATA).forEach(([key, data]) => {
-    // Only display interactive buildings in the directory list
-    if (data.interactive === false) return;
+    // Only display interactive buildings unless showAllUnclickable is true
+    if (!showAllUnclickable && data.interactive === false) return;
 
     const btn = document.createElement('button');
-    btn.className = 'cat-btn';
+    btn.className = 'cat-btn' + (data.interactive === false ? ' non-interactive-chip' : '');
     btn.textContent = data.shortName || data.name.split(' ')[0];
     btn.title = data.name;
-    btn.addEventListener('click', () => {
-      _selectBuilding(key, true);
-      // sync search input
-      const input = document.getElementById('map-search');
-      if (input) input.value = data.name;
-    });
+    if (data.interactive !== false) {
+      btn.addEventListener('click', () => {
+        _selectBuilding(key, true);
+        // sync search input
+        const input = document.getElementById('map-search');
+        if (input) input.value = data.name;
+      });
+    } else {
+      btn.style.opacity = '0.7';
+      btn.style.cursor = 'default';
+    }
     bar.appendChild(btn);
   });
 }
@@ -1370,9 +1374,11 @@ function _updatePins() {
       return;
     }
 
-    if (!pin.interactive && zoom < 0.3) {
-      pin.el.style.display = 'none';
-      return;
+    if (!pin.interactive) {
+      if (!showAllUnclickable || zoom < 0.3) {
+        pin.el.style.display = 'none';
+        return;
+      }
     }
 
     pin.el.style.display = '';
@@ -1724,6 +1730,25 @@ export function initMapOverlay() {
     btn3D.addEventListener('click', () => {
       if (experience && experience.controls) {
         experience.controls.setViewMode('3D');
+      }
+    });
+  }
+
+  // Show All button listener
+  const showAllBtn = document.getElementById('show-all-btn');
+  if (showAllBtn) {
+    showAllBtn.addEventListener('click', () => {
+      showAllUnclickable = !showAllUnclickable;
+      showAllBtn.classList.toggle('active', showAllUnclickable);
+      const textSpan = showAllBtn.querySelector('span:not(.mdi)');
+      if (textSpan) textSpan.textContent = showAllUnclickable ? 'Hide Buildings' : 'Show All';
+      const icon = showAllBtn.querySelector('.mdi');
+      if (icon) {
+        icon.className = showAllUnclickable ? 'mdi mdi-eye-off-outline' : 'mdi mdi-eye-outline';
+      }
+      _buildChips();
+      if (worldReady) {
+        _updatePins();
       }
     });
   }

@@ -1163,11 +1163,17 @@
   <div id="map-overlay">
     <!-- Inner container -->
     <div class="map-overlay-inner">
-      <!-- Search Bar — floats top-left -->
-      <div class="map-search-wrap">
-        <span class="map-search-icon mdi mdi-magnify"></span>
-        <input id="map-search" type="text" placeholder="Search…" />
-        <div id="search-dropdown"></div>
+      <!-- Search Container — floats top-left -->
+      <div class="map-search-container">
+        <div class="map-search-wrap">
+          <span class="map-search-icon mdi mdi-magnify"></span>
+          <input id="map-search" type="text" placeholder="Search…" />
+          <div id="search-dropdown"></div>
+        </div>
+        <button id="show-all-btn" class="show-all-btn" title="Toggle unclickable buildings and landmark labels">
+          <span class="mdi mdi-eye-outline"></span>
+          <span>Show All</span>
+        </button>
       </div>
 
       <!-- View Toggle + Close — floats top-right -->
