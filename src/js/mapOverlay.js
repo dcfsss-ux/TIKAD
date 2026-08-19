@@ -832,6 +832,11 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
 
   if (openPanel) _openPanel(key, highlightRoom, searchMode);
 
+  // Trigger immediate WebGL frame paint
+  if (experience && experience.renderer) {
+    experience.renderer.requestRender();
+  }
+
   // Close any open 3D viewer modal when selecting a new building.
   // The live 3D preview will ONLY open when the user manually clicks "View 3D Model" in the info panel.
   closeBuildingViewer();
@@ -846,6 +851,9 @@ function _resetHighlight() {
   highlightedMeshes = [];
   activeKey = null;
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
+  if (experience && experience.renderer) {
+    experience.renderer.requestRender();
+  }
 }
 
 // ── Dynamic Floor Tabs & Rooms Helper Functions ────────────────────────────────
@@ -1503,17 +1511,32 @@ function _findKeyByBuildingName(name) {
 }
 
 async function _handleSearch(query) {
-  if (!query.trim()) return;
+  const q = query.trim();
+  if (!q) return;
 
-  const { rooms, offices, facilities } = await searchCampusEntities(query);
-  console.log('[GIYA Search] Query:', query, '→ rooms:', rooms, 'offices:', offices, 'facilities:', facilities);
+  // 1️⃣ Check direct building name/alias match first for instant 0ms highlight
+  const directKey = _findKeyByBuildingName(q) || Object.keys(BUILDING_DATA).find(k =>
+    BUILDING_DATA[k].interactive !== false &&
+    (k.toLowerCase() === q.toLowerCase() ||
+      BUILDING_DATA[k].name.toLowerCase() === q.toLowerCase() ||
+      (BUILDING_DATA[k].shortName && BUILDING_DATA[k].shortName.toLowerCase() === q.toLowerCase()) ||
+      (BUILDING_DATA[k].abbrev && BUILDING_DATA[k].abbrev.toLowerCase() === q.toLowerCase()))
+  );
+
+  if (directKey) {
+    const input = document.getElementById('map-search');
+    if (input) input.value = BUILDING_DATA[directKey]?.name || directKey;
+    _selectBuilding(directKey, true, false, null);
+    return;
+  }
+
+  // 2️⃣ Search Supabase rooms, offices, facilities
+  const { rooms, offices, facilities } = await searchCampusEntities(q);
 
   if (rooms.length > 0) {
     const r = rooms[0];
     const buildingName = r.BUILDINGS?.Building_name;
-    console.log('[GIYA Search] Matched room:', r.Room_number, 'in building:', buildingName);
     const key = _findKeyByBuildingName(buildingName);
-    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
     if (key) {
       const input = document.getElementById('map-search');
       if (input) input.value = `${r.Room_number || r.Room_name} (${buildingName})`;
@@ -1525,9 +1548,7 @@ async function _handleSearch(query) {
   if (offices.length > 0) {
     const o = offices[0];
     const buildingName = o.BUILDINGS?.Building_name;
-    console.log('[GIYA Search] Matched office:', o.Office_name, 'in building:', buildingName);
     const key = _findKeyByBuildingName(buildingName);
-    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
     if (key) {
       const input = document.getElementById('map-search');
       if (input) input.value = `${o.Office_name} (${buildingName})`;
@@ -1539,9 +1560,7 @@ async function _handleSearch(query) {
   if (facilities.length > 0) {
     const f = facilities[0];
     const buildingName = f.BUILDINGS?.Building_name;
-    console.log('[GIYA Search] Matched facility:', f.Facility_name, 'in building:', buildingName);
     const key = _findKeyByBuildingName(buildingName);
-    console.log('[GIYA Search] Resolved BUILDING_DATA key:', key);
     if (key) {
       const input = document.getElementById('map-search');
       if (input) input.value = `${f.Facility_name} (${buildingName})`;
@@ -1550,13 +1569,18 @@ async function _handleSearch(query) {
     }
   }
 
-  // Fallback to interactive building name search
+  // 3️⃣ Partial fallback match for building names
   const key = Object.keys(BUILDING_DATA).find(k =>
     BUILDING_DATA[k].interactive !== false &&
-    (k.includes(query.toLowerCase()) ||
-      BUILDING_DATA[k].name.toLowerCase().includes(query.toLowerCase()))
+    (k.toLowerCase().includes(q.toLowerCase()) ||
+      BUILDING_DATA[k].name.toLowerCase().includes(q.toLowerCase()) ||
+      (BUILDING_DATA[k].shortName && BUILDING_DATA[k].shortName.toLowerCase().includes(q.toLowerCase())) ||
+      (BUILDING_DATA[k].abbrev && BUILDING_DATA[k].abbrev.toLowerCase().includes(q.toLowerCase())))
   );
+
   if (key) {
+    const input = document.getElementById('map-search');
+    if (input) input.value = BUILDING_DATA[key]?.name || key;
     _selectBuilding(key, true, false, null);
   } else {
     const dd = document.getElementById('search-dropdown');
@@ -1610,9 +1634,14 @@ async function _buildDropdown(query) {
   });
 
   // 4. Render matched Local Buildings
+  const qLower = query.toLowerCase();
   const localMatches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
     b.interactive !== false &&
-    (k.includes(query.toLowerCase()) || b.name.toLowerCase().includes(query.toLowerCase()))
+    (k.toLowerCase().includes(qLower) ||
+      b.name.toLowerCase().includes(qLower) ||
+      (b.shortName && b.shortName.toLowerCase().includes(qLower)) ||
+      (b.abbrev && b.abbrev.toLowerCase().includes(qLower)) ||
+      (b.supabaseNames && b.supabaseNames.some(s => s.toLowerCase().includes(qLower))))
   );
 
   localMatches.forEach(([key, b]) => {
@@ -1696,7 +1725,21 @@ export function initMapOverlay() {
   // Search input
   const searchInput = document.getElementById('map-search');
   if (searchInput) {
-    searchInput.addEventListener('input', e => _buildDropdown(e.target.value));
+    searchInput.addEventListener('input', e => {
+      const raw = e.target.value;
+      const q = raw.trim();
+
+      if (!q) {
+        _resetHighlight();
+        const dd = document.getElementById('search-dropdown');
+        if (dd) dd.style.display = 'none';
+        return;
+      }
+
+      // Populate search dropdown suggestions as user types
+      _buildDropdown(raw);
+    });
+
     searchInput.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         _handleSearch(e.target.value);
