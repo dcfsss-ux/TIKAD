@@ -667,6 +667,19 @@ function _bootExperience() {
     _buildChips();
     experience.time.on('update', _updatePins);
 
+    // Register base model nodes (campusBase, trees, easterEgg) into meshIndex
+    if (experience.world && experience.world.plateforme10 && experience.world.plateforme10.modelsToLoad) {
+      experience.world.plateforme10.modelsToLoad.forEach(({ name, item }) => {
+        if (item && item.scene) {
+          item.scene.traverse((node) => {
+            if (!node.name) return;
+            const k = node.name.toLowerCase().trim();
+            if (k && !meshIndex[k]) meshIndex[k] = node;
+          });
+        }
+      });
+    }
+
     // Fetch college seals live from Supabase buildings table
     _loadSupabaseSeals();
 

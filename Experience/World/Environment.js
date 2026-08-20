@@ -10,10 +10,10 @@ export default class Environment {
     this.debug = this.experience.debug
 
     // Debug
-    if(this.debug.active) {
+    if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder('environment')
       this.obj = {
-        colorObj: {r:0 , g: 0, b: 0}
+        colorObj: { r: 0, g: 0, b: 0 }
       }
     }
 
@@ -23,19 +23,19 @@ export default class Environment {
   }
 
   setBackground() {
-    this.bgColor = 0xd6d2ca
+    this.bgColor = 0xb4afaa
     this.scene.background = new THREE.Color(this.bgColor)
     // Fog removed — it was causing the black gradient clipping at the view edges
   }
 
   setLights() {
     // With useLegacyLights = false (physically correct mode), intensities must
-    // be much lower than legacy values to avoid blowing materials to white.
-    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
+    // be controlled to avoid overexposure.
+    this.ambientLight = new THREE.AmbientLight(0xffffff, 0.45)
     this.scene.add(this.ambientLight)
 
     // Directional light from above to add subtle depth
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 1.0)
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.7)
     this.directionalLight.position.set(5, 10, 5)
     this.scene.add(this.directionalLight)
 
@@ -45,11 +45,11 @@ export default class Environment {
     pmrem.compileEquirectangularShader()
     const neutralEnv = pmrem.fromScene(new RoomEnvironment()).texture
     this.scene.environment = neutralEnv
-    this.scene.environmentIntensity = 0.5
+    this.scene.environmentIntensity = 0.35
     pmrem.dispose()
   }
 
-  resize() {}
+  resize() { }
 
-  update() {}
+  update() { }
 }

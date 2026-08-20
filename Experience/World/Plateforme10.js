@@ -18,7 +18,6 @@ export default class MapBase {
 
     this.modelsToLoad = [
       { name: "campusBase", item: this.resources.items.campusBase },
-      { name: "trees", item: this.resources.items.trees },
       { name: "easterEgg", item: this.resources.items.easterEgg },
     ];
 

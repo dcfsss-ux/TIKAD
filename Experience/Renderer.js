@@ -31,7 +31,7 @@ export default class Renderer {
     this.renderer.useLegacyLights = false
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 0.85
+    this.renderer.toneMappingExposure = 0.75
 
     // Shadows OFF for performance
     this.renderer.shadowMap.enabled = false
