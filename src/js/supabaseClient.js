@@ -211,33 +211,36 @@ export async function searchCampusEntities(query) {
  */
 export async function fetchBuildingSeals() {
   try {
-    // Primary query: lower-case 'buildings' table as per schema, with fallback to 'BUILDINGS'
+    // Primary query: 'BUILDINGS' table (upper-case), with fallback to 'buildings' (lower-case)
     let { data: buildings, error } = await supabase
+      .from('BUILDINGS')
+      .select('Building_ID, Building_name, Logo_URL');
+
+    if (!error && buildings && buildings.length > 0) {
+      return buildings.map(b => ({
+        id: b.Building_ID,
+        name: b.Building_name,
+        Logo_URL: (b.Logo_URL && typeof b.Logo_URL === 'string' && b.Logo_URL.trim() !== '') ? b.Logo_URL.trim() : null
+      }));
+    }
+
+    // Fallback: lower-case 'buildings'
+    const res = await supabase
       .from('buildings')
-      .select('id, name, Logo_URL');
+      .select('id, name, Logo_URL, logo_url');
 
-    if (error || !buildings || buildings.length === 0) {
-      const res = await supabase
-        .from('BUILDINGS')
-        .select('Building_ID, Building_name, Logo_URL');
-      if (!res.error && res.data && res.data.length > 0) {
-        buildings = res.data.map(b => ({
-          id: b.Building_ID,
-          name: b.Building_name,
-          Logo_URL: b.Logo_URL
-        }));
-        error = null;
-      }
+    if (!res.error && res.data && res.data.length > 0) {
+      return res.data.map(b => ({
+        id: b.id,
+        name: b.name,
+        Logo_URL: (b.Logo_URL || b.logo_url) && typeof (b.Logo_URL || b.logo_url) === 'string' ? (b.Logo_URL || b.logo_url).trim() : null
+      }));
     }
 
-    if (error) {
-      console.error('Failed to load buildings:', error);
-      return [];
-    }
-
-    return buildings || [];
+    if (error) console.error('Failed to load buildings from Supabase:', error);
+    return [];
   } catch (err) {
-    console.error('Failed to load buildings:', err);
+    console.error('Failed to load buildings from Supabase:', err);
     return [];
   }
 }

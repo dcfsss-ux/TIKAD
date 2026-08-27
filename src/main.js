@@ -47,4 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarousel();
   initMapOverlay();
   initModel3D();
+
+  const heroVideo = document.querySelector('.hero-bg-video');
+  if (heroVideo) {
+    heroVideo.play().catch(() => {});
+  }
 });

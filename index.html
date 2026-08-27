@@ -119,10 +119,12 @@
 
   <!-- ── HERO ── -->
   <section class="hero" id="home">
-    <canvas id="hero-canvas"></canvas>
+    <video class="hero-bg-video" autoplay loop muted playsinline poster="/images/csu.jpg">
+      <source src="/background_video/MAIN CSU.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-video-overlay"></div>
 
     <div class="hero-text">
-      <p class="hero-eyebrow"> Caraga State University</p>
       <h1 class="hero-title">
         See Your Campus in a Whole New
         <em>Dimension</em>
@@ -160,15 +162,9 @@
       </div>
     </div>
 
-    <!-- 3D Model Viewer / Hero Visual -->
+    <!-- Holographic 3D Model Viewer / Hero Visual -->
     <div class="hero-visual">
-      <div id="model-3d-container">
-        <div class="hero-shimmer"></div>
-      </div>
-      <div class="hero-badge">
-        <strong>3D</strong>
-        Interactive Campus Map
-      </div>
+      <div id="model-3d-container"></div>
     </div>
   </section>
 
