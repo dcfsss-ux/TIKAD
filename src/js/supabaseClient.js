@@ -7,6 +7,50 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'YOUR_SUPABASE
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 /**
+ * Helper to extract 3D Model URL from a Supabase building object.
+ * Checks all possible column name variations flexibly.
+ * @param {object} dbBuilding 
+ * @param {string|null} fallbackUrl 
+ */
+export function extractModelUrl(dbBuilding, fallbackUrl = null) {
+  if (!dbBuilding || typeof dbBuilding !== 'object') return fallbackUrl;
+
+  const candidateKeys = [
+    'Model_URL', 'model_url', 'Model_Url', 'MODEL_URL',
+    'Model_path', 'model_path', 'Model_Path', 'MODEL_PATH',
+    'Model_3d', 'model_3d', 'Model_3D', 'model_3D', 'MODEL_3D',
+    'Model_3D_URL', 'model_3d_url', 'Model_3d_url', '3D_Model_URL',
+    '3d_model_url', '3D_Model', '3d_model', '3D_MODEL',
+    'Glb_URL', 'glb_url', 'GLB_URL', 'glb_path', 'GLB_PATH',
+    'Model_link', 'model_link', 'Model_Link',
+    'Model_file', 'model_file', 'Model_File',
+    '3D_Model_Path', '3d_model_path',
+    'Model', 'model', 'glb', 'GLB'
+  ];
+
+  for (const key of candidateKeys) {
+    if (dbBuilding[key] && typeof dbBuilding[key] === 'string' && dbBuilding[key].trim() !== '') {
+      const val = dbBuilding[key].trim();
+      if (val !== 'null' && val !== 'undefined') return val;
+    }
+  }
+
+  // Scan all keys if not matched by standard names
+  for (const [k, v] of Object.entries(dbBuilding)) {
+    if (typeof v === 'string' && v.trim() !== '') {
+      const lk = k.toLowerCase();
+      const val = v.trim();
+      if ((lk.includes('model') || lk.includes('glb') || lk.includes('3d')) &&
+          (val.endsWith('.glb') || val.endsWith('.gltf') || val.includes('.glb?') || val.includes('/models/') || val.startsWith('http') || val.startsWith('/'))) {
+        return val;
+      }
+    }
+  }
+
+  return fallbackUrl;
+}
+
+/**
  * Helper to fetch a building with all its nested rooms, offices, and facilities
  * @param {number} buildingId 
  */
@@ -14,12 +58,7 @@ export async function getBuildingDetails(buildingId) {
   const { data, error } = await supabase
     .from('BUILDINGS')
     .select(`
-      Building_ID,
-      Building_name,
-      Description,
-      Image_URL,
-      Model_type,
-      Status_type,
+      *,
       ROOMS ( Room_ID, Room_number, Room_name, Floor ),
       OFFICES ( Office_ID, Office_name, Abbreviations, Room_number, Floor ),
       FACILITIES ( Facility_ID, Facility_name, Abbreviations, Room_number, Floor )
@@ -59,89 +98,57 @@ export async function getAllBuildings() {
 export async function getBuildingByNameOrKey(keyOrName) {
   if (!keyOrName) return null;
 
-  // Build multiple search variants from the mesh key
+  const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const keyNorm = norm(keyOrName);
+
   const cleanName = keyOrName
-    .replace(/_building|_hall|_bldg/g, '')
-    .replace(/_/g, ' ')
+    .replace(/_building|_hall|_bldg/gi, '')
+    .replace(/[_-]/g, ' ')
     .trim();
 
-  // Also try first meaningful word (e.g. "ced" from "ced building")
   const firstWord = cleanName.split(' ').filter(w => w.length > 1)[0] || cleanName;
+  const cleanNorm = norm(cleanName);
+  const firstNorm = norm(firstWord);
 
-  console.log(`[Supabase] Looking up building — key: "${keyOrName}" | cleanName: "${cleanName}" | firstWord: "${firstWord}"`);
+  console.log(`[Supabase] Looking up building — key: "${keyOrName}" | cleanName: "${cleanName}"`);
 
-  const SELECT_FRAGMENT = `
-    Building_ID,
-    Building_name,
-    Description,
-    Image_URL,
-    Model_type,
-    Status_type,
-    ROOMS ( Room_ID, Room_number, Room_name, Floor ),
-    OFFICES ( Office_ID, Office_name, Abbreviations, Room_number, Floor ),
-    FACILITIES ( Facility_ID, Facility_name, Abbreviations, Room_number, Floor )
-  `;
-
-  // ── Try 1: match cleanName (e.g. "ced") ──────────────────────────────
-  const { data: d1, error: e1 } = await supabase
+  // Fetch all buildings with full nested details
+  const { data: allBuildings, error } = await supabase
     .from('BUILDINGS')
-    .select(SELECT_FRAGMENT)
-    .ilike('Building_name', `%${cleanName}%`)
-    .limit(1);
+    .select(`
+      *,
+      ROOMS ( Room_ID, Room_number, Room_name, Floor ),
+      OFFICES ( Office_ID, Office_name, Abbreviations, Room_number, Floor ),
+      FACILITIES ( Facility_ID, Facility_name, Abbreviations, Room_number, Floor )
+    `);
 
-  if (e1) console.error('[Supabase] ilike error (cleanName):', e1);
-
-  if (d1 && d1.length > 0) {
-    console.log(`[Supabase] ✅ Matched by cleanName "${cleanName}":`, d1[0].Building_name);
-    return d1[0];
-  }
-
-  // ── Try 2: match firstWord only ────────────────────────────────────────
-  if (firstWord !== cleanName) {
-    const { data: d2, error: e2 } = await supabase
-      .from('BUILDINGS')
-      .select(SELECT_FRAGMENT)
-      .ilike('Building_name', `%${firstWord}%`)
-      .limit(1);
-
-    if (e2) console.error('[Supabase] ilike error (firstWord):', e2);
-
-    if (d2 && d2.length > 0) {
-      console.log(`[Supabase] ✅ Matched by firstWord "${firstWord}":`, d2[0].Building_name);
-      return d2[0];
-    }
-  }
-
-  // ── Try 3: fetch ALL buildings and fuzzy-match client-side ──────────────
-  console.warn(`[Supabase] ⚠️ No direct match found for "${cleanName}". Trying client-side fuzzy match…`);
-
-  const { data: allBuildings, error: allErr } = await supabase
-    .from('BUILDINGS')
-    .select('Building_ID, Building_name');
-
-  if (allErr) {
-    console.error('[Supabase] Error fetching all buildings:', allErr);
+  if (error || !allBuildings || !allBuildings.length) {
+    console.error('[Supabase] Error fetching buildings list:', error);
     return null;
   }
 
-  console.log('[Supabase] All buildings in DB:', allBuildings?.map(b => `[${b.Building_ID}] ${b.Building_name}`));
-
-  const keyNorm = keyOrName.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const matched = allBuildings?.find(b => {
-    const nameNorm = b.Building_name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return nameNorm.includes(keyNorm) || keyNorm.includes(nameNorm) ||
-           nameNorm.includes(firstWord) || firstWord.includes(nameNorm);
+  // 1. Exact normalized match or containment
+  let matched = allBuildings.find(b => {
+    const nameNorm = norm(b.Building_name);
+    return nameNorm === keyNorm || nameNorm.includes(keyNorm) || keyNorm.includes(nameNorm);
   });
 
+  // 2. Clean name or first word match
   if (!matched) {
-    console.warn(`[Supabase] ❌ No building matched for key "${keyOrName}"`);
-    return null;
+    matched = allBuildings.find(b => {
+      const nameNorm = norm(b.Building_name);
+      return (cleanNorm && (nameNorm.includes(cleanNorm) || cleanNorm.includes(nameNorm))) ||
+             (firstNorm && (nameNorm.includes(firstNorm) || firstNorm.includes(nameNorm)));
+    });
   }
 
-  console.log(`[Supabase] ✅ Fuzzy-matched: [${matched.Building_ID}] ${matched.Building_name}`);
+  if (matched) {
+    console.log(`[Supabase] ✅ Matched building: [${matched.Building_ID}] ${matched.Building_name}`);
+    return matched;
+  }
 
-  // Fetch full details for the matched building by ID
-  return getBuildingDetails(matched.Building_ID);
+  console.warn(`[Supabase] ❌ No building matched for key "${keyOrName}"`);
+  return null;
 }
 
 /**

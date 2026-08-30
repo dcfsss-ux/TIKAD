@@ -359,7 +359,7 @@
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
-  z-index: 20;
+  z-index: 100 !important;
   overflow: hidden;
   display: none;
   transition:

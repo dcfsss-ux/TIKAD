@@ -10,7 +10,81 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { getBuildingByNameOrKey, searchCampusEntities, fetchBuildingSeals } from './supabaseClient.js';
+import {
+  getBuildingByNameOrKey,
+  searchCampusEntities,
+  fetchBuildingSeals,
+  extractModelUrl,
+  getAllBuildings,
+  getBuildingDetails
+} from './supabaseClient.js';
+
+/**
+ * Sync 3D Model URLs for all buildings from Supabase into BUILDING_DATA
+ */
+async function _syncSupabaseModels() {
+  try {
+    const allDbBuildings = await getAllBuildings();
+    if (!allDbBuildings || !allDbBuildings.length) return;
+
+    console.log(`[MapOverlay] 🔄 Syncing 3D model URLs from Supabase (${allDbBuildings.length} buildings)...`);
+
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    allDbBuildings.forEach(dbB => {
+      const modelUrl = extractModelUrl(dbB);
+      if (!modelUrl) return;
+
+      const dbNameNorm = norm(dbB.Building_name);
+
+      for (const [key, bData] of Object.entries(BUILDING_DATA)) {
+        let isMatch = false;
+
+        // 1. Match by supabaseId
+        if (bData.supabaseId && bData.supabaseId === dbB.Building_ID) {
+          isMatch = true;
+        }
+
+        // 2. Match by key
+        const keyNorm = norm(key);
+        if (!isMatch && keyNorm && (dbNameNorm.includes(keyNorm) || keyNorm.includes(dbNameNorm))) {
+          isMatch = true;
+        }
+
+        // 3. Match by supabaseNames
+        if (!isMatch && bData.supabaseNames && dbNameNorm) {
+          isMatch = bData.supabaseNames.some(sn => {
+            const snNorm = norm(sn);
+            return snNorm === dbNameNorm || dbNameNorm.includes(snNorm) || snNorm.includes(dbNameNorm);
+          });
+        }
+
+        // 4. Match by name or shortName or abbrev
+        if (!isMatch && dbNameNorm) {
+          const nameNorm = norm(bData.name);
+          const sNameNorm = norm(bData.shortName);
+          const abbrevNorm = norm(bData.abbrev);
+
+          if ((nameNorm && (dbNameNorm.includes(nameNorm) || nameNorm.includes(dbNameNorm))) ||
+              (sNameNorm && (dbNameNorm.includes(sNameNorm) || sNameNorm.includes(dbNameNorm))) ||
+              (abbrevNorm && (dbNameNorm.includes(abbrevNorm) || abbrevNorm.includes(dbNameNorm)))) {
+            isMatch = true;
+          }
+        }
+
+        if (isMatch) {
+          bData.model3d = modelUrl;
+          if (!bData.supabaseId && dbB.Building_ID) {
+            bData.supabaseId = dbB.Building_ID;
+          }
+          console.log(`[MapOverlay] ✅ Synced 3D model for "${bData.name}":`, modelUrl);
+        }
+      }
+    });
+  } catch (err) {
+    console.warn('[MapOverlay] Could not sync Supabase 3D models:', err);
+  }
+}
 
 
 
@@ -444,9 +518,8 @@ const BUILDING_DATA = {
     glbName: "CHED_LGU -",
     name: "CHED-LGU Building", shortName: "CHED-LGU", abbrev: "CHED-LGU", type: "Government Satellite Office", emoji: "🏛",
     supabaseId: null,
-    supabaseNames: ['CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED'],
+    supabaseNames: ['CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
     image: "/images/kinaadman.jpg",
-    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/CHED.png",
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)",
     desc: "The Commission on Higher Education (CHED) satellite office within the CSU campus. Serves as a coordination point between the university and the national higher education regulatory body.",
     depts: [
@@ -603,6 +676,8 @@ let activeMesh = null;
 export function openMapOverlay() {
   const overlay = document.getElementById('map-overlay');
   if (!overlay) return;
+
+  _syncSupabaseModels();
 
   overlay.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -1147,14 +1222,48 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       contactWrap.style.display = 'none';
     }
 
-    // ── "View 3D Model" button (only opens live 3D viewer when clicked) ──
+    // ── "View 3D Model" button (visible on ALL cards, calls designated model from Supabase/data) ──
     if (viewBtnWrap && viewBtn) {
-      if (data.model3d) {
-        viewBtn.onclick = () => openBuildingViewer(data.model3d, data.name);
-        viewBtnWrap.style.display = '';
-      } else {
-        viewBtnWrap.style.display = 'none';
-      }
+      viewBtnWrap.style.display = '';
+
+      const handleOpen3D = async () => {
+        // 1. If 3D model URL is already known/cached, open immediately
+        if (data.model3d) {
+          openBuildingViewer(data.model3d, data.name);
+          return;
+        }
+
+        // 2. Otherwise fetch live model URL from Supabase on demand
+        try {
+          const originalText = viewBtn.innerHTML;
+          viewBtn.innerHTML = `<span>⏳</span> Loading 3D Model...`;
+          viewBtn.disabled = true;
+
+          let dbB = null;
+          if (data.supabaseId) {
+            dbB = await getBuildingDetails(data.supabaseId);
+          } else {
+            dbB = await getBuildingByNameOrKey(key);
+          }
+
+          const modelUrl = extractModelUrl(dbB);
+          viewBtn.innerHTML = originalText;
+          viewBtn.disabled = false;
+
+          if (modelUrl) {
+            data.model3d = modelUrl;
+            openBuildingViewer(modelUrl, data.name || dbB?.Building_name);
+          } else {
+            console.warn(`[MapOverlay] No 3D model found in Supabase for "${data.name}"`);
+            alert(`No 3D model URL is configured for "${data.name}" yet.`);
+          }
+        } catch (e) {
+          console.error('[MapOverlay] Error loading 3D model from Supabase:', e);
+          viewBtn.disabled = false;
+        }
+      };
+
+      viewBtn.onclick = handleOpen3D;
     }
   }
 
@@ -1162,7 +1271,6 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   try {
     let dbBuilding = null;
     if (data.supabaseId) {
-      const { getBuildingDetails } = await import('./supabaseClient.js');
       dbBuilding = await getBuildingDetails(data.supabaseId);
     } else {
       dbBuilding = await getBuildingByNameOrKey(key);
@@ -1173,6 +1281,16 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       if (dbBuilding.Description) set('panel-desc', dbBuilding.Description);
       if (dbBuilding.Image_URL && imgEl) {
         imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
+      }
+
+      // Check and attach live Supabase 3D model URL
+      const liveModelUrl = extractModelUrl(dbBuilding);
+      if (liveModelUrl) {
+        data.model3d = liveModelUrl;
+        if (viewBtnWrap && viewBtn) {
+          viewBtn.onclick = () => openBuildingViewer(liveModelUrl, dbBuilding.Building_name || data.name);
+          viewBtnWrap.style.display = '';
+        }
       }
 
       const hasSupabaseData = (
@@ -1876,5 +1994,8 @@ export function initMapOverlay() {
 
   // Boot the 3D Experience in the background immediately on page load
   _bootExperience();
+
+  // Sync 3D model URLs from Supabase on init
+  _syncSupabaseModels();
 }
 
