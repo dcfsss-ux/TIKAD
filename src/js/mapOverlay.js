@@ -10,6 +10,8 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
+import { logRoadSegments } from './roadDebugLogger.js';
+import { initNavigation, handleBuildingRoute, clearRouteHighlight } from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
   searchCampusEntities,
@@ -516,6 +518,7 @@ function _bootExperience() {
     experience.time.on('update', _updatePins);
 
     // Register base model nodes (campusBase, trees, easterEgg) into meshIndex
+    let campusBaseScene = null;
     if (experience.world && experience.world.plateforme10 && experience.world.plateforme10.modelsToLoad) {
       experience.world.plateforme10.modelsToLoad.forEach(({ name, item }) => {
         if (item && item.scene) {
@@ -524,8 +527,19 @@ function _bootExperience() {
             const k = node.name.toLowerCase().trim();
             if (k && !meshIndex[k]) meshIndex[k] = node;
           });
+          // Capture the campusBase scene for navigation init
+          if (name === 'campusBase') campusBaseScene = item.scene;
         }
       });
+    }
+
+    // ── Navigation system init ─────────────────────────────────────────────
+    const navSceneRoot = experience.scene || campusBaseScene;
+    if (navSceneRoot) {
+      // Debug: log all mesh names from campusBase
+      if (campusBaseScene) logRoadSegments(campusBaseScene);
+      // Initialize pathfinding + road segment highlighting against the active 3D scene
+      initNavigation(navSceneRoot);
     }
 
     // Fetch college seals live from Supabase buildings table
@@ -677,6 +691,13 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
         highlightedMeshes.push(child);
       }
     });
+
+    // ── Road navigation: highlight route to this building ──────────────────
+    // Get building world position for waypoint snapping
+    const buildingPos = new THREE.Vector3();
+    _box.setFromObject(node);
+    _box.getCenter(buildingPos);
+    handleBuildingRoute(key, [buildingPos.x, buildingPos.y, buildingPos.z]);
   } else {
     console.warn(`No node found for "${key}". Available keys:`, Object.keys(meshIndex));
   }
@@ -704,6 +725,7 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
 }
 
 function _resetHighlight() {
+  // Clear building mesh highlights
   highlightedMeshes.forEach(child => {
     if (child.userData.origMat) {
       child.material = child.userData.origMat;
@@ -712,6 +734,10 @@ function _resetHighlight() {
   highlightedMeshes = [];
   activeKey = null;
   document.querySelectorAll('#map-chips-bar .cat-btn').forEach(b => b.classList.remove('active-cat'));
+
+  // Clear road segment route highlights
+  clearRouteHighlight();
+
   if (experience && experience.renderer) {
     experience.renderer.requestRender();
   }
@@ -985,6 +1011,23 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   } else {
     if (descWrap) descWrap.style.display = '';
     if (descEl) descEl.style.display = '';
+
+    // ── "Show Campus Route" button ──
+    const showPathBtn = document.getElementById('panel-showpath-btn');
+    if (showPathBtn) {
+      showPathBtn.style.display = 'flex';
+      showPathBtn.onclick = () => {
+        const node = _findNode(key);
+        let posArray = null;
+        if (node) {
+          const buildingPos = new THREE.Vector3();
+          _box.setFromObject(node);
+          _box.getCenter(buildingPos);
+          posArray = [buildingPos.x, buildingPos.y, buildingPos.z];
+        }
+        handleBuildingRoute(key, posArray);
+      };
+    }
 
     if (contactWrap && contactContent && data.contact) {
       contactContent.innerHTML =

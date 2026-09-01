@@ -907,6 +907,45 @@
   transform: scale(0.98);
 }
 
+/* ── SHOW PATH / CAMPUS ROUTE BUTTON ── */
+.panel-showpath-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #008000 0%, #004d00 100%);
+  color: #ffffff;
+  border: 1.5px solid #eddd53;
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s,
+    color 0.2s,
+    transform 0.1s;
+}
+
+.panel-showpath-btn:hover {
+  background: linear-gradient(135deg, #009900 0%, #006600 100%);
+  border-color: #fff;
+  color: #fff;
+  box-shadow:
+    0 0 14px rgba(237, 221, 83, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.panel-showpath-btn:active {
+  transform: scale(0.98);
+}
+
 /* ── MOUSE CONTROL HINT LEGEND CARD ── */
 .controls-hint-card {
   position: absolute;

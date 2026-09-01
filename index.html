@@ -544,11 +544,16 @@
               <div class="panel-label">Contact</div>
               <p id="panel-contact"></p>
             </div>
-            <!-- 3D Model Viewer button — shown only for buildings with a textured model -->
-            <div id="panel-view3d-wrap" style="display:none; margin-top:10px;">
-              <button id="panel-view3d-btn" class="panel-view3d-btn">
-                <span>🏛</span> View 3D Model
+            <!-- Action Buttons: Navigation Route & 3D Model Viewer -->
+            <div id="panel-actions-wrap" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+              <button id="panel-showpath-btn" class="panel-showpath-btn">
+                <span class="mdi mdi-routes"></span> Show Campus Route
               </button>
+              <div id="panel-view3d-wrap" style="display:none;">
+                <button id="panel-view3d-btn" class="panel-view3d-btn">
+                  <span>🏛</span> View 3D Model
+                </button>
+              </div>
             </div>
           </div>
         </div>

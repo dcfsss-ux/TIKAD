@@ -1,0 +1,217 @@
+{
+  "meta": {
+    "description": "Campus waypoint graph for road-segment navigation. Each edge maps to a real mesh in platform_with_rocky_road.glb.",
+    "version": "0.3.0-full-compat",
+    "notes": "Edge segmentNames match confirmed GLB node names 'road 1' through 'road 30'. Includes both nodes[].connections and root edges[] for 100% format compatibility."
+  },
+  "nodes": [
+    {
+      "id": "gate_main",
+      "position": [-41.8841, 0.162292, -486.505],
+      "type": "gate",
+      "connections": [{ "id": "cross_01", "segmentName": "road 1" }]
+    },
+    {
+      "id": "gate_second",
+      "position": [211.586, 0.897858, -204.351],
+      "type": "gate",
+      "connections": [{ "id": "cross_03", "segmentName": "road 25" }]
+    },
+    {
+      "id": "gate_third",
+      "position": [180.3, 2.04004, 818.803],
+      "type": "gate",
+      "connections": [{ "id": "cross_09", "segmentName": "road 18" }]
+    },
+    {
+      "id": "gate_fourth",
+      "position": [270.374, 0.522324, 168.275],
+      "type": "gate",
+      "connections": [{ "id": "cross_06", "segmentName": "road 12" }]
+    },
+
+    {
+      "id": "cross_01",
+      "position": [0, 0.5, -400],
+      "type": "crossing",
+      "connections": [
+        { "id": "gate_main", "segmentName": "road 1" },
+        { "id": "cross_02", "segmentName": "road 2" },
+        { "id": "bld_masawa", "segmentName": "road 13" },
+        { "id": "bld_old_admin", "segmentName": "road 14" }
+      ]
+    },
+    {
+      "id": "cross_02",
+      "position": [50, 0.5, -300],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_01", "segmentName": "road 2" },
+        { "id": "cross_03", "segmentName": "road 3" },
+        { "id": "bld_hinang", "segmentName": "road 15" }
+      ]
+    },
+    {
+      "id": "cross_03",
+      "position": [100, 0.5, -200],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_02", "segmentName": "road 3" },
+        { "id": "cross_04", "segmentName": "road 4" },
+        { "id": "gate_second", "segmentName": "road 25" },
+        { "id": "bld_kinaadman", "segmentName": "road 16" },
+        { "id": "bld_ched_lgu", "segmentName": "road 17" }
+      ]
+    },
+    {
+      "id": "cross_04",
+      "position": [150, 0.5, -100],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_03", "segmentName": "road 4" },
+        { "id": "cross_05", "segmentName": "road 5" },
+        { "id": "bld_hiraya", "segmentName": "road 21" },
+        { "id": "bld_admin_new", "segmentName": "road 22" },
+        { "id": "bld_old_cas", "segmentName": "road 23" }
+      ]
+    },
+    {
+      "id": "cross_05",
+      "position": [150, 0.5, 0],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_04", "segmentName": "road 5" },
+        { "id": "cross_06", "segmentName": "road 6" },
+        { "id": "bld_library", "segmentName": "road 24" },
+        { "id": "bld_student_ctr", "segmentName": "road 10" },
+        { "id": "bld_batok", "segmentName": "road 11" }
+      ]
+    },
+    {
+      "id": "cross_06",
+      "position": [150, 0.5, 100],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_05", "segmentName": "road 6" },
+        { "id": "cross_07", "segmentName": "road 7" },
+        { "id": "gate_fourth", "segmentName": "road 12" },
+        { "id": "bld_ced", "segmentName": "road 26" },
+        { "id": "bld_kalinaw", "segmentName": "road 27" },
+        { "id": "bld_villares", "segmentName": "road 28" }
+      ]
+    },
+    {
+      "id": "cross_07",
+      "position": [180, 0.5, 200],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_06", "segmentName": "road 7" },
+        { "id": "cross_08", "segmentName": "road 8" },
+        { "id": "bld_gym", "segmentName": "road 29" },
+        { "id": "bld_sports", "segmentName": "road 30" },
+        { "id": "bld_hostel", "segmentName": "road 19" }
+      ]
+    },
+    {
+      "id": "cross_08",
+      "position": [180, 0.5, 400],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_07", "segmentName": "road 8" },
+        { "id": "cross_09", "segmentName": "road 9" },
+        { "id": "bld_dost", "segmentName": "road 20" },
+        { "id": "bld_fic", "segmentName": "road 8" }
+      ]
+    },
+    {
+      "id": "cross_09",
+      "position": [180, 0.5, 600],
+      "type": "crossing",
+      "connections": [
+        { "id": "cross_08", "segmentName": "road 9" },
+        { "id": "gate_third", "segmentName": "road 18" },
+        { "id": "bld_caa", "segmentName": "road 9" }
+      ]
+    },
+
+    { "id": "bld_masawa",     "position": [30, 0.5, -350], "type": "building_entrance", "connections": [{ "id": "cross_01", "segmentName": "road 13" }] },
+    { "id": "bld_hinang",     "position": [80, 0.5, -250], "type": "building_entrance", "connections": [{ "id": "cross_02", "segmentName": "road 15" }] },
+    { "id": "bld_kinaadman",  "position": [120, 0.5, -150], "type": "building_entrance", "connections": [{ "id": "cross_03", "segmentName": "road 16" }] },
+    { "id": "bld_hiraya",     "position": [130, 0.5, -50],  "type": "building_entrance", "connections": [{ "id": "cross_04", "segmentName": "road 21" }] },
+    { "id": "bld_batok",      "position": [140, 0.5, 50],   "type": "building_entrance", "connections": [{ "id": "cross_05", "segmentName": "road 11" }] },
+    { "id": "bld_admin_new",  "position": [160, 0.5, -80],  "type": "building_entrance", "connections": [{ "id": "cross_04", "segmentName": "road 22" }] },
+    { "id": "bld_library",    "position": [170, 0.5, -30],  "type": "building_entrance", "connections": [{ "id": "cross_05", "segmentName": "road 24" }] },
+    { "id": "bld_kalinaw",    "position": [160, 0.5, 150],  "type": "building_entrance", "connections": [{ "id": "cross_06", "segmentName": "road 27" }] },
+    { "id": "bld_gym",        "position": [200, 0.5, 250],  "type": "building_entrance", "connections": [{ "id": "cross_07", "segmentName": "road 29" }] },
+    { "id": "bld_ced",        "position": [120, 0.5, 120],  "type": "building_entrance", "connections": [{ "id": "cross_06", "segmentName": "road 26" }] },
+    { "id": "bld_caa",        "position": [200, 0.5, 500],  "type": "building_entrance", "connections": [{ "id": "cross_09", "segmentName": "road 9" }] },
+    { "id": "bld_dost",       "position": [190, 0.5, 350],  "type": "building_entrance", "connections": [{ "id": "cross_08", "segmentName": "road 20" }] },
+    { "id": "bld_old_admin",  "position": [50, 0.5, -380],  "type": "building_entrance", "connections": [{ "id": "cross_01", "segmentName": "road 14" }] },
+    { "id": "bld_old_cas",    "position": [100, 0.5, -100], "type": "building_entrance", "connections": [{ "id": "cross_04", "segmentName": "road 23" }] },
+    { "id": "bld_student_ctr","position": [140, 0.5, -10],  "type": "building_entrance", "connections": [{ "id": "cross_05", "segmentName": "road 10" }] },
+    { "id": "bld_hostel",     "position": [220, 0.5, 300],  "type": "building_entrance", "connections": [{ "id": "cross_07", "segmentName": "road 19" }] },
+    { "id": "bld_fic",        "position": [210, 0.5, 450],  "type": "building_entrance", "connections": [{ "id": "cross_08", "segmentName": "road 8" }] },
+    { "id": "bld_ched_lgu",   "position": [230, 0.5, -180], "type": "building_entrance", "connections": [{ "id": "cross_03", "segmentName": "road 17" }] },
+    { "id": "bld_sports",     "position": [170, 0.5, 270],  "type": "building_entrance", "connections": [{ "id": "cross_07", "segmentName": "road 30" }] },
+    { "id": "bld_villares",   "position": [110, 0.5, 80],   "type": "building_entrance", "connections": [{ "id": "cross_06", "segmentName": "road 28" }] }
+  ],
+  "edges": [
+    { "from": "gate_main",   "to": "cross_01",  "segmentName": "road 1" },
+    { "from": "cross_01",    "to": "cross_02",  "segmentName": "road 2" },
+    { "from": "cross_02",    "to": "cross_03",  "segmentName": "road 3" },
+    { "from": "cross_03",    "to": "cross_04",  "segmentName": "road 4" },
+    { "from": "cross_04",    "to": "cross_05",  "segmentName": "road 5" },
+    { "from": "cross_05",    "to": "cross_06",  "segmentName": "road 6" },
+    { "from": "cross_06",    "to": "cross_07",  "segmentName": "road 7" },
+    { "from": "cross_07",    "to": "cross_08",  "segmentName": "road 8" },
+    { "from": "cross_08",    "to": "cross_09",  "segmentName": "road 9" },
+    { "from": "cross_09",    "to": "gate_third", "segmentName": "road 18" },
+
+    { "from": "gate_second", "to": "cross_03",  "segmentName": "road 25" },
+    { "from": "gate_fourth", "to": "cross_06",  "segmentName": "road 12" },
+
+    { "from": "cross_01",    "to": "bld_masawa",    "segmentName": "road 13" },
+    { "from": "cross_01",    "to": "bld_old_admin",  "segmentName": "road 14" },
+    { "from": "cross_02",    "to": "bld_hinang",    "segmentName": "road 15" },
+    { "from": "cross_03",    "to": "bld_kinaadman", "segmentName": "road 16" },
+    { "from": "cross_03",    "to": "bld_ched_lgu",  "segmentName": "road 17" },
+    { "from": "cross_04",    "to": "bld_hiraya",    "segmentName": "road 21" },
+    { "from": "cross_04",    "to": "bld_admin_new", "segmentName": "road 22" },
+    { "from": "cross_04",    "to": "bld_old_cas",   "segmentName": "road 23" },
+    { "from": "cross_05",    "to": "bld_library",   "segmentName": "road 24" },
+    { "from": "cross_05",    "to": "bld_student_ctr","segmentName": "road 10" },
+    { "from": "cross_05",    "to": "bld_batok",     "segmentName": "road 11" },
+    { "from": "cross_06",    "to": "bld_ced",       "segmentName": "road 26" },
+    { "from": "cross_06",    "to": "bld_kalinaw",   "segmentName": "road 27" },
+    { "from": "cross_06",    "to": "bld_villares",  "segmentName": "road 28" },
+    { "from": "cross_07",    "to": "bld_gym",       "segmentName": "road 29" },
+    { "from": "cross_07",    "to": "bld_sports",    "segmentName": "road 30" },
+    { "from": "cross_07",    "to": "bld_hostel",    "segmentName": "road 19" },
+    { "from": "cross_08",    "to": "bld_dost",      "segmentName": "road 20" },
+    { "from": "cross_08",    "to": "bld_fic",       "segmentName": "road 8" },
+    { "from": "cross_09",    "to": "bld_caa",       "segmentName": "road 9" }
+  ],
+
+  "buildingWaypointMap": {
+    "masawa_building":           "bld_masawa",
+    "hinang_building":           "bld_hinang",
+    "kinaadman_hall":            "bld_kinaadman",
+    "hiraya_building":           "bld_hiraya",
+    "batok_hall":                "bld_batok",
+    "new_administrative_bldg":   "bld_admin_new",
+    "state-of-the-art-library":  "bld_library",
+    "kalinaw":                   "bld_kalinaw",
+    "csu_gym":                   "bld_gym",
+    "ced_building":              "bld_ced",
+    "caa_building":              "bld_caa",
+    "dost":                      "bld_dost",
+    "old_administrative_building":"bld_old_admin",
+    "old_cas":                   "bld_old_cas",
+    "csu_student_center":        "bld_student_ctr",
+    "hostel":                    "bld_hostel",
+    "food_innovation_center":    "bld_fic",
+    "ched_lgu":                  "bld_ched_lgu",
+    "sports_office":             "bld_sports",
+    "Villares":                  "bld_villares"
+  }
+}
