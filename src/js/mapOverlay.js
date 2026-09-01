@@ -33,8 +33,7 @@ async function _syncSupabaseModels() {
 
     allDbBuildings.forEach(dbB => {
       const modelUrl = extractModelUrl(dbB);
-      if (!modelUrl) return;
-
+      const logoUrl = dbB.Logo_URL || dbB.logo_url;
       const dbNameNorm = norm(dbB.Building_name);
 
       for (const [key, bData] of Object.entries(BUILDING_DATA)) {
@@ -73,11 +72,15 @@ async function _syncSupabaseModels() {
         }
 
         if (isMatch) {
-          bData.model3d = modelUrl;
+          if (modelUrl) bData.model3d = modelUrl;
+          if (logoUrl) {
+            bData.Logo_URL = logoUrl;
+            bData.logo = logoUrl;
+          }
           if (!bData.supabaseId && dbB.Building_ID) {
             bData.supabaseId = dbB.Building_ID;
           }
-          console.log(`[MapOverlay] ✅ Synced 3D model for "${bData.name}":`, modelUrl);
+          console.log(`[MapOverlay] ✅ Synced Supabase data for "${bData.name}":`, { modelUrl, logoUrl });
         }
       }
     });
@@ -89,364 +92,158 @@ async function _syncSupabaseModels() {
 
 
 const BUILDING_DATA = {
+  // ── INTERACTIVE BUILDINGS (clickable pins, info cards populated from Supabase) ──
   "masawa_building": {
     glbName: "MASAWA HALL",
-    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", type: "Academic Building", emoji: "🏫",
+    name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", emoji: "🏫",
     supabaseId: 12,
     supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
-    image: "/images/masawa.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)",
-    desc: "Houses the College of Computing and Information Sciences (CCIS), offering undergraduate programs in Computer Science, Information Technology, and related fields. Equipped with modern computer labs and development studios.",
-    depts: [
-      { icon: "💻", name: "College of Computing & Information Sciences", sub: "All Floors" },
-      { icon: "🖥️", name: "Computer Labs 1–4", sub: "Floors 1–2" },
-      { icon: "🔐", name: "IT Resource Center", sub: "Floor 3" },
-    ],
-    contact: { phone: "(085) 341-2321", email: "ccis@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)"
   },
-
   "hinang_building": {
     glbName: "HINANG BUILDING",
-    name: "Hinang Building", shortName: "Hinang", type: "Academic Building", emoji: "🏛",
+    name: "Hinang Building", shortName: "Hinang", emoji: "🏛",
     supabaseId: 6,
     supabaseNames: ['Hinang', 'Hinang Building'],
-    image: "/images/hinang.jpg",
-    logo: "/images/logo cegs.jpg",
-    gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)",
-    model3d: "/models/hinang.draco.glb",
-    desc: "Home of the College of Engineering and Geosciences (CEGS), providing programs in Civil, Electrical, and Mechanical Engineering. Features laboratories, drafting rooms, and workshops for hands-on technical education.",
-    depts: [
-      { icon: "⚙️", name: "College of Engineering & Geosciences", sub: "All Floors" },
-      { icon: "🏗️", name: "Civil Engineering Lab", sub: "Ground Floor" },
-      { icon: "⚡", name: "Electrical Engineering Lab", sub: "Floor 2" },
-      { icon: "🔧", name: "Mechanical Workshop", sub: "Floor 3" },
-    ],
-    contact: { phone: "(085) 341-2322", email: "cegs@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)"
   },
   "kinaadman_hall": {
     glbName: "KINAADMAN HALL",
-    name: "Kinaadman Hall", shortName: "Kinaadman", type: "Academic Hall", emoji: "🎓",
+    name: "Kinaadman Hall", shortName: "Kinaadman", emoji: "🎓",
     supabaseId: 5,
     supabaseNames: ['Kinaadman', 'Kinaadman Hall'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)",
-    model3d: "/models/kinaadman.draco.glb",
-    desc: "Named after the Bisaya word for knowledge, Kinaadman Hall is the intellectual hub of the campus. It houses the College of Humanities, Arts, and Social Sciences (CHASS) alongside the University Research Center.",
-    depts: [
-      { icon: "📚", name: "College of Humanities, Arts & Social Sciences", sub: "Floors 1–3" },
-      { icon: "🔬", name: "University Research Center", sub: "Floor 4" },
-      { icon: "📖", name: "Library Annex", sub: "Ground Floor" },
-    ],
-    contact: { phone: "(085) 341-2323", email: "chass@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)"
   },
   "hiraya_building": {
     glbName: "Hiraya Building",
-    name: "Hiraya Building", shortName: "Hiraya", type: "Academic Building", emoji: "🌟",
+    name: "Hiraya Building", shortName: "Hiraya", emoji: "🌟",
     supabaseId: 3,
     supabaseNames: ['Hiraya', 'Hiraya Building'],
-    image: "/images/hiraya.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)",
-    model3d: "/models/hiraya.draco.glb",
-    desc: "The Hiraya Building supports the College of Agriculture and Natural Resources (CANR) and the College of Fisheries. It offers programs and research facilities centered on sustainable agriculture, aquaculture, and environmental science.",
-    depts: [
-      { icon: "🌾", name: "College of Agriculture & Natural Resources", sub: "Floors 1–2" },
-      { icon: "🐟", name: "College of Fisheries", sub: "Floor 3" },
-      { icon: "🧪", name: "Agricultural Science Labs", sub: "Ground Floor" },
-    ],
-    contact: { phone: "(085) 341-2324", email: "canr@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)"
   },
   "batok_hall": {
     glbName: "BATOK HALL",
-    name: "Batok Hall", shortName: "Batok", type: "Multi-Purpose Hall", emoji: "🏟",
+    name: "Batok Hall", shortName: "Batok", emoji: "🏟",
     supabaseId: 4,
     supabaseNames: ['Batok', 'Batok Hall'],
-    image: "/images/batok.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)",
-    model3d: "/models/nsb-batok.draco.glb",
-    desc: "The primary venue for university-wide events, convocations, commencement ceremonies, and large-scale student activities. Batok Hall seats over 1,000 people and is equipped with full audio-visual systems.",
-    depts: [
-      { icon: "🏢", name: "Events & Facilities Office", sub: "Ground Floor" },
-      { icon: "🎤", name: "Main Auditorium", sub: "Main Hall" },
-      { icon: "🎪", name: "Student Activity Center", sub: "Side Wing" },
-    ],
-    contact: { phone: "(085) 341-2325", email: "events@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)"
   },
   "new_administrative_bldg": {
     glbName: "NEW ADMINISTRATIVE BUILDING",
-    name: "New Admin Building", shortName: "Admin", type: "Administration", emoji: "🏢",
+    name: "New Admin Building", shortName: "Admin", emoji: "🏢",
     supabaseId: 1,
     supabaseNames: ['New Administration Building', 'New Admin Building', 'Admin'],
-    image: "/images/new admin.jpeg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)",
-    model3d: "/models/textured-admin-building.draco.glb",   // ← lazy-loaded on demand
-    desc: "The central hub for all administrative operations of Caraga State University. Houses the Office of the President, University Registrar, Finance Division, and student support services. One-stop for all official university transactions.",
-    depts: [
-      { icon: "🎓", name: "Office of the University President", sub: "Floor 4" },
-      { icon: "📋", name: "University Registrar's Office", sub: "Ground Floor" },
-      { icon: "💰", name: "Finance & Accounting Division", sub: "Floor 2" },
-      { icon: "👥", name: "Student Affairs & Services", sub: "Floor 3" },
-      { icon: "📢", name: "Public Information Office", sub: "Floor 1" },
-    ],
-    contact: { phone: "(085) 341-2300", email: "admin@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)"
   },
   "state-of-the-art-library": {
     glbName: "STATE-OF-THE-ART LIBRARY",
-    name: "State-of-the-Art Library", shortName: "Library", type: "Library / Learning Hub", emoji: "📖",
+    name: "State-of-the-Art Library", shortName: "Library", emoji: "📖",
     supabaseId: 11,
     supabaseNames: ['Library', 'State-of-the-Art Library'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
-    model3d: "/models/textured-library.draco.glb",
-    desc: "Caraga State University's main campus library. Houses vast print collections, multimedia centers, digital learning lounges, research archives, and open study areas for all student levels.",
-    depts: [
-      { icon: "📚", name: "Circulation & Reference Section", sub: "Floor 1" },
-      { icon: "🖥️", name: "E-Library & Multimedia Lounge", sub: "Floor 2" },
-      { icon: "🔍", name: "Graduate Research Section", sub: "Floor 3" }
-    ],
-    contact: { phone: "(085) 341-2350", email: "library@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)"
   },
   "kalinaw": {
     glbName: "KALINAW",
-    name: "Kalinaw Hall", shortName: "Kalinaw", type: "Guest House & Seminar Center", emoji: "🏨",
+    name: "Kalinaw Hall", shortName: "Kalinaw", emoji: "🏨",
     supabaseId: 10,
     supabaseNames: ['Kalinaw', 'Kalinaw Hall'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)",
-    desc: "Acts as the university's prime guest facility, lodging services, and executive seminar workspace, providing high-quality hospitality accommodations for visiting scholars and events.",
-    depts: [
-      { icon: "🛏️", name: "Guest Suites & Dormitories", sub: "Floors 2–3" },
-      { icon: "🎙️", name: "Executive Seminar Rooms", sub: "Floor 1" },
-      { icon: "☕", name: "Social & Catering Services", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2361", email: "kalinaw@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)"
   },
   "csu_student_center": {
     glbName: "CSU STUDENT CENTER",
-    name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", type: "Student Services", emoji: "🏢",
+    name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", emoji: "🏢",
     interactive: false,
     supabaseId: 19,
     supabaseNames: ['Student Center', 'CSU Student Center'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
-    desc: "The nerve center for all student activities, student government leadership meetings, publications, and student welfare services.",
-    depts: [
-      { icon: "⚖️", name: "University Student Council Office", sub: "Floor 2" },
-      { icon: "📰", name: "Gold Collar Publications", sub: "Floor 2" },
-      { icon: "🎭", name: "Organization Workspaces", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2370", email: "studentcenter@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
   },
   "ced_building": {
     glbName: "CED BUILDING",
-    name: "CED Building", shortName: "CED", type: "Academic Building", emoji: "🏫",
-    supabaseId: 7,          // Building_ID in Supabase BUILDINGS table
-    supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],  // Supabase name aliases
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo cegs.jpg",
-    gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)",
-    desc: "Houses the College of Education (CED). Dedicated to training and preparing the next generation of educators, instructors, and specialists.",
-    depts: [
-      { icon: "🍎", name: "Elementary & Secondary Education", sub: "Floor 1" },
-      { icon: "🏃", name: "Physical Education Department", sub: "Floor 2" },
-      { icon: "📖", name: "Professional Education Department", sub: "Floor 3" }
-    ],
-    contact: { phone: "(085) 341-2330", email: "ced@csu.edu.ph" }
+    name: "CED Building", shortName: "CED", emoji: "🏫",
+    supabaseId: 7,
+    supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],
+    gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)"
   },
   "caa_building": {
     glbName: "CAA BUILDING",
-    name: "CAA Building", shortName: "CAA", type: "Academic Building", emoji: "🌾",
+    name: "CAA Building", shortName: "CAA", emoji: "🌾",
     supabaseId: 8,
     supabaseNames: ['CAA', 'CAA Building'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo cegs.jpg",
-    gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)",
-    desc: "College of Agriculture and Forestry. Equipped with laboratories for soil studies, plant sciences, and research spaces supporting campus agricultural farms.",
-    depts: [
-      { icon: "🌱", name: "Agricultural Science Dept", sub: "Floor 1" },
-      { icon: "🌲", name: "Forestry & Silviculture Section", sub: "Floor 2" }
-    ],
-    contact: { phone: "(085) 341-2340", email: "caa@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)"
   },
   "dost": {
     glbName: "DOST",
-    name: "DOST Building", shortName: "DOST", type: "Research Center", emoji: "🔬",
+    name: "DOST Building", shortName: "DOST", emoji: "🔬",
     supabaseId: 15,
     supabaseNames: ['DOST Building', 'DOST'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #0f2c59 0%, #205090 100%)",
-    desc: "Department of Science and Technology research center. Hosts joint innovation labs, meteorological research units, and regional development initiatives.",
-    depts: [
-      { icon: "🔬", name: "CSU-DOST Regional Laboratory", sub: "Floor 1" },
-      { icon: "🛰️", name: "Geospatial Research Center", sub: "Floor 2" }
-    ],
-    contact: { phone: "(085) 341-2390", email: "dost@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #0f2c59 0%, #205090 100%)"
   },
   "food_innovation_center": {
     glbName: "FOOD INNOVATION CENTER",
-    name: "Food Innovation Center", shortName: "FIC", type: "Research & Development Center", emoji: "🍎",
+    name: "Food Innovation Center", shortName: "FIC", emoji: "🍎",
     interactive: false,
     supabaseId: 18,
     supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo cegs.jpg",
-    gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)",
-    model3d: "/models/food%20technology%20center.draco.glb",
-    desc: "Dedicated to local food technology development, offering testing laboratories and processing machinery for food scientists and agricultural graduates.",
-    depts: [
-      { icon: "🧪", name: "Food Testing Lab", sub: "Floor 1" },
-      { icon: "⚙️", name: "Product Development Wing", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2388", email: "fic@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)"
   },
   "hostel": {
     glbName: "UNIVERSITY HOSTEL",
-    name: "University Hostel", shortName: "Hostel", type: "Accommodation", emoji: "🏨",
+    name: "University Hostel", shortName: "Hostel", emoji: "🏨",
     interactive: false,
     supabaseId: 16,
     supabaseNames: ['Hostel', 'University Hostel'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)",
-    model3d: "/models/map/HOSTEL.glb",
-    desc: "Campus hostel facility providing lodging services, conference spaces, and visitor suites for incoming guests and scholars.",
-    depts: [
-      { icon: "🛏️", name: "Guest Accommodations", sub: "Floors 1–2" },
-      { icon: "🍽️", name: "Lobby Dining area", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2365", email: "hostel@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)"
   },
   "school_of_medicine_(_under_cons_)": {
     glbName: "SCHOOL OF MEDICINE ( UNDER CONS. )",
-    name: "School of Medicine", shortName: "Medicine", type: "Under Construction", emoji: "🏥",
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)",
-    desc: "Future campus building dedicated to the upcoming College of Medicine, designed to house advanced clinical laboratories and simulation classrooms.",
-    depts: [
-      { icon: "🏗️", name: "Construction Site - Under Development", sub: "N/A" }
-    ],
-    contact: { phone: "(085) 341-2300", email: "medicine.project@csu.edu.ph" }
+    name: "School of Medicine", shortName: "Medicine", emoji: "🏥",
+    gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)"
   },
   "csu_gym": {
     glbName: "Gymnasium",
-    name: "University Gymnasium", shortName: "Gymnasium", type: "Sports Complex", emoji: "🏟",
+    name: "University Gymnasium", shortName: "Gymnasium", emoji: "🏟",
     supabaseId: 13,
     supabaseNames: ['CSU Gymnasium', 'University Gymnasium', 'Gym'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)",
-    model3d: "/models/textured-gym-building.draco.glb",
-    desc: "Future state-of-the-art sports arena for university athletics, concerts, cultural pageants, and campus gatherings.",
-    depts: [
-      { icon: "🏗️", name: "Construction Site - Under Development", sub: "N/A" }
-    ],
-    contact: { phone: "(085) 341-2300", email: "gym.project@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)"
   },
   "old_administrative_building": {
     glbName: "OLD ADMINISTRATIVE BUILDING",
-    name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", type: "Academic Support", emoji: "🏢",
+    name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", emoji: "🏢",
     supabaseId: 2,
     supabaseNames: ['Old Administration Building', 'Old Admin Building'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)",
-    desc: "The legacy administrative center, now housing auxiliary units, faculty offices, and legacy records departments.",
-    depts: [
-      { icon: "📦", name: "Auxiliary Records Office", sub: "Floor 1" },
-      { icon: "👥", name: "Faculty Lounge & Offices", sub: "Floor 2" }
-    ],
-    contact: { phone: "(085) 341-2305", email: "oldadmin@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
   },
-  "alumni_office": {
-    glbName: "ALUMNI OFFICE",
-    name: "Alumni Office", shortName: "Alumni Office", abbrev: "Alumni", type: "Administration", emoji: "🤝",
-    interactive: false,
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)",
-    desc: "Mainquarters for the CSU Alumni Association, managing alumni databases, networking, and annual reunions.",
-    depts: [
-      { icon: "👥", name: "Alumni Relations Desk", sub: "Floor 1" },
-      { icon: "🏆", name: "Alumni Heritage Hall", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2311", email: "alumni@csu.edu.ph" }
-  },
-
   "old_cas": {
     glbName: "OLD CAS BUILDING",
-    name: "Old CAS Building", shortName: "Old CAS", type: "Academic Building", emoji: "🏫",
+    name: "Old CAS Building", shortName: "Old CAS", emoji: "🏫",
     interactive: false,
     supabaseId: 20,
     supabaseNames: ['Old CAS', 'Old CAS Building'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo ccis.jpg",
-    gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)",
-    model3d: "/models/old_cas.draco.glb",
-    desc: "Original College of Arts and Sciences building, now serving as additional academic space for various university departments and administrative units.",
-    depts: [
-      { icon: "📚", name: "Arts & Sciences Departments", sub: "All Floors" },
-    ],
-    contact: { phone: "(085) 341-2300", email: "cas@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)"
   },
   "sports_office": {
     glbName: "ROTC OFFICE",
-    name: "Sports Office", shortName: "Sports Office", type: "Athletics & Sports", emoji: "🏆",
+    name: "Sports Office", shortName: "Sports Office", emoji: "🏆",
     interactive: false,
     supabaseId: 14,
     supabaseNames: ['PE Building', 'Sports Office'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
-    model3d: "/models/sports_office.draco.glb",
-    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
-    depts: [
-      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
-      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
-    ],
-    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
-
   "Villares": {
-    name: "Villares", shortName: "Villares", type: "Athletics & Sports", emoji: "🏆",
+    name: "Villares", shortName: "Villares", emoji: "🏆",
     supabaseId: 9,
     supabaseNames: ['Villares'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
-    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
-    depts: [
-      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
-      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
-    ],
-    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
-  "Annex 3": {
-    name: "Annex 3", shortName: "Annex 3", type: "Athletics & Sports", emoji: "🏆",
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
-    model3d: "/models/sports_office.draco.glb",
-    desc: "Headquarters of the University Athletics program, managing varsity teams, intramural leagues, sports events, and student athletic development.",
-    depts: [
-      { icon: "⚽", name: "University Athletics Office", sub: "Ground Floor" },
-      { icon: "🏃", name: "Varsity & Intramurals", sub: "Ground Floor" },
-    ],
-    contact: { phone: "(085) 341-2380", email: "sports@csu.edu.ph" }
+  "ched_lgu": {
+    glbName: "CHED_LGU -",
+    name: "CHED-LGU", shortName: "CHED-LGU", abbrev: "CHED-LGU", emoji: "🏛",
+    supabaseId: null,
+    supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
+    gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
   },
 
-
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-  // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-  // Keys below use glbName so _findNode() can locate them precisely.
   "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
   "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", interactive: false },
   "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", interactive: false },
@@ -454,7 +251,6 @@ const BUILDING_DATA = {
   "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
   "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
   "guard_house001": { glbName: "GUARD HOUSE.001", name: "Guard House (Gate)", shortName: "Guard House", interactive: false },
-
   "harrison_statue": { glbName: "HARRISON STATUE", name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
   "ochoa_statue": { glbName: "OCHOA STATUE", name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
   "green_house": { glbName: "GREEN HOUSE", name: "Green House", shortName: "Green House", interactive: false },
@@ -479,29 +275,22 @@ const BUILDING_DATA = {
   "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
   "bodega": { glbName: "BODEGA", name: "Bodega", shortName: "Bodega", interactive: false },
 
-  // ── ADDITIONAL CAMPUS STRUCTURES ──────────────────────────────────────────
+  // ── ADDITIONAL CAMPUS STRUCTURES ──
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
   "alumni_office": {
-    name: "Alumni Center", shortName: "Alumni Center", type: "Administrative Unit", emoji: "🎓",
+    name: "Alumni Center", shortName: "Alumni Center", emoji: "🎓",
     interactive: false,
     supabaseId: 17,
     supabaseNames: ['Alumni Center', 'Alumni Office'],
-    image: "/images/kinaadman.jpg",
-    logo: "/images/logo chass.jpg",
-    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)",
-    desc: "Serves the Caraga State University Alumni Association, managing alumni records, events, and community engagements.",
-    depts: [
-      { icon: "🎓", name: "Alumni Affairs Office", sub: "Ground Floor" }
-    ],
-    contact: { phone: "(085) 341-2300", email: "alumni@csu.edu.ph" }
+    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
+  "Annex 3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
   "amante_building": { name: "Amante Building", shortName: "Amante Bldg.", interactive: false },
   "annex_2_(old_ladies_dorm)": { name: "Annex 2 (Old Ladies Dorm)", shortName: "Annex 2", interactive: false },
   "annex_3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
   "atm_machine_landbank": { name: "ATM - Landbank", shortName: "ATM Landbank", interactive: false },
   "atm_machine_pnb": { name: "ATM - PNB", shortName: "ATM PNB", interactive: false },
   "bio_diagnostic_laboratory": { name: "Bio-Diagnostic Laboratory", shortName: "Bio-Diag Lab", interactive: false },
-  "bodega": { name: "Bodega", shortName: "Bodega", interactive: false },
   "bookstore_and_orgms_office": { name: "Bookstore & Orgs Office", shortName: "Bookstore", interactive: false },
   "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", interactive: false },
   "caa_layering_house": { name: "CAA Layering House", shortName: "Layering House", interactive: false },
@@ -514,20 +303,6 @@ const BUILDING_DATA = {
   "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
   "ccard_office": { name: "CCARD Office", shortName: "CCARD Office", interactive: false },
   "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
-  "ched_lgu": {
-    glbName: "CHED_LGU -",
-    name: "CHED-LGU Building", shortName: "CHED-LGU", abbrev: "CHED-LGU", type: "Government Satellite Office", emoji: "🏛",
-    supabaseId: null,
-    supabaseNames: ['CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
-    image: "/images/kinaadman.jpg",
-    gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)",
-    desc: "The Commission on Higher Education (CHED) satellite office within the CSU campus. Serves as a coordination point between the university and the national higher education regulatory body.",
-    depts: [
-      { icon: "🏛", name: "CHED Regional Office", sub: "Ground Floor" },
-      { icon: "📋", name: "Higher Education Coordination Desk", sub: "Floor 1" }
-    ],
-    contact: { phone: "(085) 341-2300", email: "ched@csu.edu.ph" }
-  },
   "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
   "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
   "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
@@ -542,11 +317,9 @@ const BUILDING_DATA = {
   "mechanical_dryer": { name: "Mechanical Dryer", shortName: "Mech. Dryer", interactive: false },
   "micoriza_office": { name: "Micoriza Office", shortName: "Micoriza Office", interactive: false },
   "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
-  "oatc": { name: "OATC", shortName: "OATC", interactive: false },
   "old_ccaarrd_building": { name: "Old CCAARRD Building", shortName: "Old CCAARRD", interactive: false },
   "old_cegsttloresearch_services_office": { name: "Old Research Services Office", shortName: "Old Research Ofc.", interactive: false },
   "old_farm_mechanization_center": { name: "Old Farm Mechanization Center", shortName: "Old Farm Mech.", interactive: false },
-  "power_house": { name: "Power House", shortName: "Power House", interactive: false },
   "power_house001": { name: "Power House", shortName: "Power House", interactive: false },
   "rooting_recovery": { name: "Rooting Recovery Area", shortName: "Rooting Area", interactive: false },
   "rotc_office": { name: "ROTC Office", shortName: "ROTC Office", interactive: false },
@@ -1158,11 +931,12 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   const buildingDesc = data.desc || '';
   const buildingImg = data.image || '/images/kinaadman.jpg';
 
-  // Set building logo
+  // Set building logo (prioritizes Supabase Logo_URL)
+  const logoUrl = data.Logo_URL || data.logo;
   const iconEl = document.getElementById('panel-icon');
   if (iconEl) {
-    if (data.logo) {
-      iconEl.innerHTML = `<img src="${data.logo}" />`;
+    if (logoUrl) {
+      iconEl.innerHTML = `<img src="${logoUrl}" alt="${data.name} logo" />`;
       iconEl.style.background = 'transparent';
     } else {
       iconEl.textContent = data.emoji || '🏛';
@@ -1174,7 +948,6 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   if (imgIconEl) imgIconEl.style.display = 'none';
 
   set('panel-name', buildingName);
-  set('panel-type', data.type || 'Building');
   set('panel-desc', buildingDesc);
 
   const imgEl = document.getElementById('panel-img-bg');
@@ -1283,6 +1056,15 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
         imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
       }
 
+      // Check and update live building logo from Supabase Logo_URL
+      const dbLogo = dbBuilding.Logo_URL || dbBuilding.logo_url;
+      if (dbLogo && iconEl) {
+        data.Logo_URL = dbLogo;
+        data.logo = dbLogo;
+        iconEl.innerHTML = `<img src="${dbLogo}" alt="${dbBuilding.Building_name || data.name} logo" />`;
+        iconEl.style.background = 'transparent';
+      }
+
       // Check and attach live Supabase 3D model URL
       const liveModelUrl = extractModelUrl(dbBuilding);
       if (liveModelUrl) {
@@ -1293,16 +1075,37 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
         }
       }
 
-      const hasSupabaseData = (
-        dbBuilding.ROOMS?.length > 0 ||
-        dbBuilding.OFFICES?.length > 0 ||
-        dbBuilding.FACILITIES?.length > 0
+      // Dynamic Faculties & Offices from Supabase
+      const hasSupabaseRooms = (
+        (dbBuilding.ROOMS && dbBuilding.ROOMS.length > 0) ||
+        (dbBuilding.OFFICES && dbBuilding.OFFICES.length > 0) ||
+        (dbBuilding.FACILITIES && dbBuilding.FACILITIES.length > 0)
       );
 
-      if (hasSupabaseData && deptsWrap && deptsList) {
-        const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
-        renderFloorSection(floors, deptsList);
-        deptsWrap.style.display = '';
+      if (deptsWrap && deptsList) {
+        if (hasSupabaseRooms) {
+          const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
+          renderFloorSection(floors, deptsList);
+          deptsWrap.style.display = '';
+        } else {
+          deptsList.innerHTML = '';
+          deptsWrap.style.display = 'none';
+        }
+      }
+
+      // Dynamic Contact info from Supabase
+      const dbPhone = dbBuilding.Phone_number || dbBuilding.phone_number || dbBuilding.Contact_Number || dbBuilding.contact_number || dbBuilding.Phone || dbBuilding.phone || '';
+      const dbEmail = dbBuilding.Contact_Email || dbBuilding.contact_email || dbBuilding.Email || dbBuilding.email || '';
+
+      if (contactWrap && contactContent) {
+        if (dbPhone || dbEmail) {
+          contactContent.innerHTML =
+            (dbPhone ? `📞 ${dbPhone}<br>` : '') +
+            (dbEmail ? `✉️ ${dbEmail}` : '');
+          contactWrap.style.display = '';
+        } else {
+          contactWrap.style.display = 'none';
+        }
       }
     }
   } catch (err) {
