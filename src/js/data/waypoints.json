@@ -213,5 +213,47 @@
     "ched_lgu":                  "bld_ched_lgu",
     "sports_office":             "bld_sports",
     "Villares":                  "bld_villares"
+  },
+
+  "buildingRoadHighlights": {
+    "caa_building": ["road 1", "road 2"],
+    "caa": ["road 1", "road 2"],
+
+    "ced_building": ["road 1", "road 2"],
+    "ced": ["road 1", "road 2"],
+
+    "state-of-the-art-library": ["road 22", "road 30", "road 5", "road 1"],
+    "library": ["road 22", "road 30", "road 5", "road 1"],
+
+    "batok_hall": ["road 1", "road 5", "road 6", "road 24", "road 26", "road 31"],
+    "batok": ["road 1", "road 5", "road 6", "road 24", "road 26", "road 31"],
+
+    "kalinaw": ["road 22", "road 30", "road 5", "road 1"],
+
+    "new_administrative_bldg": ["road 21", "road 31", "road 26", "road 7"],
+    "new_admin": ["road 21", "road 31", "road 26", "road 7"],
+
+    "old_administrative_building": ["road 21", "road 31", "road 26", "road 7", "road 36"],
+    "old_admin": ["road 21", "road 31", "road 26", "road 7", "road 36"],
+
+    "kinaadman_hall": ["road 27", "road 25", "road 26", "road 35"],
+    "kinaadman": ["road 27", "road 25", "road 26", "road 35"],
+
+    "csu_gym": ["road 34", "road 27", "road 25", "road 26", "road 33"],
+    "gymnasium": ["road 34", "road 27", "road 25", "road 26", "road 33"],
+
+    "hiraya_building": ["road 25", "road 26", "road 32"],
+    "hiraya": ["road 25", "road 26", "road 32"],
+
+    "masawa_building": ["road 25", "road 26", "road 32"],
+    "masawa": ["road 25", "road 26", "road 32"],
+
+    "hinang_building": ["road 25", "road 26", "road 32"],
+    "hinang": ["road 25", "road 26", "road 32"],
+
+    "Villares": ["road 12"],
+    "villares": ["road 12"],
+
+    "dost": ["road 12"]
   }
 }

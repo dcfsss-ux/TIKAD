@@ -5,8 +5,7 @@
  * Called from mapOverlay.js to handle building click → route highlight.
  */
 
-import { loadGraph, findNearestWaypoint, computeFullRoute } from './pathfinding.js';
-import { resolveEntranceExit } from './gateStrategy.js';
+import { loadGraph, findNearestWaypoint, getBuildingExitRouteSegments } from './pathfinding.js';
 import { buildMeshLookup, highlightSegments, clearHighlight, hasActiveHighlight } from './highlightRenderer.js';
 import waypointsData from './data/waypoints.json';
 
@@ -33,11 +32,11 @@ export function initNavigation(campusBaseScene) {
 }
 
 /**
- * Handle a building being selected — compute and highlight the route.
+ * Handle a building being selected — highlight ALL roads connected to its exit (e.g. 2nd Gate for Kinaadman) & entrance gate.
  *
  * @param {string} buildingKey — the BUILDING_DATA key (e.g. "masawa_building")
  * @param {number[]} [buildingWorldPos] — optional [x, y, z] world position of the building
- * @returns {boolean} — true if a route was highlighted, false otherwise
+ * @returns {boolean} — true if roads were highlighted, false otherwise
  */
 export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
   if (!isInitialized || !graph) {
@@ -48,7 +47,15 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
   // 1. Clear any existing route highlight
   clearRouteHighlight();
 
-  // 2. Resolve building key to its waypoint ID
+  // 2. Check if the building has an explicit manual list of road segments in waypoints.json
+  const manualSegments = _getManualRoadSegments(buildingKey);
+  if (manualSegments && manualSegments.length > 0) {
+    highlightSegments(manualSegments);
+    console.log(`[Navigation] 🎯 (Manual Override) Highlighted road segments for "${buildingKey}":`, manualSegments);
+    return true;
+  }
+
+  // 3. Resolve building key to its waypoint ID
   let buildingWaypointId = _resolveBuildingWaypoint(buildingKey);
 
   // If no explicit mapping, try snapping to nearest waypoint by position
@@ -61,27 +68,38 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
     return false;
   }
 
-  // 3. Determine entrance and exit gates
-  const { entrance, exit } = resolveEntranceExit(buildingWaypointId, graph);
+  // 4. Highlight roads connecting the building to its exit gate (e.g. 2nd Gate for Kinaadman) and entrance gate
+  const segments = getBuildingExitRouteSegments(graph, buildingWaypointId);
 
-  if (!entrance || !exit) {
-    console.warn(`[Navigation] Could not resolve gates for "${buildingKey}"`);
+  if (!segments || segments.length === 0) {
+    console.warn(`[Navigation] No exit/entrance road segments found for "${buildingKey}"`);
     return false;
   }
 
-  // 4. Compute the full route: gate → building → gate
-  const result = computeFullRoute(graph, entrance, buildingWaypointId, exit);
+  // 5. Highlight those connected entrance and exit roads
+  highlightSegments(segments);
 
-  if (!result || result.segments.length === 0) {
-    console.warn(`[Navigation] No route found for "${buildingKey}" (entrance: ${entrance}, exit: ${exit})`);
-    return false;
-  }
-
-  // 5. Highlight the road segments
-  highlightSegments(result.segments);
-
-  console.log(`[Navigation] 🗺️ Route: ${entrance} → ${buildingWaypointId} → ${exit} (${result.segments.length} segments)`);
+  console.log(`[Navigation] 🛣️ Highlighted ${segments.length} exit/entrance connected roads for "${buildingKey}":`, segments);
   return true;
+}
+
+/**
+ * Check if a building key has an explicit array of road segments in waypoints.json -> buildingRoadHighlights
+ */
+function _getManualRoadSegments(buildingKey) {
+  if (!waypointsData || !waypointsData.buildingRoadHighlights) return null;
+  const map = waypointsData.buildingRoadHighlights;
+
+  if (map[buildingKey]) return map[buildingKey];
+
+  const cleanKey = buildingKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+  for (const [k, segs] of Object.entries(map)) {
+    if (k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey) {
+      return segs;
+    }
+  }
+
+  return null;
 }
 
 /**

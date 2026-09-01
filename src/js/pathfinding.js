@@ -263,6 +263,88 @@ export function computeFullRoute(graph, entranceGateId, buildingWaypointId, exit
   return { path: fullPath, segments };
 }
 
+/**
+ * Get ONLY the road segments that are directly near/connected to the building's entrance/exit.
+ *
+ * @param {Object} graph — from loadGraph()
+ * @param {string} buildingWaypointId — the waypoint ID of the building
+ * @returns {string[]} — array of segment names near the building entrance/exit
+ */
+export function getBuildingEntranceSegments(graph, buildingWaypointId) {
+  if (!graph || !graph.adjacency.has(buildingWaypointId)) return [];
+
+  const segments = new Set();
+  const directEdges = graph.adjacency.get(buildingWaypointId) || [];
+
+  // 1. Direct segment connecting the building entrance to the road network
+  for (const edge of directEdges) {
+    if (edge.segmentName) {
+      segments.add(edge.segmentName);
+    }
+
+    // 2. Immediate crossing segments attached to the junction right outside the building entrance
+    const junctionEdges = graph.adjacency.get(edge.id) || [];
+    for (const jEdge of junctionEdges) {
+      if (jEdge.segmentName) {
+        segments.add(jEdge.segmentName);
+      }
+    }
+  }
+
+  return Array.from(segments);
+}
+
+/**
+ * Get ALL road segments connecting a building to its exit gate location (e.g., 2nd Gate for Kinaadman, Gate 4 for Hiraya)
+ * and entrance gate location, highlighting ONLY those exit and entrance connected roads.
+ *
+ * @param {Object} graph — from loadGraph()
+ * @param {string} buildingWaypointId — the building's waypoint ID
+ * @returns {string[]} — array of segment names connecting the building to its exit/entrance gates
+ */
+export function getBuildingExitRouteSegments(graph, buildingWaypointId) {
+  if (!graph || !graph.nodes.has(buildingWaypointId)) return [];
+
+  const segmentSet = new Set();
+
+  // 1. Find nearest exit gate location for this building (e.g. gate_second for Kinaadman)
+  const nearestExitGate = findNearestGate(graph, buildingWaypointId, graph.gateIds);
+
+  if (nearestExitGate) {
+    const exitPath = findPath(graph, buildingWaypointId, nearestExitGate);
+    if (exitPath) {
+      const exitSegs = pathToSegments(graph, exitPath);
+      exitSegs.forEach(s => segmentSet.add(s));
+    }
+  }
+
+  // 2. Include path to main entrance gate if different from nearest exit gate
+  const entranceGate = "gate_main";
+  if (entranceGate && entranceGate !== nearestExitGate) {
+    const entrancePath = findPath(graph, entranceGate, buildingWaypointId);
+    if (entrancePath) {
+      const entranceSegs = pathToSegments(graph, entrancePath);
+      entranceSegs.forEach(s => segmentSet.add(s));
+    }
+  }
+
+  // 3. Include direct edges at the building entrance waypoint
+  const directEdges = graph.adjacency.get(buildingWaypointId) || [];
+  for (const edge of directEdges) {
+    if (edge.segmentName) segmentSet.add(edge.segmentName);
+  }
+
+  // 4. Include direct edges at the exit gate node
+  if (nearestExitGate) {
+    const gateEdges = graph.adjacency.get(nearestExitGate) || [];
+    for (const edge of gateEdges) {
+      if (edge.segmentName) segmentSet.add(edge.segmentName);
+    }
+  }
+
+  return Array.from(segmentSet);
+}
+
 
 // ── Internal helpers ──────────────────────────────────────────────────────────
 
