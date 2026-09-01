@@ -11,10 +11,10 @@
   --ft-ink: #ffffff;
 }
 
-.csu-features-team {
+.csu-features {
   max-width: 100%;
   margin: 0 auto;
-  padding: 100px 32px;
+  padding: 44px 32px 44px;
   position: relative;
   z-index: 2;
   background: radial-gradient(circle at 85% 20%, rgba(0, 102, 0, 0.45) 0%, transparent 55%),
@@ -23,6 +23,32 @@
   color: var(--ft-ink);
 }
 
+.csu-team {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 40px;
+  position: relative;
+  z-index: 2;
+  background: radial-gradient(circle at 85% 20%, rgba(0, 102, 0, 0.45) 0%, transparent 55%),
+              radial-gradient(circle at 10% 80%, rgba(0, 85, 0, 0.4) 0%, transparent 50%),
+              linear-gradient(180deg, #002200 0%, #003300 50%, #002600 100%);
+  color: var(--ft-ink);
+}
+
+.csu-features-team {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 44px 32px 44px;
+  position: relative;
+  z-index: 2;
+  background: radial-gradient(circle at 85% 20%, rgba(0, 102, 0, 0.45) 0%, transparent 55%),
+              radial-gradient(circle at 10% 80%, rgba(0, 85, 0, 0.4) 0%, transparent 50%),
+              linear-gradient(180deg, #002200 0%, #003300 50%, #002600 100%);
+  color: var(--ft-ink);
+}
+
+.csu-features::before,
+.csu-team::before,
 .csu-features-team::before {
   content: '';
   position: absolute;
@@ -30,6 +56,53 @@
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23EDDD53' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   z-index: 1;
   pointer-events: none;
+}
+
+.features-inner,
+.team-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.features-header {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 24px;
+}
+
+.team-header {
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto 16px;
+}
+
+.features-header .section-title,
+.team-header .section-title {
+  font-family: 'DM Serif Display', 'Playfair Display', serif;
+  font-weight: 800;
+  font-size: clamp(30px, 3.5vw, 42px);
+  line-height: 1.2;
+  margin: 0 0 6px;
+  color: #ffffff;
+}
+
+.features-header .section-title em,
+.team-header .section-title em {
+  font-style: normal;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.features-header .section-subhead,
+.team-header .section-subhead {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
 }
 
 .split {
@@ -74,8 +147,34 @@
 /* Feature Cards Grid */
 .cards {
   display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.csu-features-team .cards {
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
+}
+
+.team-content-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+@media (max-width: 1080px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card {
