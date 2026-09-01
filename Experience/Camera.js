@@ -25,8 +25,8 @@ export default class Camera {
       (this.sizes.aspect * this.sizes.frustum) / 2,
       this.sizes.frustum / 2,
       -this.sizes.frustum / 2,
-      -500,
-      500,
+      -15000,
+      15000,
     );
 
     this.orthographicCamera.position.x = 8.5;
@@ -49,5 +49,5 @@ export default class Camera {
     this.orthographicCamera.updateProjectionMatrix();
   }
 
-  update() {}
+  update() { }
 }

@@ -6,12 +6,31 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 0;
-  background: linear-gradient(135deg, rgba(0, 51, 0, 0.85) 0%, rgba(0, 85, 0, 0.85) 55%, rgba(0, 153, 0, 0.85) 100%), url('/images/csu.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: #050f05;
   position: relative;
   overflow: hidden;
+}
+
+.hero-bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  transform: translate(-50%, -50%) scale(0.8);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 35, 0, 0.75) 0%, rgba(0, 60, 0, 0.70) 55%, rgba(0, 90, 0, 0.75) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero::before {
@@ -19,20 +38,22 @@
   position: absolute;
   inset: 0;
   background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23EDDD53' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ── HERO CANVAS (particles) ── */
 #hero-canvas {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
 .hero-text {
   padding: 80px 64px 80px 80px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-eyebrow {
@@ -147,325 +168,386 @@
   letter-spacing: 0.06em;
 }
 
-/* ── HERO VISUAL / 3D MODEL CONTAINER ── */
+/* ── HERO VISUAL — holographic floating display ── */
 .hero-visual {
   position: relative;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* ── 3D MODEL CONTAINER — live Three.js hero preview ── */
-#model-3d-container {
-  width: 88%;
-  aspect-ratio: 4/3;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.12);
-  animation: none;
-  position: relative;
-  z-index: 1;
-  background: linear-gradient(135deg, #0a1a0a 0%, #0d2d0d 60%, #003300 100%);
-  cursor: grab;
-}
-
-#model-3d-container:active {
-  cursor: grabbing;
-}
-
-/* ── Loading shimmer overlay ── */
-.hero-shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    110deg,
-    rgba(255,255,255,0.0) 30%,
-    rgba(255,255,255,0.06) 50%,
-    rgba(255,255,255,0.0) 70%
-  );
-  background-size: 200% 100%;
-  animation: shimmer-sweep 1.6s infinite linear;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
   z-index: 2;
 }
 
-@keyframes shimmer-sweep {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* ── Hero badge stays above canvas ── */
-.hero-badge {
-  z-index: 5;
-}
-
-/* ── LEGACY HERO MOCK (fallback) ── */
-.hero-mock {
-  width: 88%;
-  aspect-ratio: 4/3;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(4px);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
-  animation: float 5s ease-in-out infinite;
-}
-
-.mock-bar {
-  background: rgba(0, 51, 0, 0.4);
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.mock-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.mock-body {
-  flex: 1;
-  background: linear-gradient(160deg, #003300 0%, #005500 50%, #009900 100%);
+/* Container: NO card background, NO shadow, transparent */
+#model-3d-container {
+  width: 92%;
+  aspect-ratio: 1/1;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 1;
+  cursor: grab;
+  background: transparent;
+  /* Sitting still vertically (no bobbing) */
 }
 
-.mock-pin {
-  font-size: 48px;
-  animation: bounce 2s infinite;
+#model-3d-container:active { cursor: grabbing; }
+
+#hero-3d-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  transition: opacity 0.3s ease;
 }
 
-.mock-label {
+/* ── Emitter Ring (static glowing circle under model) ── */
+.holo-emitter-ring {
   position: absolute;
-  bottom: 24px;
+  bottom: 12%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.92);
-  padding: 8px 16px;
-  border-radius: 20px;
+  width: 55%;
+  height: 0;
+  padding-bottom: 14%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(249, 220, 7, 0.6);
+  box-shadow:
+    0 0 20px 4px rgba(249, 220, 7, 0.25),
+    inset 0 0 12px 2px rgba(249, 220, 7, 0.1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Pulse Ring (sonar ping) ── */
+.holo-pulse-ring {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%) scale(1);
+  width: 55%;
+  height: 0;
+  padding-bottom: 14%;
+  border-radius: 50%;
+  border: 1px solid rgba(249, 220, 7, 0.5);
+  pointer-events: none;
+  z-index: 0;
+  animation: holo-ping 3.2s ease-out infinite;
+}
+
+@keyframes holo-ping {
+  0%   { transform: translateX(-50%) scale(1); opacity: 0.6; }
+  100% { transform: translateX(-50%) scale(1.65); opacity: 0; }
+}
+
+/* ── Ground Glow (soft radial using CSU Green + Gold Yellow) ── */
+.holo-ground-glow {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 0;
+  padding-bottom: 16%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(0, 153, 0, 0.22) 0%, rgba(249, 220, 7, 0.12) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(12px);
+}
+
+/* ── Scanline (thin light band with CSU Gold Yellow to Orange sweep) ── */
+.holo-scanline {
+  position: absolute;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(249, 220, 7, 0.45), rgba(255, 153, 0, 0.35), transparent);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  animation: holo-scanline 5s 1.5s ease-in-out infinite;
+}
+
+@keyframes holo-scanline {
+  0%   { top: 85%; opacity: 0; }
+  8%   { opacity: 0.7; }
+  92%  { opacity: 0.7; }
+  100% { top: 10%; opacity: 0; }
+}
+
+/* ── Rising Particles ── */
+.holo-particle {
+  position: absolute;
+  bottom: 16%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  animation: holo-particle-rise 4s ease-out infinite;
+}
+
+@keyframes holo-particle-rise {
+  0%   { transform: translateY(0) scale(1); opacity: 0; }
+  10%  { opacity: 0.85; }
+  80%  { opacity: 0.3; }
+  100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLOATING GLASSMORPHISM CHIPS — CSU Emerald background & Gold Yellow borders
+   ═══════════════════════════════════════════════════════════════════════════ */
+.holo-chip {
+  position: absolute;
+  pointer-events: auto;
+  background: rgba(0, 51, 0, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(249, 220, 7, 0.28);
+  border-radius: 22px;
+  padding: 7px 16px;
+  color: #fff;
   font-size: 12px;
   font-weight: 600;
-  color: #003300;
+  z-index: 12;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* ── Google Maps-Style Pin Label anchored directly above building roof ── */
+.holo-pin-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  pointer-events: auto;
+  z-index: 12;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Text block to the LEFT of the marker, right-aligned, NO background box */
+.holo-pin-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.9);
+  padding-top: 1px;
   white-space: nowrap;
 }
 
-.hero-badge {
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(237, 221, 83, 0.35);
-  border-radius: 12px;
-  padding: 12px 18px;
-  color: #fff;
-  font-size: 13px;
-  backdrop-filter: blur(8px);
-}
-
-.hero-badge strong {
-  display: block;
-  font-size: 20px;
+.holo-pin-title {
+  font-size: 15px;
   font-weight: 800;
-  background: var(--gold-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
 }
 
-@media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-visual {
-    display: none;
-  }
-
-  .hero-text {
-    padding: 60px 32px;
-  }
+.holo-pin-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 2px;
+  line-height: 1.2;
 }
 
-/* ── 3D MODEL VIEWER PLACEHOLDER (Cleaned from inline styles) ── */
-.viewer-bar {
-  background: rgba(0, 51, 0, 0.45);
-  padding: 10px 16px;
+.holo-pin-counter {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f9dc07;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+/* Marker Assembly: Badge -> Stem -> Anchor Dot */
+.holo-pin-marker-wrap {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
   flex-shrink: 0;
 }
 
-.viewer-dot {
-  width: 10px;
-  height: 10px;
+/* Circular Icon Badge: CSU Gold background, white ring border, gold glow */
+.holo-pin-badge {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-}
-
-.viewer-dot.red {
-  background: #ff5f57;
-}
-
-.viewer-dot.yellow {
-  background: #febc2e;
-}
-
-.viewer-dot.green {
-  background: #28c840;
-}
-
-.viewer-title {
-  margin-left: 8px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.06em;
-}
-
-.viewer-body {
-  flex: 1;
-  background: linear-gradient(160deg, #003300 0%, #005500 50%, #009900 100%);
+  background: #f9dc07;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 16px rgba(249, 220, 7, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
-  gap: 16px;
+  position: relative;
+  z-index: 2;
 }
 
-.viewer-ring-outer {
-  position: absolute;
-  width: 280px;
-  height: 280px;
+.holo-pin-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
-  border: 1px solid rgba(237, 221, 83, 0.12);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse-ring 3s ease infinite;
 }
 
-.viewer-ring-inner {
-  position: absolute;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  border: 1px solid rgba(237, 221, 83, 0.18);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse-ring 3s ease 0.5s infinite;
+/* Stem: thin vertical line pointing down toward model */
+.holo-pin-stem {
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(to bottom, #ffffff, rgba(255, 255, 255, 0.6));
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+  margin-top: -1px;
 }
 
-.viewer-icon {
-  width: 72px;
-  height: 72px;
-  background: rgba(237, 221, 83, 0.15);
-  border: 2px solid rgba(237, 221, 83, 0.35);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  position: relative;
-  z-index: 1;
-}
-
-.viewer-text {
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.viewer-text-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px;
-  color: #fff;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.viewer-text-sub {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
-  letter-spacing: 0.06em;
-}
-
-.viewer-loading-dots {
-  display: flex;
-  gap: 6px;
-  position: relative;
-  z-index: 1;
-  margin-top: 4px;
-}
-
-.viewer-loading-dot {
+/* Anchor Dot: small white dot pointing down */
+.holo-pin-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(237, 221, 83, 0.6);
+  background: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 14px rgba(249, 220, 7, 0.8);
+  margin-top: -1px;
 }
 
-.viewer-loading-dot:nth-child(1) {
-  animation: dot-bounce 1.2s ease 0s infinite;
-}
-
-.viewer-loading-dot:nth-child(2) {
-  animation: dot-bounce 1.2s ease 0.2s infinite;
-}
-
-.viewer-loading-dot:nth-child(3) {
-  animation: dot-bounce 1.2s ease 0.4s infinite;
-}
-
-.viewer-badge {
+/* ── Circular Left / Right Nav Buttons (CSU Emerald & Gold Yellow) ── */
+.holo-nav-btn {
   position: absolute;
-  bottom: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 51, 0, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(249, 220, 7, 0.5);
+  color: #f9dc07;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 15;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  outline: none;
+}
+
+.holo-nav-prev { left: 4%; }
+.holo-nav-next { right: 4%; }
+
+.holo-nav-btn:hover {
+  background: #f9dc07;
+  color: #003300;
+  border-color: #f9dc07;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 22px rgba(249, 220, 7, 0.55);
+}
+
+.holo-nav-btn:focus-visible {
+  outline: 2px solid #f9dc07;
+  outline-offset: 3px;
+}
+
+/* ── Dot Navigation Chip (bottom-center) ── */
+.holo-chip-dots {
+  bottom: 14%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.92);
-  padding: 6px 16px;
-  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-color: rgba(249, 220, 7, 0.2);
+}
+
+.holo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.holo-dot:hover {
+  background: rgba(249, 220, 7, 0.85);
+  transform: scale(1.25);
+}
+
+/* Active dot: CSU Gold Yellow to Orange gradient pill */
+.holo-dot.active {
+  width: 22px;
+  height: 7px;
+  border-radius: 3.5px;
+  background: linear-gradient(90deg, #f9dc07, #ff9900);
+  box-shadow: 0 0 10px rgba(249, 220, 7, 0.7);
+}
+
+/* ── Loader (centered over model area) ── */
+.hero-3d-loader {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 51, 0, 0.88);
+  backdrop-filter: blur(10px);
+  padding: 16px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(249, 220, 7, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.hero-3d-loader.visible { opacity: 1; visibility: visible; }
+
+.hero-3d-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid rgba(249, 220, 7, 0.25);
+  border-top-color: #f9dc07;
+  border-radius: 50%;
+  animation: holo-spin 0.8s linear infinite;
+}
+
+.hero-3d-loader-text {
   font-size: 11px;
-  font-weight: 600;
-  color: #003300;
-  white-space: nowrap;
-  z-index: 1;
+  color: rgba(255, 255, 255, 0.82);
+  letter-spacing: 0.04em;
 }
 
-@keyframes pulse-ring {
+@keyframes holo-spin { to { transform: rotate(360deg); } }
 
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.06);
-  }
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE: hide visual on small screens
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+  .hero-text { padding: 60px 32px; }
 }
 
-@keyframes dot-bounce {
+/* ═══════════════════════════════════════════════════════════════════════════
+   prefers-reduced-motion: disable ALL decorative animation
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  #model-3d-container,
+  .holo-bob,
+  .holo-chip { animation: none !important; }
 
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
-}
+  .holo-pulse-ring { animation: none !important; opacity: 0; }
+  .holo-scanline   { animation: none !important; opacity: 0; }
+  .holo-particle   { animation: none !important; opacity: 0; }
+  .holo-live-dot   { animation: none !important; }
+}

@@ -60,9 +60,17 @@ export default class Resources extends EventEmitter {
   startLoading() {
     for (const asset of this.assets) {
       if (asset.type === "texture") {
-        this.loaders.textureLoader.load(asset.path, (file) => {
-          this.singleAssetLoaded(asset, file);
-        });
+        this.loaders.textureLoader.load(
+          asset.path,
+          (file) => {
+            this.singleAssetLoaded(asset, file);
+          },
+          undefined,
+          (error) => {
+            console.error(`❌ Failed to load texture ${asset.name} from ${asset.path}:`, error);
+            this.singleAssetLoaded(asset, null);
+          }
+        );
       } else if (asset.type === "glbModel") {
         this.loaders.gltfLoader.load(
           asset.path,
@@ -77,6 +85,7 @@ export default class Resources extends EventEmitter {
           },
           (error) => {
             console.error(`❌ Failed to load ${asset.name} from ${asset.path}:`, error);
+            this.singleAssetLoaded(asset, null);
           }
         );
       }
