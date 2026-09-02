@@ -49,9 +49,13 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
 
   // 2. Check if the building has an explicit manual list of road segments in waypoints.json
   const manualSegments = _getManualRoadSegments(buildingKey);
-  if (manualSegments && manualSegments.length > 0) {
-    highlightSegments(manualSegments);
-    console.log(`[Navigation] 🎯 (Manual Override) Highlighted road segments for "${buildingKey}":`, manualSegments);
+  if (Array.isArray(manualSegments)) {
+    if (manualSegments.length > 0) {
+      highlightSegments(manualSegments);
+      console.log(`[Navigation] 🎯 (Manual Override) Highlighted road segments for "${buildingKey}":`, manualSegments);
+    } else {
+      console.log(`[Navigation] 🎯 (Manual Override) Empty road segments for "${buildingKey}", pathway highlight disabled.`);
+    }
     return true;
   }
 
@@ -90,7 +94,7 @@ function _getManualRoadSegments(buildingKey) {
   if (!waypointsData || !waypointsData.buildingRoadHighlights) return null;
   const map = waypointsData.buildingRoadHighlights;
 
-  if (map[buildingKey]) return map[buildingKey];
+  if (map[buildingKey] !== undefined) return map[buildingKey];
 
   const cleanKey = buildingKey.toLowerCase().replace(/[^a-z0-9]/g, '');
   for (const [k, segs] of Object.entries(map)) {

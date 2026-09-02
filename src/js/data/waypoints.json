@@ -254,6 +254,10 @@
     "Villares": ["road 12"],
     "villares": ["road 12"],
 
-    "dost": ["road 12"]
+    "dost": ["road 12"],
+
+    "ched_lgu": [],
+    "ched-lgu": [],
+    "ched": []
   }
 }
