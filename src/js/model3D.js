@@ -14,7 +14,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { fetchBuildingSeals } from './supabaseClient.js';
+import { fetchBuildingSeals, getHeroShowcaseBuildings } from './supabaseClient.js';
 
 const PREVIEW_MODELS = [
   { key: 'admin', name: 'Admin Building', category: 'Administration', icon: '/images/logo ccis.jpg', path: '/models/textured-admin-building.draco.glb', aliases: ['admin', 'new administration building', 'new admin building', 'administration', 'admin building'] },
@@ -175,10 +175,52 @@ export function initModel3D() {
   // ── Boot Three.js ────────────────────────────────────────────────────────
   _initThreeScene(container, canvas);
   _selectBuildingIndex(0);
-  _syncSupabaseLogos();
+  _syncSupabaseData();
 }
 
-// ── Supabase Logo Synchronization ──────────────────────────────────────────
+// ── Supabase Data Synchronization ──────────────────────────────────────────
+
+async function _syncSupabaseData() {
+  // 1. Try to load hero showcase from Supabase (requires show_in_hero, hero_order, hero_category columns)
+  try {
+    const heroBuildings = await getHeroShowcaseBuildings();
+    if (heroBuildings && heroBuildings.length > 0) {
+      // Replace the PREVIEW_MODELS array content in-place
+      PREVIEW_MODELS.length = 0;
+      heroBuildings.forEach(b => PREVIEW_MODELS.push(b));
+      console.log(`[Model3D] ✅ Loaded ${PREVIEW_MODELS.length} buildings from Supabase hero showcase`);
+
+      // Re-render dots chip to reflect new count
+      const dotsChip = document.getElementById('holo-dots-chip');
+      if (dotsChip) {
+        dotsChip.innerHTML = PREVIEW_MODELS.map((m, idx) =>
+          `<button class="holo-dot ${idx === 0 ? 'active' : ''}" data-index="${idx}" title="${m.name}"></button>`
+        ).join('');
+        dotsChip.querySelectorAll('.holo-dot').forEach(dot => {
+          dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = parseInt(dot.dataset.index, 10);
+            if (!isNaN(idx)) _selectBuildingIndex(idx);
+          });
+        });
+      }
+
+      // Update counter text
+      const pinCounter = document.getElementById('holo-pin-counter');
+      if (pinCounter) pinCounter.textContent = `1 / ${PREVIEW_MODELS.length}`;
+
+      // Re-select index 0 with updated data
+      _selectBuildingIndex(0);
+    } else {
+      console.log('[Model3D] No Supabase hero showcase data — using hardcoded PREVIEW_MODELS as fallback.');
+    }
+  } catch (err) {
+    console.warn('[Model3D] Could not fetch hero showcase from Supabase:', err);
+  }
+
+  // 2. Sync building logos from Supabase regardless
+  _syncSupabaseLogos();
+}
 
 async function _syncSupabaseLogos() {
   try {
