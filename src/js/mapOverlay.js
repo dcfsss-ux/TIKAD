@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
 import { logRoadSegments } from './roadDebugLogger.js';
-import { initNavigation, handleBuildingRoute, clearRouteHighlight } from './interactionHandler.js';
+import { initNavigation, handleBuildingRoute, clearRouteHighlight, hasActiveRoute } from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
   searchCampusEntities,
@@ -692,12 +692,6 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
       }
     });
 
-    // ── Road navigation: highlight route to this building ──────────────────
-    // Get building world position for waypoint snapping
-    const buildingPos = new THREE.Vector3();
-    _box.setFromObject(node);
-    _box.getCenter(buildingPos);
-    handleBuildingRoute(key, [buildingPos.x, buildingPos.y, buildingPos.z]);
   } else {
     console.warn(`No node found for "${key}". Available keys:`, Object.keys(meshIndex));
   }
@@ -737,6 +731,12 @@ function _resetHighlight() {
 
   // Clear road segment route highlights
   clearRouteHighlight();
+
+  const showPathBtn = document.getElementById('panel-showpath-btn');
+  if (showPathBtn) {
+    showPathBtn.classList.remove('active-route-btn');
+    showPathBtn.innerHTML = '<span class="mdi mdi-routes"></span> Show Campus Route';
+  }
 
   if (experience && experience.renderer) {
     experience.renderer.requestRender();
@@ -1016,16 +1016,36 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     const showPathBtn = document.getElementById('panel-showpath-btn');
     if (showPathBtn) {
       showPathBtn.style.display = 'flex';
+
+      // Sync button label/state on panel open based on current active route
+      if (hasActiveRoute()) {
+        showPathBtn.classList.add('active-route-btn');
+        showPathBtn.innerHTML = '<span class="mdi mdi-routes"></span> Hide Campus Route';
+      } else {
+        showPathBtn.classList.remove('active-route-btn');
+        showPathBtn.innerHTML = '<span class="mdi mdi-routes"></span> Show Campus Route';
+      }
+
       showPathBtn.onclick = () => {
-        const node = _findNode(key);
-        let posArray = null;
-        if (node) {
-          const buildingPos = new THREE.Vector3();
-          _box.setFromObject(node);
-          _box.getCenter(buildingPos);
-          posArray = [buildingPos.x, buildingPos.y, buildingPos.z];
+        if (hasActiveRoute()) {
+          clearRouteHighlight();
+          showPathBtn.classList.remove('active-route-btn');
+          showPathBtn.innerHTML = '<span class="mdi mdi-routes"></span> Show Campus Route';
+        } else {
+          const node = _findNode(key);
+          let posArray = null;
+          if (node) {
+            const buildingPos = new THREE.Vector3();
+            _box.setFromObject(node);
+            _box.getCenter(buildingPos);
+            posArray = [buildingPos.x, buildingPos.y, buildingPos.z];
+          }
+          const success = handleBuildingRoute(key, posArray);
+          if (success && hasActiveRoute()) {
+            showPathBtn.classList.add('active-route-btn');
+            showPathBtn.innerHTML = '<span class="mdi mdi-routes"></span> Hide Campus Route';
+          }
         }
-        handleBuildingRoute(key, posArray);
       };
     }
 

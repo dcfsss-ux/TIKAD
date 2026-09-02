@@ -946,6 +946,20 @@
   transform: scale(0.98);
 }
 
+.panel-showpath-btn.active-route-btn {
+  background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
+  border-color: #ff7675;
+  box-shadow: 0 0 12px rgba(192, 57, 43, 0.4);
+}
+
+.panel-showpath-btn.active-route-btn:hover {
+  background: linear-gradient(135deg, #e74c3c 0%, #9b59b6 100%);
+  border-color: #ffffff;
+  box-shadow:
+    0 0 16px rgba(231, 76, 60, 0.6),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
 /* ── MOUSE CONTROL HINT LEGEND CARD ── */
 .controls-hint-card {
   position: absolute;
