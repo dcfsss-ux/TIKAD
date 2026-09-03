@@ -84,47 +84,12 @@ export default class Controls {
     const itemRight = document.getElementById("hint-item-right");
     const itemMiddle = document.getElementById("hint-item-middle");
 
-    let hasInteractedWithCamera = false;
-    let initialTimerExpired = false;
-    let isHovered = false;
     let activeZone = null;
     let wheelTimeout = null;
 
-    const setOpacityState = () => {
-      if (!hintCard) return;
-      if (isHovered) {
-        hintCard.style.opacity = "1";
-      } else if (hasInteractedWithCamera || initialTimerExpired) {
-        hintCard.style.opacity = "0.3";
-      } else {
-        hintCard.style.opacity = "1";
-      }
-    };
-
-    // Initial 4-second full-opacity timer for first-time visual hint
     if (hintCard) {
       hintCard.style.opacity = "1";
-      setTimeout(() => {
-        initialTimerExpired = true;
-        setOpacityState();
-      }, 4000);
-
-      hintCard.addEventListener("mouseenter", () => {
-        isHovered = true;
-        setOpacityState();
-      });
-
-      hintCard.addEventListener("mouseleave", () => {
-        isHovered = false;
-        setOpacityState();
-      });
     }
-
-    // Camera interaction detection via OrbitControls 'start' event
-    this.controls.addEventListener("start", () => {
-      hasInteractedWithCamera = true;
-      setOpacityState();
-    });
 
     // Helper to highlight glyph zone and corresponding label item
     const setActiveZone = (zone) => {
