@@ -860,31 +860,44 @@ function renderFloorTabs(floors, activeFloorNumber) {
 
 function renderFloorRooms(floor) {
   if (!floor || !floor.rooms || floor.rooms.length === 0) {
-    return `<div class="room-row" style="color:#9ca3af; justify-content:center; padding:12px;">No listed facilities on Floor ${floor?.number || 1}</div>`;
+    return `<div class="room-row room-row-empty"><span class="room-empty-text">No listed facilities on Floor ${floor?.number || 1}</span></div>`;
   }
-  const iconMap = { office: 'briefcase', hall: 'building', lab: 'flask', restroom: 'toilet', storage: 'box' };
+  const iconMap = {
+    office: 'mdi-briefcase-outline',
+    hall: 'mdi-domain',
+    lab: 'mdi-flask-outline',
+    restroom: 'mdi-toilet',
+    storage: 'mdi-package-variant-closed',
+    room: 'mdi-door-sliding',
+    facility: 'mdi-domain'
+  };
 
   return floor.rooms.map(room => {
     let iconContent = '';
     if (room.iconHtml) {
       iconContent = room.iconHtml;
+    } else if (room.icon && (room.icon.startsWith('<') || room.icon.startsWith('http'))) {
+      iconContent = room.icon.startsWith('<') ? room.icon : `<img src="${room.icon}" alt="" />`;
     } else if (room.icon) {
-      iconContent = room.icon.startsWith('<') ? room.icon : `<span>${room.icon}</span>`;
+      iconContent = `<span class="room-emoji">${room.icon}</span>`;
     } else if (room.type && iconMap[room.type]) {
-      iconContent = `<i class="ti ti-${iconMap[room.type]}" aria-hidden="true"></i>`;
+      iconContent = `<i class="mdi ${iconMap[room.type]}" aria-hidden="true"></i>`;
     } else {
-      iconContent = `<i class="mdi mdi-door" aria-hidden="true"></i>`;
+      iconContent = `<i class="mdi mdi-door-sliding" aria-hidden="true"></i>`;
     }
 
     const codeBadge = room.code ? `<span class="room-code">${room.code}</span>` : '';
     const subText = room.sub ? `<span class="room-sub">${room.sub}</span>` : '';
-    const matchBadge = room.isMatched ? `<span class="floor-match-badge">MATCHED</span>` : '';
+    const matchBadge = room.isMatched ? `<span class="floor-match-badge"><i class="mdi mdi-check-circle"></i> MATCHED</span>` : '';
     const matchedClass = room.isMatched ? ' room-row--matched' : '';
 
     return `
       <div class="room-row${matchedClass}">
         <span class="room-icon">${iconContent}</span>
-        <span class="room-name"><strong>${room.name}</strong>${subText}</span>
+        <div class="room-details">
+          <span class="room-name">${room.name}</span>
+          ${subText}
+        </div>
         ${codeBadge}
         ${matchBadge}
       </div>
@@ -1052,7 +1065,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   // 1️⃣ Show panel INSTANTLY with local static data (zero network delay)
   const panel = document.getElementById('info-panel');
   if (panel) {
-    panel.style.display = 'block';
+    panel.style.display = 'flex';
     requestAnimationFrame(() => {
       panel.classList.remove('panel-hidden');
     });
@@ -1105,6 +1118,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   const descEl = document.getElementById('panel-desc');
   const contactWrap = document.getElementById('panel-contact-wrap');
   const contactContent = document.getElementById('panel-contact');
+  const routeSection = document.getElementById('panel-route-section');
   const viewBtnWrap = document.getElementById('panel-view3d-wrap');
   const viewBtn = document.getElementById('panel-view3d-btn');
 
@@ -1112,6 +1126,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     if (descWrap) descWrap.style.display = 'none';
     if (descEl) descEl.style.display = 'none';
     if (contactWrap) contactWrap.style.display = 'none';
+    if (routeSection) routeSection.style.display = 'none';
     if (viewBtnWrap) viewBtnWrap.style.display = 'none';
   } else {
     if (descWrap) descWrap.style.display = '';
@@ -1122,9 +1137,11 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     if (routeBtnsWrap) {
       // Only show route buttons if this building has categorized routes defined
       if (!hasCategorizedRoutes(key)) {
+        if (routeSection) routeSection.style.display = 'none';
         routeBtnsWrap.style.display = 'none';
       } else {
-        routeBtnsWrap.style.display = 'flex';
+        if (routeSection) routeSection.style.display = '';
+        routeBtnsWrap.style.display = 'grid';
 
         const btnNearest = document.getElementById('route-btn-nearest');
         const btnNear = document.getElementById('route-btn-near');
@@ -1188,7 +1205,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
         // 2. Otherwise fetch live model URL from Supabase on demand
         try {
           const originalText = viewBtn.innerHTML;
-          viewBtn.innerHTML = `<span>⏳</span> Loading 3D Model...`;
+          viewBtn.innerHTML = `<span class="view3d-icon-wrap"><span class="mdi mdi-loading mdi-spin"></span></span> <span class="view3d-text">Loading 3D Model...</span>`;
           viewBtn.disabled = true;
 
           let dbB = null;
@@ -1880,6 +1897,16 @@ export function initMapOverlay() {
   // Close panel button (now has id instead of onclick)
   const closeBtn = document.getElementById('panel-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', _closePanel);
+
+  // Prevent map drag/zoom while scrolling inside info panel
+  const infoPanelEl = document.getElementById('info-panel');
+  if (infoPanelEl) {
+    infoPanelEl.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
+    infoPanelEl.addEventListener('pointerdown', e => e.stopPropagation());
+    infoPanelEl.addEventListener('mousedown', e => e.stopPropagation());
+    infoPanelEl.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+    infoPanelEl.addEventListener('touchmove', e => e.stopPropagation(), { passive: true });
+  }
 
   // View toggle (2D / 3D) event listeners
   const btn2D = document.getElementById('view-toggle-2d');

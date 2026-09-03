@@ -342,14 +342,14 @@
       "far": ["road 12", "road 13", "road 15", "road 17"]
     },
     "Villares": {
-      "nearest": ["road 12", "road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
-      "near": ["road 12", "road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
-      "far": ["road 12", "road 13", "road 15", "road 17"]
+      "nearest": ["road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
+      "near": ["road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 13", "road 15", "road 17"]
     },
     "villares": {
-      "nearest": ["road 12", "road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
-      "near": ["road 12", "road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
-      "far": ["road 12", "road 13", "road 15", "road 17"]
+      "nearest": ["road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
+      "near": ["road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 13", "road 15", "road 17"]
     }
   }
 }
