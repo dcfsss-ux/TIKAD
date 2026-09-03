@@ -10,7 +10,6 @@
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { logRoadSegments } from './roadDebugLogger.js';
 import { initNavigation, handleBuildingRoute, handleCategorizedRoute, hasCategorizedRoutes, clearRouteHighlight, hasActiveRoute, getActiveRouteCategory } from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
@@ -645,8 +644,6 @@ function _bootExperience() {
     // ── Navigation system init ─────────────────────────────────────────────
     const navSceneRoot = experience.scene || campusBaseScene;
     if (navSceneRoot) {
-      // Debug: log all mesh names from campusBase
-      if (campusBaseScene) logRoadSegments(campusBaseScene);
       // Initialize pathfinding + road segment highlighting against the active 3D scene
       initNavigation(navSceneRoot);
     }
