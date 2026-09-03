@@ -24,7 +24,7 @@
     body {
       margin: 0;
       padding: 0;
-      background: #050f05;
+      background: #002600;
       overflow: hidden;
     }
 
@@ -33,7 +33,7 @@
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: #050f05;
+      background: #002600;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -103,16 +103,21 @@
       </div>
     </a>
 
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
-      <span class="nav-toggle-icon"></span>
-    </button>
-
-    <ul class="nav-links">
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home">Home</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#features">Features & Team</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#team">Team</a></li>
     </ul>
 
-    <button class="nav-cta" id="nav-launch-map">Launch Map</button>
+    <button class="nav-cta" id="nav-launch-map">
+      <span class="nav-cta-icon mdi mdi-rocket-launch"></span>
+      <span class="nav-cta-text">Launch Map</span>
+    </button>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+      <span class="nav-toggle-icon"></span>
+    </button>
   </nav>
 
   <!-- ── HERO ── -->
@@ -170,141 +175,84 @@
 
   <!-- ── NAME ORIGIN ── -->
   <section class="name-origin" id="about">
+    <div class="name-origin-bg-glow"></div>
     <div class="name-origin-inner">
       <div class="word-card reveal">
+        <div class="word-card-glow"></div>
+        <div class="word-card-badge">Cultural Root</div>
         <span class="word-big giya-baybayin">ᜄᜒᜌ</span>
-        <span class="word-lang">Filipino · Bisaya</span>
-        <span class="word-meaning">"Guide" · "To Guide"</span>
+        <div class="word-phonetic">
+          <span class="phonetic-tag">[gî-yâ]</span>
+          <span class="word-lang">Filipino · Bisaya</span>
+        </div>
+        <span class="word-meaning">"To Guide" · "A Compass"</span>
         <p class="word-desc">
-          Derived from the Filipino and Bisaya word meaning to guide or direct —
-          perfectly capturing the spirit of this smart campus navigation platform.
+          Derived from the native Filipino and Bisaya word meaning to navigate, guide, or direct — capturing the core
+          mission of CSU's intelligent 3D campus navigation platform.
         </p>
+        <div class="word-tags">
+          <span class="word-chip"><i class="mdi mdi-compass-outline"></i> Smart Wayfinding</span>
+
+          <span class="word-chip"><i class="mdi mdi-cube-outline"></i> 3D Innovation</span>
+        </div>
       </div>
+
       <div class="name-detail reveal-right">
-        <p class="section-eyebrow">About the Project</p>
-        <h2 class="section-title">The Name Behind the Map</h2>
-        <p>
-          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a campus map. It is a guide — a
-          platform designed to help every student, faculty member, and visitor
-          navigate Caraga State University with ease and confidence.
+        <h2 class="section-title">The Name Behind <em>the Map</em></h2>
+        <p class="about-lead">
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a map — it is a platform designed to help every student,
+          faculty member, and visitor navigate Caraga State University with ease and confidence.
         </p>
-        <p>
-          Developed as an internship project by students of CSU, <span class="giya-baybayin">ᜄᜒᜌ</span> brings
-          the campus into the digital age with an interactive 3D map that puts
-          every building and facility at your fingertips.
-        </p>
-        <p>
-          Our goal is simple: <span>see your campus, know your campus</span>.
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <div class="divider"></div>
-
-  <!-- ── FEATURES & TEAM PREVIEW ── -->
-  <section class="csu-features-team" id="features">
-    <div class="split">
-      <div class="features-col reveal">
-        <p class="eyebrow">What <span class="giya-baybayin">ᜄᜒᜌ</span> offers</p>
-        <h2>Everything you need to navigate CSU</h2>
-        <p class="subhead">Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it easy to find any
-          building, office, or facility on campus.</p>
-
-        <div class="cards">
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z" />
-                  <path d="M9 3v16" />
-                  <path d="M15 5v16" />
-                </svg>
-              </div>
-              <h3>Interactive 3D map</h3>
+        <div class="about-pillars">
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
             </div>
-            <p>Explore the campus in immersive 3D. Rotate, zoom, and navigate every corner of CSU.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <h3>Smart search</h3>
-            </div>
-            <p>Quickly find any building, office, or department with real-time search and filtering.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
-                  <circle cx="12" cy="9.5" r="2.3" />
-                </svg>
-              </div>
-              <h3>Building info</h3>
-            </div>
-            <p>Tap any building to see detailed information — hours, facilities, and more.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="7" y="2" width="10" height="20" rx="2" />
-                  <path d="M11 18h2" />
-                </svg>
-              </div>
-              <h3>Mobile friendly</h3>
-            </div>
-            <p>Access <span class="giya-baybayin">ᜄᜒᜌ</span> from any device. Optimized for phones, tablets, and
-              desktops.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="team-preview reveal">
-        <div class="top-copy">
-          <p class="eyebrow">Who built it</p>
-          <h2>Meet the team</h2>
-          <p class="subhead">Seven students who designed, built, and tested <span class="giya-baybayin">ᜄᜒᜌ</span>.
-            Hover or tap anyone in the lineup to see their story.</p>
-        </div>
-        <div class="bottom-block">
-          <div class="lineup-wrap" id="lineupWrap">
-            <div class="info-panel" id="infoPanel" role="dialog" aria-modal="false" aria-labelledby="infoName">
-              <button class="info-close" id="infoClose" aria-label="Close">&times;</button>
-              <p class="info-eyebrow">Team member</p>
-              <h3 class="info-name" id="infoName"></h3>
-              <p class="info-role" id="infoRole"></p>
-              <p class="info-stat" id="infoStat"></p>
-              <p class="info-fact" id="infoFact"></p>
-              <div class="info-tags" id="infoTags"></div>
-            </div>
-            <div class="lineup-stack">
-              <div class="lineup back-row" id="backRow"></div>
-              <div class="lineup front-row" id="frontRow"></div>
+            <div class="pillar-content">
+              <h4>A Name Rooted in Home</h4>
+              <span class="pillar-sub">Filipino &amp; Bisaya Heritage</span>
+              <p>The word GIYA comes from a language familiar to the people of Mindanao, giving the platform a name that
+                feels connected to the community it serves.</p>
             </div>
           </div>
 
-          <div class="team-highlight-bar">
-            <div class="stat-badge">
-              <span class="pulse-dot"></span>
-              <span class="stat-text"><strong>7 Minds</strong> Behind CSU Nav</span>
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20" />
+                <path d="M4 6h12l3 3-3 3H4z" />
+                <path d="M20 14H8l-3 3 3 3h12z" />
+              </svg>
             </div>
-            <div class="stat-badge">
-              <span class="stat-icon">🎓</span>
-              <span class="stat-text"><strong>100%</strong> Student Built</span>
+            <div class="pillar-content">
+              <h4>A Purpose to Guide</h4>
+              <span class="pillar-sub">From Meaning to Function</span>
+              <p>GIYA was named with one simple purpose in mind: to help people find their way around CSU with less
+                confusion and more confidence.</p>
             </div>
-            <div class="stat-badge">
-              <span class="stat-icon">⚡</span>
-              <span class="stat-text"><strong>60 FPS</strong> 3D Engine</span>
+          </div>
+
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="pillar-content">
+              <h4>A Digital Campus Companion</h4>
+              <span class="pillar-sub">Guidance Beyond a Traditional Map</span>
+              <p>By combining an interactive campus map with accessible building information, GIYA transforms the idea
+                of a simple map into a more helpful campus companion.</p>
             </div>
           </div>
         </div>
@@ -312,112 +260,143 @@
     </div>
   </section>
 
-  <!-- ── CTA ── -->
-  <div class="cta-band">
-    <h2 class="section-title reveal">Ready to explore CSU?</h2>
-    <p>
-      Open <span class="giya-baybayin">ᜄᜒᜌ</span> and discover every corner
-      of Caraga State University — in 3D, right from your browser.
-    </p>
-    <a href="#" class="cta-btn" id="cta-explore-map">
-      Open the Map →
-    </a>
-  </div>
+  <div class="divider-animated"></div>
+
+  <!-- ── FEATURES SECTION ── -->
+  <section class="csu-features" id="features">
+    <div class="features-inner reveal">
+      <div class="features-header">
+        <h2 class="section-title">Everything you need to navigate <em>CSU</em></h2>
+        <p class="section-subhead">
+          Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it effortless to locate every
+          building, office, and facility on campus.
+        </p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z" />
+                <path d="M9 3v16" />
+                <path d="M15 5v16" />
+              </svg>
+            </div>
+            <div>
+              <h3>Interactive 3D Map</h3>
+            </div>
+          </div>
+          <p>Explore the full campus model in immersive 3D. Rotate, pan, zoom, and inspect architecture with realistic
+            lighting.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+            </div>
+            <div>
+              <h3>Smart Instant Search</h3>
+            </div>
+          </div>
+          <p>Quickly pinpoint any building, college, administrative office, or department with smart instant filtering.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
+                <circle cx="12" cy="9.5" r="2.3" />
+              </svg>
+            </div>
+            <div>
+              <h3>Building Directory</h3>
+            </div>
+          </div>
+          <p>Click any landmark to access comprehensive directories — departments, faculties, office contacts, and
+            details.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="2" width="10" height="20" rx="2" />
+                <path d="M11 18h2" />
+              </svg>
+            </div>
+            <div>
+              <h3>Cross-Platform Ready</h3>
+            </div>
+          </div>
+          <p>Access seamlessly from any modern smartphone, tablet, or workstation without installing extra apps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-animated"></div>
+
+  <!-- ── TEAM SECTION ── -->
+  <section class="csu-team" id="team">
+    <div class="team-inner reveal">
+      <div class="team-header">
+        <h2 class="section-title">Meet the <em>Team</em></h2>
+        <p class="section-subhead">
+          Seven students who designed, built, and tested <span class="giya-baybayin">ᜄᜒᜌ</span>. Hover or tap anyone in
+          the lineup to see their story.
+        </p>
+      </div>
+
+      <div class="team-content-wrap">
+        <div class="lineup-wrap" id="lineupWrap">
+          <div class="info-panel" id="infoPanel" role="dialog" aria-modal="false" aria-labelledby="infoName">
+            <button class="info-close" id="infoClose" aria-label="Close">&times;</button>
+            <p class="info-eyebrow">Team member</p>
+            <h3 class="info-name" id="infoName"></h3>
+            <p class="info-role" id="infoRole"></p>
+            <p class="info-stat" id="infoStat"></p>
+            <p class="info-fact" id="infoFact"></p>
+            <div class="info-tags" id="infoTags"></div>
+          </div>
+          <div class="lineup-stack">
+            <div class="lineup back-row" id="backRow"></div>
+            <div class="lineup front-row" id="frontRow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── FOOTER ── -->
-  <footer>
-    <div class="footer-top">
-      <!-- Brand column -->
-      <div>
-        <div class="footer-logo-wrap">
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="#009900" />
-            <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
-              stroke-width="1.5" />
-            <circle cx="16" cy="16" r="4" fill="#EDDD53" />
-          </svg>
-          <div>
-            <div class="footer-brand-name giya-baybayin">ᜄᜒᜌ</div>
-            <div class="footer-brand-sub">CSU SMART CAMPUS</div>
-          </div>
-        </div>
-        <p class="footer-desc">
-          The official interactive 3D campus navigation platform of Caraga
-          State University. Explore every building, office, and facility from
-          your browser.
+  <footer class="footer-modern">
+    <div class="footer-inner">
+      <!-- Left Column: Brand & Description -->
+      <div class="footer-left">
+
+        <p class="footer-brand-desc">
+          The official interactive 3D campus navigation platform of Caraga State University. Explore every building,
+          office, and facility from your browser.
         </p>
-        <div class="footer-social">
-          <a href="#" title="Facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-facebook">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-            </svg>
-          </a>
-          <a href="#" title="Twitter">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-twitter">
-              <path
-                d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-            </svg>
-          </a>
-          <a href="#" title="GitHub">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-github">
-              <path
-                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-              <path d="M9 18c-4.51 2-5-2-7-2" />
-            </svg>
-          </a>
+      </div>
+
+      <!-- Right Column: Student Initiative & Feedback -->
+      <div class="footer-right">
+
+        <div class="footer-copyright-modern">
+          &copy; 2026 <span class="footer-giya-tag">giya</span> &mdash; An internship project of
+          Caraga State University.
         </div>
-      </div>
-
-      <!-- Links columns -->
-      <div class="footer-col">
-        <div class="footer-col-title">Navigate</div>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#team">Team</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Campus</div>
-        <ul>
-          <li><a href="#">Main Library</a></li>
-          <li><a href="#">Admin Building</a></li>
-          <li><a href="#">Engineering</a></li>
-          <li><a href="#">Student Center</a></li>
-          <li><a href="#">Gymnasium</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">University</div>
-        <ul>
-          <li>
-            <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
-          </li>
-          <li><a href="#">Registrar</a></li>
-          <li><a href="#">Library</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        © 2024 <span class="giya-baybayin">ᜄᜒᜌ</span> – CSU Smart Campus. An internship project of Caraga State
-        University.
-      </div>
-      <div class="footer-badge">
-        <span></span>
-        System Online
       </div>
     </div>
   </footer>

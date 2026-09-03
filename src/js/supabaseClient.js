@@ -251,7 +251,207 @@ export async function fetchBuildingSeals() {
     return [];
   }
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTH HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Sign in an admin with email + password.
+ * @param {string} email
+ * @param {string} password
+ * @returns {{ data, error }}
+ */
+export async function signIn(email, password) {
+  return supabase.auth.signInWithPassword({ email, password });
+}
 
+/**
+ * Sign out the current session.
+ * @returns {{ error }}
+ */
+export async function signOut() {
+  return supabase.auth.signOut();
+}
 
+/**
+ * Get the current auth session (null if not logged in).
+ * @returns {Promise<{ data: { session }, error }>}
+ */
+export async function getSession() {
+  return supabase.auth.getSession();
+}
+
+/**
+ * Subscribe to auth state changes.
+ * @param {function} callback - called with (event, session)
+ */
+export function onAuthStateChange(callback) {
+  return supabase.auth.onAuthStateChange(callback);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUILDING CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Update specific fields on a building record.
+ * @param {number} buildingId
+ * @param {object} fields - partial object of columns to update
+ * @returns {{ data, error }}
+ */
+export async function updateBuilding(buildingId, fields) {
+  return supabase
+    .from('BUILDINGS')
+    .update(fields)
+    .eq('Building_ID', buildingId);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROOM CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Insert or update a room. Provide Room_ID to update.
+ * @param {object} roomData - { Room_ID?, Room_number, Room_name, Floor, Building_ID }
+ * @returns {{ data, error }}
+ */
+export async function upsertRoom(roomData) {
+  return supabase
+    .from('ROOMS')
+    .upsert(roomData, { onConflict: 'Room_ID' })
+    .select();
+}
+
+/**
+ * Delete a room by its ID.
+ * @param {number} roomId
+ * @returns {{ error }}
+ */
+export async function deleteRoom(roomId) {
+  return supabase.from('ROOMS').delete().eq('Room_ID', roomId);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// OFFICE CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Insert or update an office. Provide Office_ID to update.
+ * @param {object} officeData - { Office_ID?, Office_name, Abbreviations, Room_number, Floor, Building_ID }
+ * @returns {{ data, error }}
+ */
+export async function upsertOffice(officeData) {
+  return supabase
+    .from('OFFICES')
+    .upsert(officeData, { onConflict: 'Office_ID' })
+    .select();
+}
+
+/**
+ * Delete an office by its ID.
+ * @param {number} officeId
+ * @returns {{ error }}
+ */
+export async function deleteOffice(officeId) {
+  return supabase.from('OFFICES').delete().eq('Office_ID', officeId);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FACILITY CRUD
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Insert or update a facility. Provide Facility_ID to update.
+ * @param {object} facilityData - { Facility_ID?, Facility_name, Abbreviations, Room_number, Floor, Building_ID }
+ * @returns {{ data, error }}
+ */
+export async function upsertFacility(facilityData) {
+  return supabase
+    .from('FACILITIES')
+    .upsert(facilityData, { onConflict: 'Facility_ID' })
+    .select();
+}
+
+/**
+ * Delete a facility by its ID.
+ * @param {number} facilityId
+ * @returns {{ error }}
+ */
+export async function deleteFacility(facilityId) {
+  return supabase.from('FACILITIES').delete().eq('Facility_ID', facilityId);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3D MODEL UPLOAD
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Upload a GLB file to Supabase Storage and update the building's Model_URL.
+ * The file is stored in the 'models' bucket as models/<buildingId>/<filename>.
+ *
+ * @param {number} buildingId
+ * @param {File} file - the .glb File object from the file input
+ * @returns {{ publicUrl: string|null, error: object|null }}
+ */
+export async function uploadModelGlb(buildingId, file) {
+  const ext = file.name.split('.').pop();
+  const storagePath = `${buildingId}/${Date.now()}.${ext}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('models')
+    .upload(storagePath, file, { upsert: true, contentType: 'model/gltf-binary' });
+
+  if (uploadError) {
+    console.error('[Supabase] Upload error:', uploadError);
+    return { publicUrl: null, error: uploadError };
+  }
+
+  const { data: urlData } = supabase.storage.from('models').getPublicUrl(storagePath);
+  const publicUrl = urlData?.publicUrl || null;
+
+  if (!publicUrl) {
+    return { publicUrl: null, error: new Error('Could not get public URL after upload') };
+  }
+
+  // Write the URL back to BUILDINGS
+  const { error: updateError } = await updateBuilding(buildingId, { Model_URL: publicUrl });
+  if (updateError) {
+    console.error('[Supabase] Failed to update Model_URL:', updateError);
+    return { publicUrl, error: updateError };
+  }
+
+  return { publicUrl, error: null };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HERO SHOWCASE
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Fetch all buildings that are enabled in the hero showcase,
+ * ordered by hero_order ascending.
+ * Returns an array compatible with PREVIEW_MODELS shape.
+ */
+export async function getHeroShowcaseBuildings() {
+  const { data, error } = await supabase
+    .from('BUILDINGS')
+    .select('Building_ID, Building_name, Model_URL, Logo_URL, hero_category, hero_order, show_in_hero')
+    .eq('show_in_hero', true)
+    .order('hero_order', { ascending: true });
+
+  if (error) {
+    console.error('[Supabase] Hero showcase fetch error:', error);
+    return [];
+  }
+
+  return (data || []).map(b => ({
+    key: String(b.Building_ID),
+    name: b.Building_name || 'Unknown',
+    category: b.hero_category || 'Campus Building',
+    icon: b.Logo_URL || '/images/logo ccis.jpg',
+    path: b.Model_URL || null,
+    aliases: [(b.Building_name || '').toLowerCase()],
+    supabaseId: b.Building_ID,
+  }));
+}
 
