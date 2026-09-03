@@ -4,19 +4,24 @@
  * Looks up real road segment meshes by name in the loaded scene,
  * swaps their materials to a shared highlight material, and restores
  * originals on clear. No geometry creation or disposal needed.
+ *
+ * Supports 3 route categories:
+ *   - Nearest (green)
+ *   - Near (yellow)
+ *   - Far (red)
  */
 
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 
-// ── Shared highlight material ─────────────────────────────────────────────────
-// All highlighted segments share one material instance, so pulsing the
-// emissive intensity is a single tween, not per-mesh work.
-const HIGHLIGHT_COLOR = 0xffea00; // Vibrant glowing yellow
+// ── Shared highlight materials ─────────────────────────────────────────────────
+const NEAREST_COLOR = 0x00ff66;   // Green — nearest route
+const NEAR_COLOR    = 0xffea00;   // Yellow — near route
+const FAR_COLOR     = 0xff3333;   // Red — far route
 
-const highlightMaterial = new THREE.MeshStandardMaterial({
-  color: HIGHLIGHT_COLOR,
-  emissive: 0xffd700,
+const nearestHighlightMaterial = new THREE.MeshStandardMaterial({
+  color: NEAREST_COLOR,
+  emissive: 0x00e676,
   emissiveIntensity: 2.5,
   roughness: 0.2,
   metalness: 0.1,
@@ -28,6 +33,43 @@ const highlightMaterial = new THREE.MeshStandardMaterial({
   polygonOffsetFactor: -1,
   polygonOffsetUnits: -1,
 });
+
+const nearHighlightMaterial = new THREE.MeshStandardMaterial({
+  color: NEAR_COLOR,
+  emissive: 0xffd700,
+  emissiveIntensity: 2.0,
+  roughness: 0.2,
+  metalness: 0.1,
+  transparent: true,
+  opacity: 0.9,
+  side: THREE.DoubleSide,
+  depthWrite: true,
+  polygonOffset: true,
+  polygonOffsetFactor: -1,
+  polygonOffsetUnits: -1,
+});
+
+const farHighlightMaterial = new THREE.MeshStandardMaterial({
+  color: FAR_COLOR,
+  emissive: 0xff1744,
+  emissiveIntensity: 2.0,
+  roughness: 0.2,
+  metalness: 0.1,
+  transparent: true,
+  opacity: 0.9,
+  side: THREE.DoubleSide,
+  depthWrite: true,
+  polygonOffset: true,
+  polygonOffsetFactor: -1,
+  polygonOffsetUnits: -1,
+});
+
+// Map category names to materials for easy lookup
+const CATEGORY_MATERIALS = {
+  nearest: nearestHighlightMaterial,
+  near:    nearHighlightMaterial,
+  far:     farHighlightMaterial,
+};
 
 // Helper to trigger WebGL frame redraw
 function _requestRender() {
@@ -47,6 +89,9 @@ const originalMaterialCache = new Map();
 
 /** @type {string[]} Currently highlighted segment names */
 let activeSegments = [];
+
+/** @type {string|null} Currently active route category */
+let activeCategory = null;
 
 /** Animation frame ID for the pulsing effect */
 let pulseAnimId = null;
@@ -139,44 +184,119 @@ function _findMesh(segmentName) {
 }
 
 /**
- * Highlight the given road segments by swapping their materials.
- * Automatically clears any previous highlight first.
+ * Highlight road segments for a single route category (nearest, near, or far).
+ * Automatically clears any previous highlights first.
  *
- * @param {string[]} segmentNames — array of road segment mesh names to highlight
+ * @param {string[]} segments — array of road segment mesh names to highlight
+ * @param {'nearest'|'near'|'far'} category — the route category
  */
-export function highlightSegments(segmentNames) {
+export function highlightCategorizedSegments(segments = [], category = 'nearest') {
   // Clear previous highlights first
   clearHighlight();
 
-  if (!segmentNames || segmentNames.length === 0) return;
+  if (!segments || segments.length === 0) return;
 
-  activeSegments = [...segmentNames];
-  let highlightedCount = 0;
+  const material = CATEGORY_MATERIALS[category] || nearestHighlightMaterial;
 
-  for (const segName of segmentNames) {
+  activeSegments = [...segments];
+  activeCategory = category;
+
+  let highlightCount = 0;
+
+  for (const segName of segments) {
     const node = _findMesh(segName);
     if (!node) continue;
 
-    let segmentSwapped = false;
-    // Traverse node in case it's a THREE.Group or Object3D containing meshes
+    let swapped = false;
     node.traverse((child) => {
       if (child.isMesh && child.material) {
         if (!child.userData.origRoadMat) {
           child.userData.origRoadMat = child.material;
         }
-        child.material = highlightMaterial;
-        segmentSwapped = true;
+        child.material = material;
+        swapped = true;
       }
     });
 
-    if (segmentSwapped) {
-      highlightedCount++;
-    }
+    if (swapped) highlightCount++;
   }
 
-  if (highlightedCount > 0) {
-    console.log(`[HighlightRenderer] 🛣️ Highlighted ${highlightedCount}/${segmentNames.length} road segments`);
-    _startPulse();
+  if (highlightCount > 0) {
+    console.log(`[HighlightRenderer] 🛣️ Highlighted ${highlightCount} road segments as "${category}" (${category === 'nearest' ? '🟢' : category === 'near' ? '🟡' : '🔴'})`);
+    _startPulse(category);
+  } else {
+    console.warn(`[HighlightRenderer] No road segments could be highlighted. Check mesh names.`);
+  }
+
+  _requestRender();
+}
+
+/**
+ * Highlight road segments using primary (green) and secondary (faint yellow) materials.
+ * Kept for backward compatibility. Automatically clears any previous highlights first.
+ *
+ * @param {string[]} primarySegments — array of primary road segment mesh names (vibrant green)
+ * @param {string[]} [secondarySegments] — array of secondary road segment mesh names (faint yellow)
+ */
+export function highlightSegments(primarySegments = [], secondarySegments = []) {
+  // Clear previous highlights first
+  clearHighlight();
+
+  const primaryList = primarySegments || [];
+  const secondaryList = secondarySegments || [];
+
+  if (primaryList.length === 0 && secondaryList.length === 0) return;
+
+  activeSegments = [...new Set([...primaryList, ...secondaryList])];
+  activeCategory = 'nearest';
+
+  let primaryCount = 0;
+  let secondaryCount = 0;
+
+  // 1. Swap materials for secondary segments (faint yellow)
+  for (const segName of secondaryList) {
+    // Skip if segment is already in primary list to prioritize green
+    if (primaryList.includes(segName)) continue;
+
+    const node = _findMesh(segName);
+    if (!node) continue;
+
+    let swapped = false;
+    node.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (!child.userData.origRoadMat) {
+          child.userData.origRoadMat = child.material;
+        }
+        child.material = nearHighlightMaterial;
+        swapped = true;
+      }
+    });
+
+    if (swapped) secondaryCount++;
+  }
+
+  // 2. Swap materials for primary segments (vibrant green)
+  for (const segName of primaryList) {
+    const node = _findMesh(segName);
+    if (!node) continue;
+
+    let swapped = false;
+    node.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (!child.userData.origRoadMat) {
+          child.userData.origRoadMat = child.material;
+        }
+        child.material = nearestHighlightMaterial;
+        swapped = true;
+      }
+    });
+
+    if (swapped) primaryCount++;
+  }
+
+  if (primaryCount > 0 || secondaryCount > 0) {
+    console.log(`[HighlightRenderer] 🛣️ Highlighted ${primaryCount} primary (green) & ${secondaryCount} secondary (faint yellow) road segments`);
+    _startPulse('nearest');
   } else {
     console.warn(`[HighlightRenderer] No road segments could be highlighted. Check mesh names.`);
   }
@@ -204,6 +324,7 @@ export function clearHighlight() {
 
   originalMaterialCache.clear();
   activeSegments = [];
+  activeCategory = null;
   _requestRender();
 }
 
@@ -215,21 +336,31 @@ export function hasActiveHighlight() {
   return activeSegments.length > 0;
 }
 
+/**
+ * Get the currently active route category.
+ * @returns {string|null} — 'nearest', 'near', 'far', or null
+ */
+export function getActiveCategory() {
+  return activeCategory;
+}
+
 // ── Pulsing animation (optional eye-drawing effect) ───────────────────────────
 
 const PULSE_MIN = 1.2;
 const PULSE_MAX = 3.0;
 const PULSE_SPEED = 2.0; // cycles per second
 
-function _startPulse() {
+function _startPulse(category = 'nearest') {
   _stopPulse();
 
+  const material = CATEGORY_MATERIALS[category] || nearestHighlightMaterial;
+  const baseIntensity = material.emissiveIntensity;
   const startTime = performance.now();
 
   function animate() {
     const elapsed = (performance.now() - startTime) / 1000;
     const t = (Math.sin(elapsed * PULSE_SPEED * Math.PI * 2) + 1) / 2;
-    highlightMaterial.emissiveIntensity = PULSE_MIN + t * (PULSE_MAX - PULSE_MIN);
+    material.emissiveIntensity = PULSE_MIN + t * (PULSE_MAX - PULSE_MIN);
     _requestRender();
     pulseAnimId = requestAnimationFrame(animate);
   }
@@ -242,7 +373,9 @@ function _stopPulse() {
     cancelAnimationFrame(pulseAnimId);
     pulseAnimId = null;
   }
-  // Reset to default intensity
-  highlightMaterial.emissiveIntensity = 2.5;
+  // Reset to default intensities
+  nearestHighlightMaterial.emissiveIntensity = 2.5;
+  nearHighlightMaterial.emissiveIntensity = 2.0;
+  farHighlightMaterial.emissiveIntensity = 2.0;
   _requestRender();
 }

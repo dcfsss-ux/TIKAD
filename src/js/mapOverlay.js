@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
 import { logRoadSegments } from './roadDebugLogger.js';
-import { initNavigation, handleBuildingRoute, clearRouteHighlight } from './interactionHandler.js';
+import { initNavigation, handleBuildingRoute, handleCategorizedRoute, hasCategorizedRoutes, clearRouteHighlight, hasActiveRoute, getActiveRouteCategory } from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
   searchCampusEntities,
@@ -98,6 +98,14 @@ const BUILDING_DATA = {
   "masawa_building": {
     glbName: "MASAWA HALL",
     name: "Masawa Hall", shortName: "Masawa", abbrev: "Masawa", emoji: "🏫",
+    desc: "Main academic building housing executive offices, college departments, multi-purpose lecture halls, and administrative services.",
+    depts: [
+      { name: "Dean's Office", sub: "Floor 1", icon: "🏢" },
+      { name: "Academic Affairs & Student Records", sub: "Floor 1", icon: "📋" },
+      { name: "Faculty Offices & Conference Hall", sub: "Floor 2", icon: "💼" },
+      { name: "Lecture Rooms 101-105", sub: "Floor 1-2", icon: "🏫" }
+    ],
+    contact: { phone: "(085) 341-2786", email: "masawa@csu.edu.ph" },
     supabaseId: 12,
     supabaseNames: ['Masawa Hall', 'Masawa Building', 'Masawa', 'MASAWA_HALL', 'MASAWA HALL'],
     gradient: "linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)"
@@ -105,6 +113,13 @@ const BUILDING_DATA = {
   "hinang_building": {
     glbName: "HINANG BUILDING",
     name: "Hinang Building", shortName: "Hinang", emoji: "🏛",
+    desc: "College of Engineering and Information Technology (CEIT) facility featuring modern laboratories, design studios, and lecture halls.",
+    depts: [
+      { name: "CEIT Dean's Office", sub: "Floor 1", icon: "🏢" },
+      { name: "IT & Computer Laboratories", sub: "Floor 1-2", icon: "💻" },
+      { name: "Engineering Laboratories & Drafting Rooms", sub: "Floor 2", icon: "🔬" }
+    ],
+    contact: { phone: "(085) 341-2787", email: "ceit@csu.edu.ph" },
     supabaseId: 6,
     supabaseNames: ['Hinang', 'Hinang Building'],
     gradient: "linear-gradient(135deg, #1a4a2e 0%, #2e7d52 100%)"
@@ -112,6 +127,13 @@ const BUILDING_DATA = {
   "kinaadman_hall": {
     glbName: "KINAADMAN HALL",
     name: "Kinaadman Hall", shortName: "Kinaadman", emoji: "🎓",
+    desc: "Multipurpose academic center and auditorium venue for university functions, academic conferences, and student gatherings.",
+    depts: [
+      { name: "Main Auditorium & Stage", sub: "Floor 1", icon: "🎭" },
+      { name: "Audio-Visual Center", sub: "Floor 1", icon: "🔊" },
+      { name: "Seminar Rooms", sub: "Floor 2", icon: "🎤" }
+    ],
+    contact: { phone: "(085) 341-2788", email: "events@csu.edu.ph" },
     supabaseId: 5,
     supabaseNames: ['Kinaadman', 'Kinaadman Hall'],
     gradient: "linear-gradient(135deg, #2c1a4e 0%, #5a3a8c 100%)"
@@ -119,6 +141,13 @@ const BUILDING_DATA = {
   "hiraya_building": {
     glbName: "Hiraya Building",
     name: "Hiraya Building", shortName: "Hiraya", emoji: "🌟",
+    desc: "Multidisciplinary learning center equipped with smart classrooms, research laboratories, and student study spaces.",
+    depts: [
+      { name: "General Education Department", sub: "Floor 1", icon: "📖" },
+      { name: "Science Laboratories & Research Hub", sub: "Floor 1-2", icon: "🧪" },
+      { name: "Student Innovation Lounge", sub: "Floor 2", icon: "💡" }
+    ],
+    contact: { phone: "(085) 341-2789", email: "hiraya@csu.edu.ph" },
     supabaseId: 3,
     supabaseNames: ['Hiraya', 'Hiraya Building'],
     gradient: "linear-gradient(135deg, #4a2800 0%, #a05010 100%)"
@@ -126,6 +155,13 @@ const BUILDING_DATA = {
   "batok_hall": {
     glbName: "BATOK HALL",
     name: "Batok Hall", shortName: "Batok", emoji: "🏟",
+    desc: "Cultural and sports activity hall hosting indoor sports, student assemblies, cultural performances, and university events.",
+    depts: [
+      { name: "Activity Court & Gymnasium", sub: "Floor 1", icon: "🏀" },
+      { name: "Cultural Affairs Office", sub: "Floor 1", icon: "🎨" },
+      { name: "Sports & Recreation Desk", sub: "Floor 2", icon: "🏆" }
+    ],
+    contact: { phone: "(085) 341-2790", email: "sports@csu.edu.ph" },
     supabaseId: 4,
     supabaseNames: ['Batok', 'Batok Hall'],
     gradient: "linear-gradient(135deg, #5c1a1a 0%, #9f2d2d 100%)"
@@ -133,6 +169,14 @@ const BUILDING_DATA = {
   "new_administrative_bldg": {
     glbName: "NEW ADMINISTRATIVE BUILDING",
     name: "New Admin Building", shortName: "Admin", emoji: "🏢",
+    desc: "Central administrative headquarters housing the Office of the University President, Registrar, Cashier, Human Resources, and Finance offices.",
+    depts: [
+      { name: "Office of the Registrar & Admissions", sub: "Floor 1", icon: "📋" },
+      { name: "Cashier & Accounting Offices", sub: "Floor 1", icon: "💵" },
+      { name: "Office of the President & Board Room", sub: "Floor 2", icon: "🏛" },
+      { name: "Human Resources Management", sub: "Floor 2", icon: "👥" }
+    ],
+    contact: { phone: "(085) 341-2282", email: "admin@csu.edu.ph" },
     supabaseId: 1,
     supabaseNames: ['New Administration Building', 'New Admin Building', 'Admin'],
     gradient: "linear-gradient(135deg, #003300 0%, #006600 100%)"
@@ -140,6 +184,14 @@ const BUILDING_DATA = {
   "state-of-the-art-library": {
     glbName: "STATE-OF-THE-ART LIBRARY",
     name: "State-of-the-Art Library", shortName: "Library", emoji: "📖",
+    desc: "Modern digital learning commons and library featuring extensive book collections, e-resource stations, discussion pods, and silent study zones.",
+    depts: [
+      { name: "Circulation Desk & Reference Desk", sub: "Floor 1", icon: "📚" },
+      { name: "E-Library & Computer Terminals", sub: "Floor 1", icon: "💻" },
+      { name: "Graduate Studies & Periodicals", sub: "Floor 2", icon: "📑" },
+      { name: "Quiet Study Pods & Research Hub", sub: "Floor 2", icon: "🎧" }
+    ],
+    contact: { phone: "(085) 341-2791", email: "library@csu.edu.ph" },
     supabaseId: 11,
     supabaseNames: ['Library', 'State-of-the-Art Library'],
     gradient: "linear-gradient(135deg, #1b3548 0%, #3e6d8a 100%)"
@@ -147,6 +199,12 @@ const BUILDING_DATA = {
   "kalinaw": {
     glbName: "KALINAW",
     name: "Kalinaw Hall", shortName: "Kalinaw", emoji: "🏨",
+    desc: "University lodging and guest house providing accommodation facilities for visiting dignitaries, researchers, and campus guests.",
+    depts: [
+      { name: "Reception Desk & Lounge", sub: "Floor 1", icon: "🛋" },
+      { name: "Dining Hall & Guest Suites", sub: "Floor 1-2", icon: "🛏" }
+    ],
+    contact: { phone: "(085) 341-2792", email: "kalinaw@csu.edu.ph" },
     supabaseId: 10,
     supabaseNames: ['Kalinaw', 'Kalinaw Hall'],
     gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)"
@@ -154,6 +212,12 @@ const BUILDING_DATA = {
   "csu_student_center": {
     glbName: "CSU STUDENT CENTER",
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", emoji: "🏢",
+    desc: "Hub for student organizations, Supreme Student Council, guidance services, and student enterprise outlets.",
+    depts: [
+      { name: "Student Government Office", sub: "Floor 1", icon: "🏛" },
+      { name: "Guidance & Counseling Office", sub: "Floor 1", icon: "💬" },
+      { name: "Student Publications & Organizations", sub: "Floor 2", icon: "📰" }
+    ],
     interactive: false,
     supabaseId: 19,
     supabaseNames: ['Student Center', 'CSU Student Center'],
@@ -162,6 +226,13 @@ const BUILDING_DATA = {
   "ced_building": {
     glbName: "CED BUILDING",
     name: "CED Building", shortName: "CED", emoji: "🏫",
+    desc: "College of Education facility dedicated to teacher education, laboratory schools, curriculum development, and educational research.",
+    depts: [
+      { name: "CED Dean's Office", sub: "Floor 1", icon: "🏢" },
+      { name: "Elementary & Secondary Ed Depts", sub: "Floor 1", icon: "✏️" },
+      { name: "Demonstration & Tech Labs", sub: "Floor 2", icon: "🖥" }
+    ],
+    contact: { phone: "(085) 341-2793", email: "ced@csu.edu.ph" },
     supabaseId: 7,
     supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],
     gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)"
@@ -169,6 +240,13 @@ const BUILDING_DATA = {
   "caa_building": {
     glbName: "CAA BUILDING",
     name: "CAA Building", shortName: "CAA", emoji: "🌾",
+    desc: "College of Agricultural Sciences and Natural Resources facility featuring agricultural science labs, soil testing centers, and agronomy offices.",
+    depts: [
+      { name: "CAA Dean's Office", sub: "Floor 1", icon: "🏢" },
+      { name: "Agronomy & Soil Science Labs", sub: "Floor 1", icon: "🌱" },
+      { name: "Forestry & Environmental Science Dept", sub: "Floor 2", icon: "🌲" }
+    ],
+    contact: { phone: "(085) 341-2794", email: "caa@csu.edu.ph" },
     supabaseId: 8,
     supabaseNames: ['CAA', 'CAA Building'],
     gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)"
@@ -176,6 +254,12 @@ const BUILDING_DATA = {
   "dost": {
     glbName: "DOST",
     name: "DOST Building", shortName: "DOST", emoji: "🔬",
+    desc: "Department of Science and Technology regional research facility, testing labs, and technology transfer center.",
+    depts: [
+      { name: "DOST Helpdesk & Calibration Lab", sub: "Floor 1", icon: "🔬" },
+      { name: "R&D Innovation Hub", sub: "Floor 2", icon: "💡" }
+    ],
+    contact: { phone: "(085) 341-2795", email: "dost@csu.edu.ph" },
     supabaseId: 15,
     supabaseNames: ['DOST Building', 'DOST'],
     gradient: "linear-gradient(135deg, #0f2c59 0%, #205090 100%)"
@@ -183,6 +267,8 @@ const BUILDING_DATA = {
   "food_innovation_center": {
     glbName: "FOOD INNOVATION CENTER",
     name: "Food Innovation Center", shortName: "FIC", emoji: "🍎",
+    desc: "Food technology testing facility supporting regional food processing research and development.",
+    depts: [{ name: "Food Processing & Pilot Plant", sub: "Floor 1", icon: "🍎" }],
     interactive: false,
     supabaseId: 18,
     supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
@@ -191,6 +277,8 @@ const BUILDING_DATA = {
   "hostel": {
     glbName: "UNIVERSITY HOSTEL",
     name: "University Hostel", shortName: "Hostel", emoji: "🏨",
+    desc: "Campus hostel facility providing lodging for guests, faculty trainees, and student delegates.",
+    depts: [{ name: "Guest Registration & Rooms", sub: "Floor 1-2", icon: "🏨" }],
     interactive: false,
     supabaseId: 16,
     supabaseNames: ['Hostel', 'University Hostel'],
@@ -199,11 +287,15 @@ const BUILDING_DATA = {
   "school_of_medicine_(_under_cons_)": {
     glbName: "SCHOOL OF MEDICINE ( UNDER CONS. )",
     name: "School of Medicine", shortName: "Medicine", emoji: "🏥",
+    desc: "Future medical education facility currently under construction to support healthcare degree programs.",
     gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)"
   },
   "csu_gym": {
     glbName: "Gymnasium",
     name: "University Gymnasium", shortName: "Gymnasium", emoji: "🏟",
+    desc: "Main indoor sports complex for university athletics, basketball, volleyball games, graduations, and major campus events.",
+    depts: [{ name: "Basketball Court & PE Dept", sub: "Floor 1", icon: "🏀" }],
+    contact: { phone: "(085) 341-2796", email: "sports@csu.edu.ph" },
     supabaseId: 13,
     supabaseNames: ['CSU Gymnasium', 'University Gymnasium', 'Gym'],
     gradient: "linear-gradient(135deg, #441c58 0%, #683083 100%)"
@@ -211,6 +303,12 @@ const BUILDING_DATA = {
   "old_administrative_building": {
     glbName: "OLD ADMINISTRATIVE BUILDING",
     name: "Old Admin Building", shortName: "Old Admin", abbrev: "Old Admin", emoji: "🏢",
+    desc: "Heritage administrative facility housing extension services, alumni relations, research coordination, and auxiliary offices.",
+    depts: [
+      { name: "Extension Services & Research Office", sub: "Floor 1", icon: "🌐" },
+      { name: "Planning & Alumni Affairs", sub: "Floor 1", icon: "📜" }
+    ],
+    contact: { phone: "(085) 341-2283", email: "info@csu.edu.ph" },
     supabaseId: 2,
     supabaseNames: ['Old Administration Building', 'Old Admin Building'],
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
@@ -218,6 +316,7 @@ const BUILDING_DATA = {
   "old_cas": {
     glbName: "OLD CAS BUILDING",
     name: "Old CAS Building", shortName: "Old CAS", emoji: "🏫",
+    desc: "Former College of Arts and Sciences building housing general lecture rooms and department offices.",
     interactive: false,
     supabaseId: 20,
     supabaseNames: ['Old CAS', 'Old CAS Building'],
@@ -226,6 +325,7 @@ const BUILDING_DATA = {
   "sports_office": {
     glbName: "ROTC OFFICE",
     name: "Sports Office", shortName: "Sports Office", emoji: "🏆",
+    desc: "University athletics and physical education office coordinating sports competitions and ROTC activities.",
     interactive: false,
     supabaseId: 14,
     supabaseNames: ['PE Building', 'Sports Office'],
@@ -233,6 +333,9 @@ const BUILDING_DATA = {
   },
   "Villares": {
     name: "Villares", shortName: "Villares", emoji: "🏆",
+    desc: "Villares research center supporting agricultural technology and extension programs.",
+    depts: [{ name: "Research & Seminar Rooms", sub: "Floor 1", icon: "🌱" }],
+    contact: { phone: "(085) 341-2797", email: "villares@csu.edu.ph" },
     supabaseId: 9,
     supabaseNames: ['Villares'],
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
@@ -240,6 +343,9 @@ const BUILDING_DATA = {
   "ched_lgu": {
     glbName: "CHED_LGU -",
     name: "CHED-LGU", shortName: "CHED-LGU", abbrev: "CHED-LGU", emoji: "🏛",
+    desc: "Commission on Higher Education (CHED Caraga) regional office and Local Government Unit partnership facility.",
+    depts: [{ name: "CHED Caraga Regional Office", sub: "Floor 1", icon: "🏛" }],
+    contact: { phone: "(085) 342-5253", email: "chedcaraga@ched.gov.ph" },
     supabaseId: null,
     supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
@@ -692,12 +798,6 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
       }
     });
 
-    // ── Road navigation: highlight route to this building ──────────────────
-    // Get building world position for waypoint snapping
-    const buildingPos = new THREE.Vector3();
-    _box.setFromObject(node);
-    _box.getCenter(buildingPos);
-    handleBuildingRoute(key, [buildingPos.x, buildingPos.y, buildingPos.z]);
   } else {
     console.warn(`No node found for "${key}". Available keys:`, Object.keys(meshIndex));
   }
@@ -737,6 +837,11 @@ function _resetHighlight() {
 
   // Clear road segment route highlights
   clearRouteHighlight();
+
+  // Clear active state from all route category buttons
+  document.querySelectorAll('.route-category-btn').forEach(btn => {
+    btn.classList.remove('active-route-btn');
+  });
 
   if (experience && experience.renderer) {
     experience.renderer.requestRender();
@@ -1012,21 +1117,52 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     if (descWrap) descWrap.style.display = '';
     if (descEl) descEl.style.display = '';
 
-    // ── "Show Campus Route" button ──
-    const showPathBtn = document.getElementById('panel-showpath-btn');
-    if (showPathBtn) {
-      showPathBtn.style.display = 'flex';
-      showPathBtn.onclick = () => {
-        const node = _findNode(key);
-        let posArray = null;
-        if (node) {
-          const buildingPos = new THREE.Vector3();
-          _box.setFromObject(node);
-          _box.getCenter(buildingPos);
-          posArray = [buildingPos.x, buildingPos.y, buildingPos.z];
-        }
-        handleBuildingRoute(key, posArray);
-      };
+    // ── Categorized Route Buttons (Nearest / Near / Far) ──
+    const routeBtnsWrap = document.getElementById('panel-route-btns-wrap');
+    if (routeBtnsWrap) {
+      // Only show route buttons if this building has categorized routes defined
+      if (!hasCategorizedRoutes(key)) {
+        routeBtnsWrap.style.display = 'none';
+      } else {
+        routeBtnsWrap.style.display = 'flex';
+
+        const btnNearest = document.getElementById('route-btn-nearest');
+        const btnNear = document.getElementById('route-btn-near');
+        const btnFar = document.getElementById('route-btn-far');
+        const allRouteBtns = [btnNearest, btnNear, btnFar];
+        const categories = ['nearest', 'near', 'far'];
+
+        // Sync button states on panel open
+        const activeCategory = getActiveRouteCategory();
+        allRouteBtns.forEach((btn, i) => {
+          if (btn) {
+            btn.classList.toggle('active-route-btn', activeCategory === categories[i]);
+          }
+        });
+
+        // Wire up each button
+        categories.forEach((cat, i) => {
+          const btn = allRouteBtns[i];
+          if (!btn) return;
+
+          btn.onclick = () => {
+            const currentCategory = getActiveRouteCategory();
+
+            if (currentCategory === cat) {
+              // Toggle off — clear the highlight
+              clearRouteHighlight();
+              allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
+            } else {
+              // Activate this category's route
+              const success = handleCategorizedRoute(key, cat);
+              allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
+              if (success && hasActiveRoute()) {
+                btn.classList.add('active-route-btn');
+              }
+            }
+          };
+        });
+      }
     }
 
     if (contactWrap && contactContent && data.contact) {
@@ -1177,28 +1313,31 @@ function _closePanel() {
 /**
 /**
  * createBuildingPin(building)
- * Renders a separated building marker with stacked circular seal badge (Logo_URL)
- * and compact name label, or text-only label fallback when Logo_URL is NULL.
- * @param {Object} building - { name, Logo_URL }
+ * Renders a separated building marker with stacked circular seal badge (Logo_URL or emoji fallback)
+ * and compact name label.
+ * @param {Object} building - { name, Logo_URL, logo, emoji }
  */
 function createBuildingPin(building) {
   const marker = document.createElement('div');
   marker.className = 'building-marker';
 
-  if (building.Logo_URL) {
-    const iconWrap = document.createElement('div');
-    iconWrap.className = 'marker-icon';
+  const iconWrap = document.createElement('div');
+  iconWrap.className = 'marker-icon';
 
+  const logoUrl = building.Logo_URL || building.logo;
+  if (logoUrl) {
     const img = document.createElement('img');
-    img.src = building.Logo_URL;
-    img.alt = `${building.name} college seal`;
+    img.src = logoUrl;
+    img.alt = `${building.name} logo`;
     img.onerror = () => {
-      iconWrap.remove();
-    }; // fall back to text-only label if the image fails to load
-
+      iconWrap.innerHTML = `<span style="font-size:15px;line-height:1;">${building.emoji || '🏛'}</span>`;
+    };
     iconWrap.appendChild(img);
-    marker.appendChild(iconWrap);
+  } else {
+    iconWrap.innerHTML = `<span style="font-size:15px;line-height:1;">${building.emoji || '🏛'}</span>`;
   }
+
+  marker.appendChild(iconWrap);
 
   const label = document.createElement('span');
   label.className = 'marker-label';
@@ -1246,11 +1385,13 @@ function _createPinForKey(key) {
     el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:pointer;pointer-events:all;z-index:5;';
 
     const buildingName = data.abbrev || data.shortName || data.name.split(' ')[0];
-    const logoUrl = data.Logo_URL || null;
+    const logoUrl = data.Logo_URL || data.logo || null;
 
     const pinEl = createBuildingPin({
       name: buildingName,
-      Logo_URL: logoUrl
+      Logo_URL: logoUrl,
+      logo: logoUrl,
+      emoji: data.emoji
     });
 
     el.appendChild(pinEl);
@@ -1314,7 +1455,9 @@ async function _loadSupabaseSeals() {
               const buildingName = item.abbrev || item.shortName || item.name.split(' ')[0];
               const newMarkerEl = createBuildingPin({
                 name: buildingName,
-                Logo_URL: logoUrl
+                Logo_URL: logoUrl,
+                logo: logoUrl,
+                emoji: item.emoji
               });
               if (oldMarkerEl.classList.contains('active-pin')) {
                 newMarkerEl.classList.add('active-pin');

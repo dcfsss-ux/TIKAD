@@ -523,11 +523,19 @@
               <div class="panel-label">Contact</div>
               <p id="panel-contact"></p>
             </div>
-            <!-- Action Buttons: Navigation Route & 3D Model Viewer -->
+            <!-- Action Buttons: Categorized Route Buttons & 3D Model Viewer -->
             <div id="panel-actions-wrap" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-              <button id="panel-showpath-btn" class="panel-showpath-btn">
-                <span class="mdi mdi-routes"></span> Show Campus Route
-              </button>
+              <div id="panel-route-btns-wrap" class="route-btns-group" style="display:none;">
+                <button id="route-btn-nearest" class="route-category-btn route-nearest-btn">
+                  <span class="mdi mdi-map-marker-distance"></span> Nearest Route
+                </button>
+                <button id="route-btn-near" class="route-category-btn route-near-btn">
+                  <span class="mdi mdi-map-marker-path"></span> Near Route
+                </button>
+                <button id="route-btn-far" class="route-category-btn route-far-btn">
+                  <span class="mdi mdi-map-marker-right"></span> Far Route
+                </button>
+              </div>
               <div id="panel-view3d-wrap" style="display:none;">
                 <button id="panel-view3d-btn" class="panel-view3d-btn">
                   <span>🏛</span> View 3D Model

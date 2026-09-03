@@ -907,43 +907,108 @@
   transform: scale(0.98);
 }
 
-/* ── SHOW PATH / CAMPUS ROUTE BUTTON ── */
-.panel-showpath-btn {
+/* ── CATEGORIZED ROUTE BUTTONS (Nearest / Near / Far) ── */
+.route-btns-group {
+  display: flex;
+  gap: 6px;
   width: 100%;
+}
+
+.route-category-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #008000 0%, #004d00 100%);
-  color: #ffffff;
-  border: 1.5px solid #eddd53;
-  padding: 11px;
+  gap: 4px;
+  padding: 10px 6px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   letter-spacing: 0.03em;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition:
     background 0.2s,
     border-color 0.2s,
     box-shadow 0.2s,
     color 0.2s,
-    transform 0.1s;
+    transform 0.12s,
+    opacity 0.2s;
+  border: 1.5px solid transparent;
+  color: #fff;
 }
 
-.panel-showpath-btn:hover {
-  background: linear-gradient(135deg, #009900 0%, #006600 100%);
+.route-category-btn:active {
+  transform: scale(0.96);
+}
+
+/* ── Nearest Route (Green) ── */
+.route-nearest-btn {
+  background: linear-gradient(135deg, #00a843 0%, #006b2b 100%);
+  border-color: #4cff91;
+  box-shadow: 0 2px 8px rgba(0, 168, 67, 0.25);
+}
+
+.route-nearest-btn:hover {
+  background: linear-gradient(135deg, #00c950 0%, #008837 100%);
   border-color: #fff;
-  color: #fff;
   box-shadow:
-    0 0 14px rgba(237, 221, 83, 0.4),
+    0 0 14px rgba(0, 200, 80, 0.45),
     0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.panel-showpath-btn:active {
-  transform: scale(0.98);
+.route-nearest-btn.active-route-btn {
+  background: linear-gradient(135deg, #00e65b 0%, #00a843 100%);
+  border-color: #fff;
+  box-shadow:
+    0 0 18px rgba(0, 230, 91, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Near Route (Yellow) ── */
+.route-near-btn {
+  background: linear-gradient(135deg, #d4a017 0%, #9e7a0e 100%);
+  border-color: #ffe066;
+  box-shadow: 0 2px 8px rgba(212, 160, 23, 0.25);
+}
+
+.route-near-btn:hover {
+  background: linear-gradient(135deg, #e6b31e 0%, #b88c12 100%);
+  border-color: #fff;
+  box-shadow:
+    0 0 14px rgba(230, 179, 30, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.route-near-btn.active-route-btn {
+  background: linear-gradient(135deg, #ffc521 0%, #d4a017 100%);
+  border-color: #fff;
+  box-shadow:
+    0 0 18px rgba(255, 197, 33, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Far Route (Red) ── */
+.route-far-btn {
+  background: linear-gradient(135deg, #c0392b 0%, #8b1a1a 100%);
+  border-color: #ff7675;
+  box-shadow: 0 2px 8px rgba(192, 57, 43, 0.25);
+}
+
+.route-far-btn:hover {
+  background: linear-gradient(135deg, #e04535 0%, #a82020 100%);
+  border-color: #fff;
+  box-shadow:
+    0 0 14px rgba(224, 69, 53, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.route-far-btn.active-route-btn {
+  background: linear-gradient(135deg, #ff4c4c 0%, #c0392b 100%);
+  border-color: #fff;
+  box-shadow:
+    0 0 18px rgba(255, 76, 76, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 /* ── MOUSE CONTROL HINT LEGEND CARD ── */

@@ -215,45 +215,141 @@
     "Villares":                  "bld_villares"
   },
 
-  "buildingRoadHighlights": {
-    "caa_building": ["road 1", "road 2"],
-    "caa": ["road 1", "road 2"],
-
-    "ced_building": ["road 1", "road 2"],
-    "ced": ["road 1", "road 2"],
-
-    "state-of-the-art-library": ["road 22", "road 30", "road 5", "road 1"],
-    "library": ["road 22", "road 30", "road 5", "road 1"],
-
-    "batok_hall": ["road 1", "road 5", "road 6", "road 24", "road 26", "road 31"],
-    "batok": ["road 1", "road 5", "road 6", "road 24", "road 26", "road 31"],
-
-    "kalinaw": ["road 22", "road 30", "road 5", "road 1"],
-
-    "new_administrative_bldg": ["road 21", "road 31", "road 26", "road 7"],
-    "new_admin": ["road 21", "road 31", "road 26", "road 7"],
-
-    "old_administrative_building": ["road 21", "road 31", "road 26", "road 7", "road 36"],
-    "old_admin": ["road 21", "road 31", "road 26", "road 7", "road 36"],
-
-    "kinaadman_hall": ["road 27", "road 25", "road 26", "road 35"],
-    "kinaadman": ["road 27", "road 25", "road 26", "road 35"],
-
-    "csu_gym": ["road 34", "road 27", "road 25", "road 26", "road 33"],
-    "gymnasium": ["road 34", "road 27", "road 25", "road 26", "road 33"],
-
-    "hiraya_building": ["road 25", "road 26", "road 32"],
-    "hiraya": ["road 25", "road 26", "road 32"],
-
-    "masawa_building": ["road 25", "road 26", "road 32"],
-    "masawa": ["road 25", "road 26", "road 32"],
-
-    "hinang_building": ["road 25", "road 26", "road 32"],
-    "hinang": ["road 25", "road 26", "road 32"],
-
-    "Villares": ["road 12"],
-    "villares": ["road 12"],
-
-    "dost": ["road 12"]
+  "buildingCategorizedRoutes": {
+    "caa_building": {
+      "nearest": ["road 37", "road 1"],
+      "near": ["road 37", "road 31", "road 26", "road 24", "road 5", "road 6"],
+      "far": ["road 5", "road 7", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17", "road 30", "road 35", "road 36", "road 37"]
+    },
+    "caa": {
+      "nearest": ["road 37", "road 1"],
+      "near": ["road 37", "road 31", "road 26", "road 24", "road 5", "road 6"],
+      "far": ["road 5", "road 7", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17", "road 30", "road 35", "road 36", "road 37"]
+    },
+    "ced_building": {
+      "nearest": ["road 1", "road 2"],
+      "near": ["road 2", "road 31", "road 26", "road 24", "road 5", "road 6"],
+      "far": ["road 5", "road 7", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17", "road 30", "road 35", "road 36", "road 2"]
+    },
+    "ced": {
+      "nearest": ["road 1", "road 2"],
+      "near": ["road 2", "road 31", "road 26", "road 24", "road 5", "road 6"],
+      "far": ["road 5", "road 7", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17", "road 30", "road 35", "road 36", "road 2"]
+    },
+    "state-of-the-art-library": {
+      "nearest": ["road 22", "road 30", "road 5", "road 1"],
+      "near": ["road 22", "road 21", "road 31", "road 26"],
+      "far": ["road 22", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "library": {
+      "nearest": ["road 22", "road 30", "road 5", "road 1"],
+      "near": ["road 22", "road 21", "road 31", "road 26"],
+      "far": ["road 22", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "batok_hall": {
+      "nearest": ["road 1", "road 5", "road 6"],
+      "near": ["road 6", "road 24", "road 31", "road 26"],
+      "far": ["road 30", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "batok": {
+      "nearest": ["road 1", "road 5", "road 6"],
+      "near": ["road 6", "road 24", "road 31", "road 26"],
+      "far": ["road 30", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "new_administrative_bldg": {
+      "nearest": ["circle road sa new admin", "road 7", "road 21", "road 31", "road 26"],
+      "near": ["circle road sa new admin", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["circle road sa new admin", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "new_admin": {
+      "nearest": ["circle road sa new admin", "road 7", "road 21", "road 31", "road 26"],
+      "near": ["circle road sa new admin", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["circle road sa new admin", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "old_administrative_building": {
+      "nearest": ["road 36", "road 7", "road 21", "road 31", "road 26"],
+      "near": ["road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "old_admin": {
+      "nearest": ["road 36", "road 7", "road 21", "road 31", "road 26"],
+      "near": ["road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "kalinaw": {
+      "nearest": ["road 22", "road 30", "road 5", "road 1"],
+      "near": ["road 22", "road 21", "road 31", "road 26"],
+      "far": ["road 22", "road 7", "road 36", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "kinaadman_hall": {
+      "nearest": ["kh kalsada", "road 35", "road 27", "road 25", "road 26"],
+      "near": ["kh kalsada", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["kh kalsada", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "kinaadman": {
+      "nearest": ["kh kalsada", "road 35", "road 27", "road 25", "road 26"],
+      "near": ["kh kalsada", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["kh kalsada", "road 35", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "csu_gym": {
+      "nearest": ["road 33", "road 34", "road 27", "road 25", "road 26"],
+      "near": ["road 33", "road 34", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 33", "road 34", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "gymnasium": {
+      "nearest": ["road 33", "road 34", "road 27", "road 25", "road 26"],
+      "near": ["road 33", "road 34", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 33", "road 34", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "gym": {
+      "nearest": ["road 33", "road 34", "road 27", "road 25", "road 26"],
+      "near": ["road 33", "road 34", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 33", "road 34", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "hiraya_building": {
+      "nearest": ["hiraya road", "road 8", "road 27", "road 25", "road 26"],
+      "near": ["hiraya road", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["hiraya road", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "hiraya": {
+      "nearest": ["hiraya road", "road 8", "road 27", "road 25", "road 26"],
+      "near": ["hiraya road", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["hiraya road", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "hinang_building": {
+      "nearest": ["hinang road", "road 8", "road 27", "road 25", "road 26"],
+      "near": ["hinang road", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["hinang road", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "hinang": {
+      "nearest": ["hinang road", "road 8", "road 27", "road 25", "road 26"],
+      "near": ["hinang road", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["hinang road", "road 8", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "masawa_building": {
+      "nearest": ["road 32", "road 25", "road 26"],
+      "near": ["road 32", "road 27", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 32", "road 28", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "masawa": {
+      "nearest": ["road 32", "road 25", "road 26"],
+      "near": ["road 32", "road 27", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 32", "road 28", "road 9", "road 11", "road 13", "road 15", "road 17"]
+    },
+    "dost": {
+      "nearest": ["road 12", "road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
+      "near": ["road 12", "road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 12", "road 13", "road 15", "road 17"]
+    },
+    "Villares": {
+      "nearest": ["road 12", "road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
+      "near": ["road 12", "road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 12", "road 13", "road 15", "road 17"]
+    },
+    "villares": {
+      "nearest": ["road 12", "road 11", "road 9", "road 32", "road 28", "road 25", "road 26"],
+      "near": ["road 12", "road 11", "road 9", "road 8", "road 35", "road 36", "road 7", "road 30", "road 5", "road 1"],
+      "far": ["road 12", "road 13", "road 15", "road 17"]
+    }
   }
 }

@@ -3,10 +3,12 @@
  *
  * Wires together pathfinding, gate strategy, and highlight rendering.
  * Called from mapOverlay.js to handle building click → route highlight.
+ *
+ * Supports 3 route categories: nearest (green), near (yellow), far (red).
  */
 
 import { loadGraph, findNearestWaypoint, getBuildingExitRouteSegments } from './pathfinding.js';
-import { buildMeshLookup, highlightSegments, clearHighlight, hasActiveHighlight } from './highlightRenderer.js';
+import { buildMeshLookup, highlightCategorizedSegments, highlightSegments, clearHighlight, hasActiveHighlight, getActiveCategory } from './highlightRenderer.js';
 import waypointsData from './data/waypoints.json';
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -32,7 +34,43 @@ export function initNavigation(campusBaseScene) {
 }
 
 /**
- * Handle a building being selected — highlight ALL roads connected to its exit (e.g. 2nd Gate for Kinaadman) & entrance gate.
+ * Handle a categorized route for a building — highlights roads for a specific category.
+ *
+ * @param {string} buildingKey — the BUILDING_DATA key (e.g. "masawa_building")
+ * @param {'nearest'|'near'|'far'} category — route category to show
+ * @returns {boolean} — true if roads were highlighted, false otherwise
+ */
+export function handleCategorizedRoute(buildingKey, category = 'nearest') {
+  if (!isInitialized) {
+    console.warn('[Navigation] Not initialized yet.');
+    return false;
+  }
+
+  // 1. Clear any existing route highlight
+  clearRouteHighlight();
+
+  // 2. Look up categorized routes for this building
+  const categorized = _getCategorizedRoutes(buildingKey);
+
+  if (categorized && categorized[category]) {
+    const segments = categorized[category];
+    if (segments.length > 0) {
+      highlightCategorizedSegments(segments, category);
+      const emoji = category === 'nearest' ? '🟢' : category === 'near' ? '🟡' : '🔴';
+      console.log(`[Navigation] ${emoji} Highlighted "${category}" route (${segments.length} roads) for "${buildingKey}"`);
+      return true;
+    } else {
+      console.log(`[Navigation] Empty "${category}" route for "${buildingKey}".`);
+      return false;
+    }
+  }
+
+  console.warn(`[Navigation] No categorized routes found for "${buildingKey}" (category: ${category})`);
+  return false;
+}
+
+/**
+ * Handle a building being selected — highlight ALL roads connected to its exit (legacy).
  *
  * @param {string} buildingKey — the BUILDING_DATA key (e.g. "masawa_building")
  * @param {number[]} [buildingWorldPos] — optional [x, y, z] world position of the building
@@ -47,12 +85,10 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
   // 1. Clear any existing route highlight
   clearRouteHighlight();
 
-  // 2. Check if the building has an explicit manual list of road segments in waypoints.json
-  const manualSegments = _getManualRoadSegments(buildingKey);
-  if (manualSegments && manualSegments.length > 0) {
-    highlightSegments(manualSegments);
-    console.log(`[Navigation] 🎯 (Manual Override) Highlighted road segments for "${buildingKey}":`, manualSegments);
-    return true;
+  // 2. Check if the building has categorized routes — use "nearest" as default
+  const categorized = _getCategorizedRoutes(buildingKey);
+  if (categorized && categorized.nearest) {
+    return handleCategorizedRoute(buildingKey, 'nearest');
   }
 
   // 3. Resolve building key to its waypoint ID
@@ -68,7 +104,7 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
     return false;
   }
 
-  // 4. Highlight roads connecting the building to its exit gate (e.g. 2nd Gate for Kinaadman) and entrance gate
+  // 4. Highlight roads connecting the building to its exit gate
   const segments = getBuildingExitRouteSegments(graph, buildingWaypointId);
 
   if (!segments || segments.length === 0) {
@@ -77,25 +113,38 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
   }
 
   // 5. Highlight those connected entrance and exit roads
-  highlightSegments(segments);
+  highlightSegments(segments, []);
 
   console.log(`[Navigation] 🛣️ Highlighted ${segments.length} exit/entrance connected roads for "${buildingKey}":`, segments);
   return true;
 }
 
 /**
- * Check if a building key has an explicit array of road segments in waypoints.json -> buildingRoadHighlights
+ * Check if a building has categorized routes defined.
+ *
+ * @param {string} buildingKey
+ * @returns {boolean}
  */
-function _getManualRoadSegments(buildingKey) {
-  if (!waypointsData || !waypointsData.buildingRoadHighlights) return null;
-  const map = waypointsData.buildingRoadHighlights;
+export function hasCategorizedRoutes(buildingKey) {
+  return _getCategorizedRoutes(buildingKey) !== null;
+}
 
-  if (map[buildingKey]) return map[buildingKey];
+/**
+ * Look up categorized route data for a building key in waypoints.json -> buildingCategorizedRoutes.
+ *
+ * @param {string} buildingKey
+ * @returns {{ nearest: string[], near: string[], far: string[] } | null}
+ */
+function _getCategorizedRoutes(buildingKey) {
+  if (!waypointsData || !waypointsData.buildingCategorizedRoutes) return null;
+  const map = waypointsData.buildingCategorizedRoutes;
+
+  if (map[buildingKey] !== undefined) return map[buildingKey];
 
   const cleanKey = buildingKey.toLowerCase().replace(/[^a-z0-9]/g, '');
-  for (const [k, segs] of Object.entries(map)) {
+  for (const [k, data] of Object.entries(map)) {
     if (k.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanKey) {
-      return segs;
+      return data;
     }
   }
 
@@ -115,6 +164,14 @@ export function clearRouteHighlight() {
  */
 export function hasActiveRoute() {
   return hasActiveHighlight();
+}
+
+/**
+ * Get the currently active route category.
+ * @returns {string|null}
+ */
+export function getActiveRouteCategory() {
+  return getActiveCategory();
 }
 
 // ── Internal helpers ──────────────────────────────────────────────────────────
