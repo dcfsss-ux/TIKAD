@@ -9,6 +9,7 @@
 
 import * as THREE from 'three';
 import Experience from '../../Experience/Experience.js';
+import { BalangayPreloader } from './balangayPreloader.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
 import { logRoadSegments } from './roadDebugLogger.js';
 import { initNavigation, handleBuildingRoute, handleCategorizedRoute, hasCategorizedRoutes, clearRouteHighlight, hasActiveRoute, getActiveRouteCategory } from './interactionHandler.js';
@@ -67,8 +68,8 @@ async function _syncSupabaseModels() {
           const abbrevNorm = norm(bData.abbrev);
 
           if ((nameNorm && (dbNameNorm.includes(nameNorm) || nameNorm.includes(dbNameNorm))) ||
-              (sNameNorm && (dbNameNorm.includes(sNameNorm) || sNameNorm.includes(dbNameNorm))) ||
-              (abbrevNorm && (dbNameNorm.includes(abbrevNorm) || abbrevNorm.includes(dbNameNorm)))) {
+            (sNameNorm && (dbNameNorm.includes(sNameNorm) || sNameNorm.includes(dbNameNorm))) ||
+            (abbrevNorm && (dbNameNorm.includes(abbrevNorm) || abbrevNorm.includes(dbNameNorm)))) {
             isMatch = true;
           }
         }
@@ -584,39 +585,24 @@ function _bootExperience() {
 
   experience = new Experience(canvas);
 
-  // ── Wire up progress to new preloader bar + pct ──────────────────────────
-  const barEl = document.getElementById('preloader-bar');
-  const pctEl = document.getElementById('loading-progress');
-
-  function _setProgress(pct) {
-    const clamped = Math.min(100, Math.max(0, Math.round(pct)));
-    if (barEl) barEl.style.width = clamped + '%';
-    if (pctEl) pctEl.textContent = clamped + '%';
-  }
-
+  // ── Wire up progress to Balangay preloader ──────────────────────────────
   if (experience.resources) {
     const mgr = experience.resources.loadingManager;
     if (mgr) {
       mgr.onProgress = (_url, loaded, total) => {
-        if (total > 0) _setProgress((loaded / total) * 100);
+        if (total > 0) BalangayPreloader.setProgress((loaded / total) * 100);
       };
     }
   }
 
   experience.world.on('worldready', () => {
     worldReady = true;
-    _setProgress(100);
+    BalangayPreloader.setProgress(100);
 
-    // Ground base is ready — hide the preloader immediately.
-    // Buildings will stream in progressively in the background.
-    const preloader = document.getElementById('tikad-preloader');
-    if (preloader) {
-      setTimeout(() => {
-        preloader.style.transition = 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)';
-        preloader.style.opacity = '0';
-        setTimeout(() => preloader.classList.add('hidden'), 750);
-      }, 400);
-    }
+    // Ground base is ready — smoothly dismiss the Balangay preloader
+    setTimeout(() => {
+      BalangayPreloader.hide();
+    }, 400);
 
     // Build chips and start pin-update loop immediately (buildings will
     // register their own pins as they arrive via 'buildingloaded')

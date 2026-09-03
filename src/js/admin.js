@@ -74,12 +74,67 @@ const breadcrumbName = document.getElementById('breadcrumb-name');
 const emptyState    = document.getElementById('empty-state');
 const editorPane    = document.getElementById('editor-pane');
 
+// ── Admin Preloader ────────────────────────────────────────────────────────
+const _admPreloader = {
+  el:     document.getElementById('balangay-preloader'),
+  bar:    document.getElementById('adm-preloader-bar'),
+  pct:    document.getElementById('adm-preloader-pct'),
+  _timer: null,
+  _pct:   0,
+
+  /** Animate progress bar from 0 → target% over durationMs */
+  _animateTo(target, durationMs, cb) {
+    const start = this._pct;
+    const diff  = target - start;
+    const t0    = performance.now();
+    const step  = (now) => {
+      const p = Math.min((now - t0) / durationMs, 1);
+      const v = Math.round(start + diff * p);
+      this._set(v);
+      if (p < 1) requestAnimationFrame(step);
+      else cb && cb();
+    };
+    requestAnimationFrame(step);
+  },
+
+  _set(v) {
+    this._pct = v;
+    if (this.bar) this.bar.style.width = v + '%';
+    if (this.pct) this.pct.textContent = v + '%';
+  },
+
+  start() {
+    if (!this.el) return;
+    this.el.style.display = '';
+    this.el.style.opacity = '1';
+    this._animateTo(90, 2000);
+  },
+
+  finish() {
+    if (!this.el) return;
+    this._animateTo(100, 400, () => {
+      setTimeout(() => {
+        if (this.el) {
+          this.el.style.transition = 'opacity 0.8s cubic-bezier(0.4,0,0.2,1)';
+          this.el.style.opacity = '0';
+          setTimeout(() => {
+            if (this.el) this.el.style.display = 'none';
+          }, 850);
+        }
+      }, 350);
+    });
+  },
+};
+
 // ── Init ───────────────────────────────────────────────────────────────────
 async function init() {
+  _admPreloader.start();
+
   const { data: { session } } = await getSession();
   if (session) {
     _onLoggedIn(session);
   } else {
+    _admPreloader.finish();
     _showLogin();
   }
 
@@ -102,13 +157,16 @@ function _showLogin() {
 
 async function _onLoggedIn(session) {
   loginScreen.classList.add('hidden');
-  adminApp.classList.add('visible');
 
   const email = session.user?.email || '';
   if (userChipEmail) userChipEmail.textContent = email;
   if (userAvatar) userAvatar.textContent = (email[0] || 'A').toUpperCase();
 
   await _loadBuildings();
+
+  // Finish preloader after buildings have loaded
+  _admPreloader.finish();
+  setTimeout(() => adminApp.classList.add('visible'), 900);
 }
 
 function _bindLoginForm() {

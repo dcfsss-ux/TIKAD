@@ -1,152 +1,592 @@
-/* ── TIKAD Preloader ──────────────────────────────────────────────────────── */
+/**
+ * Balangay Preloader Styles
+ * University Theme Palette & Core Values:
+ *   --univ-green:          #009900 (Competence)
+ *   --univ-gold:           #f9dc07 (Service)
+ *   --univ-orange:         #ff9900 (Uprightness)
+ *   --univ-white:          #ffffff
+ *   --univ-emerald:        #003300
+ *   --univ-emerald-deep:   #001f00
+ *   --univ-gray:           #4d4d4d
+ */
 
-.hidden { display: none !important; }
+:root {
+  --univ-green: #009900;
+  --univ-gold: #f9dc07;
+  --univ-orange: #ff9900;
+  --univ-white: #ffffff;
+  --univ-emerald: #003300;
+  --univ-emerald-deep: #001f00;
+  --univ-gray: #4d4d4d;
+  --univ-gray-light: #737373;
+}
 
-/* ── Overlay ────────────────────────────────────────────────────────────── */
-.preloader {
+.hidden {
+  display: none !important;
+}
+
+/* ─── Preloader Container Overlay ───────────────────────────── */
+.balangay-preloader,
+.preloader,
+#tikad-preloader {
   position: fixed;
   inset: 0;
-  z-index: 99999;
-  background: #002600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Radial ambient glow behind the logo */
-.preloader-bg-glow {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0, 120, 0, 0.28) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* ── Content wrapper ─────────────────────────────────────────────────────── */
-.preloader-content {
-  position: relative;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background: radial-gradient(circle at 50% 38%, #004d00 0%, var(--univ-emerald) 55%, var(--univ-emerald-deep) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s ease;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: none;
 }
 
-/* ── Logo + spinning ring ────────────────────────────────────────────────── */
-.preloader-logo-ring {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  /* No flex here — all children are absolutely positioned independently */
+.balangay-preloader.fade-out,
+.preloader.fade-out,
+#tikad-preloader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-/* Absolute SVG ring behind the logo */
-.preloader-ring-svg {
+/* ─── Background Ambient Glow & Mist ────────────────────────── */
+.balangay-bg-glow,
+.preloader-bg-glow {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* The gold arc animates from 0 → full */
-.preloader-ring-arc {
-  transform-origin: 60px 60px;
-  transform: rotate(-90deg);
-  animation: arc-fill 2s ease-out forwards;
-  filter: drop-shadow(0 0 6px rgba(237, 221, 83, 0.66));
-}
-
-@keyframes arc-fill {
-  0%   { stroke-dashoffset: 340; opacity: 0.6; }
-  60%  { stroke-dashoffset: 80;  opacity: 1; }
-  100% { stroke-dashoffset: 0;   opacity: 1; }
-}
-
-/* Inner circle behind the baybayin text */
-.preloader-logo-inner {
-  position: absolute;
-  top: 50%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
-  width: 84px;
-  height: 84px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #005500, #001a00);
-  border: 1.5px solid rgba(237, 221, 83, 0.25);
-  box-shadow:
-    0 0 24px rgba(0, 100, 0, 0.5),
-    inset 0 1px 0 rgba(255,255,255,0.05);
-  animation: logo-pulse 2.8s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(249, 220, 7, 0.18) 0%, rgba(255, 153, 0, 0.08) 40%, rgba(0, 51, 0, 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: bgGlowPulse 6s ease-in-out infinite alternate;
 }
 
-@keyframes logo-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 150, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.05); }
-  50%       { box-shadow: 0 0 36px rgba(0, 200, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
+@keyframes bgGlowPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.95;
+  }
 }
 
-/* Baybayin script character — absolutely centered, offset for Tagalog font ascenders */
-.preloader-baybayin {
-  font-family: 'Noto Sans Tagalog', sans-serif;
-  font-size: 22px;
+/* ─── Main SVG Stage ────────────────────────────────────────── */
+.balangay-svg-stage {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  height: auto;
+  max-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balangay-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* ─── Sun & Horizon Celestial Ring ──────────────────────────── */
+.balangay-sun-disc {
+  transform-origin: 400px 145px;
+  animation: sunRadiance 7s ease-in-out infinite alternate;
+}
+
+@keyframes sunRadiance {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+.balangay-sun-ring {
+  transform-origin: 400px 145px;
+  animation: sunRingSpin 24s linear infinite;
+}
+
+@keyframes sunRingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Boat Group (Pitching & Buoyancy Rocking) ──────────────── */
+.balangay-vessel-group {
+  transform-origin: 390px 255px;
+  animation: vesselBuoyancy 2.6s ease-in-out infinite;
+}
+
+@keyframes vesselBuoyancy {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  25% {
+    transform: translateY(-4px) rotate(-1.4deg);
+  }
+
+  50% {
+    transform: translateY(3px) rotate(1.2deg);
+  }
+
+  75% {
+    transform: translateY(-2px) rotate(-0.6deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+/* ─── Rower Figure (Dynamic Rowing Cycle) ───────────────────── */
+.balangay-rower-torso {
+  transform-origin: 375px 235px;
+  animation: rowerLeanCycle 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes rowerLeanCycle {
+  0% {
+    transform: rotate(0deg) translateX(0);
+  }
+
+  20% {
+    transform: rotate(7deg) translateX(4px);
+  }
+
+  45% {
+    transform: rotate(-9deg) translateX(-5px);
+  }
+
+  75% {
+    transform: rotate(-2deg) translateX(-1px);
+  }
+
+  100% {
+    transform: rotate(0deg) translateX(0);
+  }
+}
+
+/* ─── Paddle (Sagwan) Animation ─────────────────────────────── */
+.balangay-paddle-assembly {
+  transform-origin: 388px 222px;
+  animation: paddleStrokeCycle 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes paddleStrokeCycle {
+  0% {
+    transform: rotate(16deg) translateY(-2px);
+  }
+
+  20% {
+    transform: rotate(24deg) translateY(4px);
+  }
+
+  50% {
+    transform: rotate(-28deg) translateY(6px);
+  }
+
+  68% {
+    transform: rotate(-32deg) translateY(-8px);
+  }
+
+  85% {
+    transform: rotate(-4deg) translateY(-10px);
+  }
+
+  100% {
+    transform: rotate(16deg) translateY(-2px);
+  }
+}
+
+/* ─── Water Splash Particles at Paddle ──────────────────────── */
+.balangay-paddle-splash {
+  transform-origin: 360px 270px;
+  animation: splashTrigger 2.6s ease-out infinite;
+}
+
+@keyframes splashTrigger {
+
+  0%,
+  15% {
+    opacity: 0;
+    transform: scale(0.3) translateY(4px);
+  }
+
+  25% {
+    opacity: 0.9;
+    transform: scale(1.1) translateY(-3px);
+  }
+
+  40% {
+    opacity: 0.7;
+    transform: scale(1) translateY(2px);
+  }
+
+  50% {
+    opacity: 0;
+    transform: scale(1.3) translateY(8px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* ─── Boat Wake Waves & Stern Ripples ───────────────────────── */
+.balangay-wake-ripple-1 {
+  animation: wakeSpread 2.6s linear infinite;
+}
+
+.balangay-wake-ripple-2 {
+  animation: wakeSpread 2.6s linear 0.9s infinite;
+}
+
+.balangay-wake-ripple-3 {
+  animation: wakeSpread 2.6s linear 1.8s infinite;
+}
+
+@keyframes wakeSpread {
+  0% {
+    transform: translateX(0) scale(0.6);
+    opacity: 0.8;
+  }
+
+  70% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateX(-65px) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* ─── Multi-Layer Ocean Waves (Parallax Flow) ───────────────── */
+.balangay-wave-layer-back {
+  animation: waveScrollBack 8s linear infinite;
+}
+
+.balangay-wave-layer-mid {
+  animation: waveScrollMid 5s linear infinite;
+}
+
+.balangay-wave-layer-front {
+  animation: waveScrollFront 3.4s linear infinite;
+}
+
+@keyframes waveScrollBack {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-240px);
+  }
+}
+
+@keyframes waveScrollMid {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-320px);
+  }
+}
+
+@keyframes waveScrollFront {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-400px);
+  }
+}
+
+/* ─── Banner / Mast Pennant Flutter ─────────────────────────── */
+.balangay-pennant {
+  transform-origin: 290px 185px;
+  animation: pennantFlutter 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes pennantFlutter {
+  0% {
+    transform: scaleX(0.85) skewY(-3deg);
+  }
+
+  100% {
+    transform: scaleX(1.05) skewY(4deg);
+  }
+}
+
+/* ─── Loading Information & Progress UI ─────────────────────── */
+.balangay-info-box,
+.preloader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 14px;
+  z-index: 10;
+  max-width: 480px;
+  width: 90%;
+}
+
+.balangay-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.balangay-loading-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--univ-white);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.balangay-loading-title span.highlight-gold {
+  color: var(--univ-gold);
+}
+
+.balangay-loading-title span.highlight-orange {
+  color: var(--univ-orange);
+}
+
+/* Sequentially pulsing dots */
+.balangay-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.balangay-dot {
+  display: inline-block;
+  opacity: 0.2;
+  color: var(--univ-gold);
+  font-weight: 800;
+  font-size: 18px;
   line-height: 1;
-  color: #EDDD53;
-  text-shadow: 0 0 12px rgba(237, 221, 83, 0.6);
-  user-select: none;
-  animation: baybayin-glow 2.8s ease-in-out infinite;
-  /* Absolute positioning independent of font metrics */
-  position: absolute;
-  left: 50%;
-  /* Noto Sans Tagalog glyphs sit in the TOP of their bounding box.
-     Position element top at center, then pull up only half the
-     element height so the glyph visually lands in the circle center. */
-  top: 50%;
-  transform: translate(-50%, -55%);
-  z-index: 2;
-  white-space: nowrap;
+  animation: dotPulse 1.4s infinite;
 }
 
-@keyframes baybayin-glow {
-  0%, 100% { text-shadow: 0 0 10px rgba(237, 221, 83, 0.5); }
-  50%       { text-shadow: 0 0 20px rgba(237, 221, 83, 0.9), 0 0 40px rgba(237, 221, 83, 0.3); }
+.balangay-dot:nth-child(1) {
+  animation-delay: 0s;
 }
 
-/* ── Label text ──────────────────────────────────────────────────────────── */
+.balangay-dot:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.balangay-dot:nth-child(3) {
+  animation-delay: 0.44s;
+}
+
+@keyframes dotPulse {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+.balangay-status-subtitle,
 .preloader-label {
-  font-family: 'Inter', 'DM Serif Display', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-size: 12.5px;
+  color: #a8d5a8;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 0;
+  font-weight: 500;
+  margin-bottom: 14px;
+  opacity: 0.9;
 }
 
-/* ── Progress bar ────────────────────────────────────────────────────────── */
+/* Progress Row & Bar */
+.balangay-progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.balangay-progress-track,
 .preloader-bar-wrap {
-  width: 200px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.08);
+  flex: 1;
+  max-width: 300px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 999px;
+  position: relative;
   overflow: hidden;
+  border: 1px solid rgba(249, 220, 7, 0.25);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
+.balangay-progress-fill,
 .preloader-bar {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #009900 0%, #EDDD53 70%, #ffffff 85%, #EDDD53 100%);
+  background: linear-gradient(90deg, var(--univ-green) 0%, var(--univ-orange) 50%, var(--univ-gold) 100%);
   border-radius: 999px;
-  transition: width 0.25s ease;
-  box-shadow: 0 0 8px rgba(237, 221, 83, 0.5);
+  transition: width 0.35s ease;
+  box-shadow: 0 0 10px rgba(249, 220, 7, 0.7);
+  position: relative;
 }
 
-/* ── Percentage counter ──────────────────────────────────────────────────── */
+/* Percentage counter */
+.balangay-pct,
 .preloader-pct {
   font-family: 'Inter', monospace;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--univ-gold);
+  min-width: 38px;
+  text-align: right;
+  text-shadow: 0 0 8px rgba(249, 220, 7, 0.5);
+}
+
+/* Indeterminate Shimmer Mode */
+.balangay-progress-fill.indeterminate,
+.preloader-bar.indeterminate {
+  width: 45%;
+  animation: indeterminateShimmer 1.8s cubic-bezier(0.65, 0.05, 0.35, 1) infinite;
+}
+
+@keyframes indeterminateShimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+/* Values Footer Badges */
+.balangay-values-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.balangay-pill {
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(237, 221, 83, 0.75);
-  min-width: 3ch;
-  text-align: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.balangay-pill-green {
+  background: rgba(0, 153, 0, 0.2);
+  color: #70e670;
+  border: 1px solid rgba(0, 153, 0, 0.45);
+}
+
+.balangay-pill-gold {
+  background: rgba(249, 220, 7, 0.15);
+  color: var(--univ-gold);
+  border: 1px solid rgba(249, 220, 7, 0.4);
+}
+
+.balangay-pill-orange {
+  background: rgba(255, 153, 0, 0.15);
+  color: #ffaa33;
+  border: 1px solid rgba(255, 153, 0, 0.4);
+}
+
+.balangay-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.balangay-pill-green .balangay-pill-dot {
+  background: #70e670;
+}
+
+.balangay-pill-gold .balangay-pill-dot {
+  background: var(--univ-gold);
+  box-shadow: 0 0 6px var(--univ-gold);
+}
+
+.balangay-pill-orange .balangay-pill-dot {
+  background: #ffaa33;
+}
+
+/* ─── Responsive Adjustments ────────────────────────────────── */
+@media (max-width: 600px) {
+  .balangay-loading-title {
+    font-size: 16px;
+  }
+
+  .balangay-status-subtitle {
+    font-size: 11px;
+  }
+
+  .balangay-progress-row {
+    max-width: 280px;
+  }
+
+  .balangay-progress-track {
+    max-width: 220px;
+  }
+
+  .balangay-values-pills {
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .balangay-pill {
+    font-size: 9.5px;
+    padding: 3px 8px;
+  }
 }

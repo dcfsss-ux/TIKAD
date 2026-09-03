@@ -25,6 +25,7 @@ import { initCarousel }     from './js/carousel.js';
 import { initMapOverlay }   from './js/mapOverlay.js';
 import { initModel3D }      from './js/model3D.js';
 import { initTeamBlurReveal } from './js/teamBlurReveal.js';
+import { BalangayPreloader } from './js/balangayPreloader.js';
 
 // ── Lift critical-CSS visibility lock ─────────────────────────────
 // The inline <style> in index.html hides body > * to prevent the

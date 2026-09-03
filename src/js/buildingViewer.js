@@ -95,7 +95,82 @@ function _ensureModal() {
     <div id="bv-canvas-wrap">
       <canvas id="bv-canvas"></canvas>
       <div id="bv-loader">
-        <div id="bv-spinner"></div>
+        <div id="bv-spinner">
+          <svg id="bv-balangay-svg" xmlns="http://www.w3.org/2000/svg"
+            viewBox="140 148 340 175" width="170" height="88"
+            overflow="visible" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="bvHullGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ff9900"/>
+                <stop offset="100%" stop-color="#5c3a1e"/>
+              </linearGradient>
+              <linearGradient id="bvGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#f9dc07"/>
+                <stop offset="100%" stop-color="#ff9900"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Background Outrigger (far side) -->
+            <g opacity="0.6">
+              <path d="M 320 236 Q 360 216 410 230" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M 440 238 Q 470 218 510 232" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M 350 232 Q 450 220 540 230 Q 450 235 350 232 Z" fill="#946030" stroke="#2b1b0e" stroke-width="1"/>
+            </g>
+
+            <!-- Mast & Pennant -->
+            <line x1="325" y1="245" x2="305" y2="165" stroke="#2b1b0e" stroke-width="3" stroke-linecap="round"/>
+            <line x1="325" y1="245" x2="305" y2="165" stroke="#ff9900" stroke-width="1.2"/>
+            <g class="bv-pennant">
+              <polygon points="305,167 242,174 305,184" fill="#009900" stroke="#f9dc07" stroke-width="1.2"/>
+              <polygon points="305,172 265,176 305,180" fill="#f9dc07"/>
+            </g>
+
+            <!-- Main Hull -->
+            <path d="M 215 228 C 240 248 310 266 410 266 C 510 266 565 248 595 212 C 585 242 510 274 410 274 C 300 274 235 248 215 228 Z"
+              fill="url(#bvHullGrad)" stroke="#2b1b0e" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M 215 228 C 260 246 340 254 415 254 C 490 254 555 242 595 212"
+              fill="none" stroke="#f9dc07" stroke-width="2.8" stroke-linecap="round"/>
+            <!-- Naga Prow -->
+            <path d="M 595 212 C 608 198 614 186 612 178 C 610 172 602 170 598 176 C 594 182 598 190 603 194"
+              fill="none" stroke="#f9dc07" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="608" cy="182" r="3.5" fill="#ff9900" stroke="#f9dc07" stroke-width="1"/>
+            <!-- Stern Wing -->
+            <path d="M 215 228 C 205 218 198 206 195 198 C 193 192 201 190 205 196 C 209 202 206 210 212 216"
+              fill="none" stroke="#f9dc07" stroke-width="2.4" stroke-linecap="round"/>
+            <!-- Plank lines -->
+            <path d="M 226 238 C 275 254 345 260 415 260 C 485 260 540 252 575 230"
+              fill="none" stroke="rgba(255,153,0,0.65)" stroke-width="1.5"/>
+
+            <!-- Rower -->
+            <g class="bv-rower-torso">
+              <path d="M 368 245 L 374 218 L 388 220 L 385 245 Z" fill="#009900" stroke="#2b1b0e" stroke-width="1.4" stroke-linejoin="round"/>
+              <rect x="377" y="212" width="5" height="6" fill="#d99f6b"/>
+              <circle cx="380" cy="206" r="7.5" fill="#d99f6b" stroke="#2b1b0e" stroke-width="1.2"/>
+              <!-- Headband -->
+              <path d="M 372 205 C 375 200 385 200 388 204 L 388 208 C 385 204 375 204 372 208 Z"
+                fill="#f9dc07" stroke="#ff9900" stroke-width="1"/>
+              <!-- Arms -->
+              <path d="M 374 222 L 366 230 L 382 233" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 386 222 L 396 232 L 388 238" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+
+            <!-- Paddle (Sagwan) -->
+            <g class="bv-paddle">
+              <line x1="382" y1="215" x2="360" y2="298" stroke="#946030" stroke-width="3.2" stroke-linecap="round"/>
+              <line x1="382" y1="215" x2="360" y2="298" stroke="#f9dc07" stroke-width="1"/>
+              <path d="M 364 268 C 372 280 368 296 358 306 C 352 296 354 280 360 268 Z"
+                fill="url(#bvGoldGrad)" stroke="#ff9900" stroke-width="1.5" stroke-linejoin="round"/>
+            </g>
+
+            <!-- Foreground Outrigger (katig) -->
+            <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#f9dc07" stroke-width="1.2"/>
+            <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#f9dc07" stroke-width="1.2"/>
+            <path d="M 360 284 C 420 278 510 278 570 284 C 510 290 420 290 360 284 Z"
+              fill="#f9dc07" stroke="#ff9900" stroke-width="1.8"/>
+          </svg>
+        </div>
         <div id="bv-loader-text">LOADING MODEL…</div>
       </div>
     </div>
