@@ -411,7 +411,8 @@
         <div class="map-top-left">
           <div class="map-search-wrap">
             <span class="map-search-icon mdi mdi-magnify"></span>
-            <input id="map-search" type="text" placeholder="Search buildings, rooms, offices…" aria-label="Search campus" autocomplete="off" />
+            <input id="map-search" type="text" placeholder="Search buildings, rooms, offices…"
+              aria-label="Search campus" autocomplete="off" />
             <div id="search-dropdown"></div>
           </div>
 
@@ -434,7 +435,8 @@
 
         <!-- Top Right: Dedicated Exit -->
         <div class="map-top-right">
-          <button id="map-close-btn" class="map-close-btn" aria-label="Close interactive map" title="Close interactive map">
+          <button id="map-close-btn" class="map-close-btn" aria-label="Close interactive map"
+            title="Close interactive map">
             <span class="mdi mdi-close"></span>
           </button>
         </div>
@@ -459,6 +461,15 @@
 
           <!-- 3D-projected pin markers -->
           <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
+
+          <!-- Floating Complex Buildings Card (Bottom Left) -->
+          <div id="caa-complex-card" class="caa-complex-card" style="display:none;">
+            <div class="caa-card-header">
+              <span class="caa-card-icon mdi mdi-office-building-marker-outline" id="caa-card-icon"></span>
+              <span class="caa-card-title" id="caa-card-title">Complex</span>
+            </div>
+            <div class="caa-card-body" id="caa-card-body"></div>
+          </div>
 
           <!-- Mouse Control Hint Legend -->
           <div id="controls-hint-legend" class="controls-hint-card">
@@ -522,7 +533,8 @@
           </div>
           <div class="panel-body">
             <div class="panel-label">Description</div>
-            <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details here.</p>
+            <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details
+              here.</p>
             <div id="panel-depts-wrap" style="display:none;">
               <div class="panel-label">Faculties &amp; Offices</div>
               <ul class="panel-facilities" id="panel-depts"></ul>
@@ -536,24 +548,27 @@
               <div id="panel-route-section" class="panel-route-section" style="display:none;">
                 <div class="panel-label">Route Options</div>
                 <div id="panel-route-btns-wrap" class="route-btns-group">
-                  <button id="route-btn-nearest" class="route-category-btn route-nearest-btn" title="Highlight shortest / nearest route">
+                  <button id="route-btn-nearest" class="route-category-btn route-nearest-btn"
+                    title="Highlight shortest / nearest route">
                     <span class="route-btn-icon mdi mdi-navigation"></span>
                     <div class="route-btn-label">
-                      <span class="route-title">Nearest</span>
+                      <span class="route-title">Main Gate</span>
                       <span class="route-sub">Route</span>
                     </div>
                   </button>
-                  <button id="route-btn-near" class="route-category-btn route-near-btn" title="Highlight secondary / near route">
+                  <button id="route-btn-near" class="route-category-btn route-near-btn"
+                    title="Highlight secondary / near route">
                     <span class="route-btn-icon mdi mdi-routes"></span>
                     <div class="route-btn-label">
-                      <span class="route-title">Near</span>
+                      <span class="route-title">Green Gate</span>
                       <span class="route-sub">Route</span>
                     </div>
                   </button>
-                  <button id="route-btn-far" class="route-category-btn route-far-btn" title="Highlight perimeter / far route">
+                  <button id="route-btn-far" class="route-category-btn route-far-btn"
+                    title="Highlight perimeter / far route">
                     <span class="route-btn-icon mdi mdi-map-marker-distance"></span>
                     <div class="route-btn-label">
-                      <span class="route-title">Far</span>
+                      <span class="route-title">Back Gate</span>
                       <span class="route-sub">Route</span>
                     </div>
                   </button>

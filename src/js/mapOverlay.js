@@ -67,8 +67,8 @@ async function _syncSupabaseModels() {
           const abbrevNorm = norm(bData.abbrev);
 
           if ((nameNorm && (dbNameNorm.includes(nameNorm) || nameNorm.includes(dbNameNorm))) ||
-              (sNameNorm && (dbNameNorm.includes(sNameNorm) || sNameNorm.includes(dbNameNorm))) ||
-              (abbrevNorm && (dbNameNorm.includes(abbrevNorm) || abbrevNorm.includes(dbNameNorm)))) {
+            (sNameNorm && (dbNameNorm.includes(sNameNorm) || sNameNorm.includes(dbNameNorm))) ||
+            (abbrevNorm && (dbNameNorm.includes(abbrevNorm) || abbrevNorm.includes(dbNameNorm)))) {
             isMatch = true;
           }
         }
@@ -199,6 +199,7 @@ const BUILDING_DATA = {
   "kalinaw": {
     glbName: "KALINAW",
     name: "Kalinaw Hall", shortName: "Kalinaw", emoji: "🏨",
+    isKalinawComplexMember: true,
     desc: "University lodging and guest house providing accommodation facilities for visiting dignitaries, researchers, and campus guests.",
     depts: [
       { name: "Reception Desk & Lounge", sub: "Floor 1", icon: "🛋" },
@@ -206,19 +207,15 @@ const BUILDING_DATA = {
     ],
     contact: { phone: "(085) 341-2792", email: "kalinaw@csu.edu.ph" },
     supabaseId: 10,
-    supabaseNames: ['Kalinaw', 'Kalinaw Hall'],
+    supabaseNames: ['Kalinaw', 'Kalinaw Hall', 'Kalinaw Complex'],
     gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)"
   },
   "csu_student_center": {
     glbName: "CSU STUDENT CENTER",
     name: "Student Center", shortName: "Student Center", abbrev: "Std. Ctr.", emoji: "🏢",
+    hidePin: true,
+    isKalinawComplexMember: true,
     desc: "Hub for student organizations, Supreme Student Council, guidance services, and student enterprise outlets.",
-    depts: [
-      { name: "Student Government Office", sub: "Floor 1", icon: "🏛" },
-      { name: "Guidance & Counseling Office", sub: "Floor 1", icon: "💬" },
-      { name: "Student Publications & Organizations", sub: "Floor 2", icon: "📰" }
-    ],
-    interactive: false,
     supabaseId: 19,
     supabaseNames: ['Student Center', 'CSU Student Center'],
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
@@ -239,16 +236,19 @@ const BUILDING_DATA = {
   },
   "caa_building": {
     glbName: "CAA BUILDING",
-    name: "CAA Building", shortName: "CAA", emoji: "🌾",
-    desc: "College of Agricultural Sciences and Natural Resources facility featuring agricultural science labs, soil testing centers, and agronomy offices.",
+    name: "CAA Main Building", shortName: "CAA Main", abbrev: "CAA", emoji: "🌾",
+    pinOffset: [0, 1.0, 18],
+    isCAAComplexMember: true,
+    desc: "College of Agricultural Sciences and Natural Resources main academic facility featuring agricultural science labs, soil testing centers, and agronomy offices.",
     depts: [
-      { name: "CAA Dean's Office", sub: "Floor 1", icon: "🏢" },
-      { name: "Agronomy & Soil Science Labs", sub: "Floor 1", icon: "🌱" },
-      { name: "Forestry & Environmental Science Dept", sub: "Floor 2", icon: "🌲" }
+      { name: "Accreditation Office", sub: "Floor 1", icon: "💼" },
+      { name: "Department of Plant and Soil Sciences", sub: "Floor 1", icon: "🌱", code: "DAE" },
+      { name: "Department of Agricultural Education", sub: "Floor 2", icon: "🏢", code: "CAA Faculty Office 3" },
+      { name: "Department of Animal Science", sub: "Floor 2", icon: "🐄", code: "DAS" }
     ],
     contact: { phone: "(085) 341-2794", email: "caa@csu.edu.ph" },
     supabaseId: 8,
-    supabaseNames: ['CAA', 'CAA Building'],
+    supabaseNames: ['CAA', 'CAA Building', 'CAA Complex', 'Main CAA Building'],
     gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)"
   },
   "dost": {
@@ -266,10 +266,11 @@ const BUILDING_DATA = {
   },
   "food_innovation_center": {
     glbName: "FOOD INNOVATION CENTER",
-    name: "Food Innovation Center", shortName: "FIC", emoji: "🍎",
+    name: "Food Innovation Center", shortName: "FIC", emoji: "💡",
+    hidePin: true,
+    isCAAComplexMember: true,
     desc: "Food technology testing facility supporting regional food processing research and development.",
-    depts: [{ name: "Food Processing & Pilot Plant", sub: "Floor 1", icon: "🍎" }],
-    interactive: false,
+    depts: [{ name: "Food Processing & Pilot Plant", sub: "Floor 1", icon: "💡" }],
     supabaseId: 18,
     supabaseNames: ['Food Innovation Center (FIC)', 'Food Innovation Center', 'FIC'],
     gradient: "linear-gradient(135deg, #6b4311 0%, #a16c27 100%)"
@@ -352,10 +353,10 @@ const BUILDING_DATA = {
   },
 
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
-  "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", interactive: false },
-  "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", interactive: false },
+  "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", emoji: "☕", hidePin: true, isKalinawComplexMember: true, desc: "Campus cafeteria providing meals and refreshments for students, faculty, and guests.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
+  "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", emoji: "🍽️", hidePin: true, isKalinawComplexMember: true, desc: "University canteen serving hot meals, snacks, and beverages.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", interactive: false },
-  "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", interactive: false },
+  "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", emoji: "🍽️", hidePin: true, isCAAComplexMember: true, desc: "CAA dining hall and cafeteria serving students and research personnel.", depts: [{ name: "CAA Canteen Dining Area", sub: "Floor 1", icon: "🍽️" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
   "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
   "guard_house001": { glbName: "GUARD HOUSE.001", name: "Guard House (Gate)", shortName: "Guard House", interactive: false },
@@ -368,7 +369,7 @@ const BUILDING_DATA = {
   "reservoir": { glbName: "RESERVOIR", name: "Water Reservoir", shortName: "Reservoir", interactive: false },
   "mrf": { glbName: "MRF", name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
   "feedmill": { glbName: "FEEDMILL", name: "Feedmill", shortName: "Feedmill", interactive: false },
-  "milk_processing_facility": { glbName: "MILK PROCESSING FACILITY", name: "Milk Processing Facility", shortName: "Milk Facility", interactive: false },
+  "milk_processing_facility": { glbName: "MILK PROCESSING FACILITY", name: "Milk Processing Facility", shortName: "Milk Facility", emoji: "🥛", hidePin: true, isCAAComplexMember: true, desc: "Dairy science processing plant for pasteurization and milk product development.", depts: [{ name: "Dairy Processing & Bottling", sub: "Floor 1", icon: "🥛" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
   "caretaker_house": { glbName: "CARETAKER HOUSE", name: "Caretaker House", shortName: "Caretaker", interactive: false },
   "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Beef Cattle Shed", shortName: "Cattle Shed", interactive: false },
@@ -378,13 +379,13 @@ const BUILDING_DATA = {
   "agro_forestry_shed": { glbName: "AGRO-FORESTRY SHED", name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
   "wood_workshop": { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
   "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", interactive: false },
-  "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", interactive: false },
-  "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", interactive: false },
+  "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", hidePin: true, isKalinawComplexMember: true },
+  "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", hidePin: true, isKalinawComplexMember: true },
   "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
   "bodega": { glbName: "BODEGA", name: "Bodega", shortName: "Bodega", interactive: false },
 
   // ── ADDITIONAL CAMPUS STRUCTURES ──
-  "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", interactive: false },
+  "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", emoji: "🛠️", hidePin: true, isCAAComplexMember: true, desc: "Agricultural engineering workshop for machinery testing and fabrication.", depts: [{ name: "Machinery Workshop", sub: "Floor 1", icon: "🛠️" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "alumni_office": {
     name: "Alumni Center", shortName: "Alumni Center", emoji: "🎓",
     interactive: false,
@@ -392,24 +393,24 @@ const BUILDING_DATA = {
     supabaseNames: ['Alumni Center', 'Alumni Office'],
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
-  "Annex 3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
-  "amante_building": { name: "Amante Building", shortName: "Amante Bldg.", interactive: false },
+  "Annex 3": { glbName: "ANNEX 3", name: "Annex 3", shortName: "Annex 3", emoji: "🏬", hidePin: true, isKalinawComplexMember: true },
+  "amante_building": { glbName: "AMANTE BUILDING", name: "Amante Building", shortName: "Amante Bldg.", emoji: "🏛️", hidePin: true, isKalinawComplexMember: true, desc: "Academic and administrative facility supporting university instruction and research.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "annex_2_(old_ladies_dorm)": { name: "Annex 2 (Old Ladies Dorm)", shortName: "Annex 2", interactive: false },
-  "annex_3": { name: "Annex 3", shortName: "Annex 3", interactive: false },
+  "annex_3": { glbName: "ANNEX 3", name: "Annex 3", shortName: "Annex 3", emoji: "🏬", hidePin: true, isKalinawComplexMember: true, desc: "Campus annex building providing auxiliary offices, student spaces, and lecture rooms.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "atm_machine_landbank": { name: "ATM - Landbank", shortName: "ATM Landbank", interactive: false },
   "atm_machine_pnb": { name: "ATM - PNB", shortName: "ATM PNB", interactive: false },
   "bio_diagnostic_laboratory": { name: "Bio-Diagnostic Laboratory", shortName: "Bio-Diag Lab", interactive: false },
-  "bookstore_and_orgms_office": { name: "Bookstore & Orgs Office", shortName: "Bookstore", interactive: false },
-  "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", interactive: false },
+  "bookstore_and_orgms_office": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & Orgs Office", shortName: "Bookstore", emoji: "📚", hidePin: true, isKalinawComplexMember: true, desc: "University bookstore and student organizations administrative office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
+  "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", emoji: "🔬", hidePin: true, isCAAComplexMember: true, desc: "Diagnostic laboratory providing plant pathology and soil chemistry analysis.", depts: [{ name: "Pathology & Soil Testing Lab", sub: "Floor 1", icon: "🔬" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "caa_layering_house": { name: "CAA Layering House", shortName: "Layering House", interactive: false },
   "caa_restroom": { name: "CAA Restroom", shortName: "CAA Restroom", interactive: false },
   "caa_swine_laboratory": { name: "CAA Swine Laboratory", shortName: "Swine Lab", interactive: false },
   "chicken_coop": { name: "Chicken Coop", shortName: "Chicken Coop", interactive: false },
   "caraga_black_native_chicken": { name: "Caraga Black Native Chicken House", shortName: "Native Chicken", interactive: false },
   "cas_covered_court": { name: "CAS Covered Court", shortName: "CAS Court", interactive: false },
-  "cas_student_center": { name: "CAS Student Center", shortName: "CAS Std. Ctr.", interactive: false },
+  "cas_student_center": { glbName: "CAS STUDENT CENTER", name: "Student Office", shortName: "Student Office", emoji: "👥", hidePin: true, isKalinawComplexMember: true, desc: "Administrative office for student council and campus student services.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
-  "ccard_office": { name: "CCARD Office", shortName: "CCARD Office", interactive: false },
+  "ccard_office": { glbName: "CCARD OFFICE", name: "CCARD Office", shortName: "CCARD Office", emoji: "📁", hidePin: true, isKalinawComplexMember: true, desc: "Caraga Center for Agricultural and Resource Development research office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
   "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
   "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
@@ -430,14 +431,14 @@ const BUILDING_DATA = {
   "old_farm_mechanization_center": { name: "Old Farm Mechanization Center", shortName: "Old Farm Mech.", interactive: false },
   "power_house001": { name: "Power House", shortName: "Power House", interactive: false },
   "rooting_recovery": { name: "Rooting Recovery Area", shortName: "Rooting Area", interactive: false },
-  "rotc_office": { name: "ROTC Office", shortName: "ROTC Office", interactive: false },
+  "rotc_office": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC Office", emoji: "🛡️", hidePin: true, isKalinawComplexMember: true, desc: "Reserve Officers' Training Corps campus headquarters and tactical training office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
-  "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", interactive: false },
+  "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", emoji: "🧫", hidePin: true, isCAAComplexMember: true, desc: "Biotechnology laboratory dedicated to plant tissue culture micropropagation.", depts: [{ name: "Micropropagation Unit", sub: "Floor 1", icon: "🧫" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false },
   "cas_canteen": { name: "CAS Canteen", shortName: "CAS Canteen", interactive: false },
   "ced_lsg_office": { name: "CED LSG Office", shortName: "CED LSG", interactive: false },
   "ttlo": { name: "TTLO Office", shortName: "TTLO", interactive: false },
-  "caa": { name: "CAA Complex", shortName: "CAA Complex", interactive: false },
+  "caa": { name: "CAA Complex", shortName: "CAA Complex", hidePin: true, isCAAComplexMember: true },
   "carabao_center": { name: "Carabao Center", shortName: "Carabao Ctr.", interactive: false },
   "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false }
 };
@@ -503,6 +504,8 @@ const BUILDING_GLB_MAP = {
   'bookstore_and_orgms_office': '/models/map/BOOK%20STORE%20AND%20NORMS.glb',
   'agri-workshop_2': '/models/map/Agri%20Workshop%202.glb',
   'annex_3': '/models/map/ANNEX%203.glb',
+  'student_office': '/models/map/CAS%20STUDENT%20CENTER%20-.glb',
+  'cas_student_center': '/models/map/CAS%20STUDENT%20CENTER%20-.glb',
 
   // ── Additional campus structures & agricultural facilities ─────────────────
   'agro_forestry_shed': '/models/map/AGRO-FORESTRY%20SHED.glb',
@@ -767,9 +770,94 @@ function _buildChips() {
 
 let highlightedMeshes = [];
 
+// ── Floating Complex Buildings Card (Bottom Left) ────────────────────────────
+
+const COMPLEX_CONFIGS = {
+  caa: {
+    title: "CAA Complex",
+    icon: "mdi-office-building-marker-outline",
+    items: [
+      { key: 'caa_building', name: 'Main CAA Building', icon: 'mdi-bank-outline' },
+      { key: 'agri-workshop_2', name: 'Agri Workshop 2', icon: 'mdi-storefront-outline' },
+      { key: 'tissue_culture_lab', name: 'CAA Tissue Culture Lab', icon: 'mdi-sprout-outline' },
+      { key: 'caa_canteen', name: 'CAA Canteen', icon: 'mdi-silverware-fork-knife' },
+      { key: 'milk_processing_facility', name: 'Milk Facility', icon: 'mdi-cup-water' },
+      { key: 'caa_diagnostic_laboratory', name: 'CAA Diag Lab', icon: 'mdi-flask-outline' },
+      { key: 'food_innovation_center', name: 'FIC', icon: 'mdi-lightbulb-outline' }
+    ]
+  },
+  kalinaw: {
+    title: "Kalinaw Complex",
+    icon: "mdi-home-city-outline",
+    items: [
+      { key: 'kalinaw', name: 'Main Kalinaw Building', icon: 'mdi-bank-outline' },
+      { key: 'bbc_cafeteria', name: 'BBC Cafeteria', icon: 'mdi-coffee-outline' },
+      { key: 'boffo_canteen', name: 'Boffo Canteen', icon: 'mdi-silverware-fork-knife' },
+      { key: 'rotc_office', name: 'ROTC office', icon: 'mdi-shield-outline' },
+      { key: 'bookstore_and_orgms_office', name: 'Bookstore', icon: 'mdi-book-open-page-variant-outline' },
+      { key: 'ccard_office', name: 'CCARD office', icon: 'mdi-briefcase-outline' },
+      { key: 'csu_student_center', name: 'Student Center', icon: 'mdi-domain' },
+      { key: 'amante_building', name: 'Amante Bldg', icon: 'mdi-office-building-outline' },
+      { key: 'annex_3', name: 'Annex 3', icon: 'mdi-layers-outline' }
+    ]
+  }
+};
+
+function renderComplexCard(type = 'caa', activeSubKey = null) {
+  const card = document.getElementById('caa-complex-card');
+  const body = document.getElementById('caa-card-body');
+  const titleEl = document.getElementById('caa-card-title');
+  const iconEl = document.getElementById('caa-card-icon');
+  if (!card || !body) return;
+
+  const config = COMPLEX_CONFIGS[type];
+  if (!config) return;
+
+  if (titleEl) titleEl.textContent = config.title;
+  if (iconEl) iconEl.className = `caa-card-icon mdi ${config.icon}`;
+
+  const currentActiveKey = activeSubKey || (type === 'kalinaw' ? 'kalinaw' : 'caa_building');
+
+  body.innerHTML = config.items.map(item => {
+    const isActive = item.key === currentActiveKey;
+    return `
+      <div class="caa-card-item${isActive ? ' caa-item--active' : ''}" data-key="${item.key}">
+        <span class="caa-item-icon mdi ${item.icon}"></span>
+        <span class="caa-item-name">${item.name}</span>
+      </div>
+    `;
+  }).join('');
+
+  body.querySelectorAll('.caa-card-item').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const subKey = el.dataset.key;
+      _selectBuilding(subKey, true);
+    });
+  });
+
+  card.style.display = 'block';
+}
+
+function _hideComplexCard() {
+  const card = document.getElementById('caa-complex-card');
+  if (card) card.style.display = 'none';
+}
+
 function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highlightRoom = null, searchMode = false) {
   _resetHighlight();
   activeKey = key;
+
+  const data = BUILDING_DATA[key];
+
+  // Show bottom-left Complex Card if selecting a Complex member
+  if (data?.isCAAComplexMember || key === 'caa_building' || key === 'caa') {
+    renderComplexCard('caa', key);
+  } else if (data?.isKalinawComplexMember || key === 'kalinaw') {
+    renderComplexCard('kalinaw', key);
+  } else {
+    _hideComplexCard();
+  }
 
   const node = _findNode(key);
 
@@ -819,8 +907,6 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
     experience.renderer.requestRender();
   }
 
-  // Close any open 3D viewer modal when selecting a new building.
-  // The live 3D preview will ONLY open when the user manually clicks "View 3D Model" in the info panel.
   closeBuildingViewer();
 }
 
@@ -842,6 +928,8 @@ function _resetHighlight() {
   document.querySelectorAll('.route-category-btn').forEach(btn => {
     btn.classList.remove('active-route-btn');
   });
+
+  _hideComplexCard();
 
   if (experience && experience.renderer) {
     experience.renderer.requestRender();
@@ -1099,12 +1187,16 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
   }
 
+  // Complex sub-buildings (not the main building) show no depts / facilities
+  const isComplexSubBuilding = (data.isCAAComplexMember && key !== 'caa_building') ||
+    (data.isKalinawComplexMember && key !== 'kalinaw');
+
   // Populate local fallback departments formatted into dynamic floor tabs
   const deptsWrap = document.getElementById('panel-depts-wrap');
   const deptsList = document.getElementById('panel-depts');
 
   if (deptsWrap && deptsList) {
-    if (data.depts?.length) {
+    if (!isComplexSubBuilding && data.depts?.length) {
       const floors = parseLocalFloors(data.depts, highlightRoom);
       renderFloorSection(floors, deptsList);
       deptsWrap.style.display = '';
@@ -1182,7 +1274,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       }
     }
 
-    if (contactWrap && contactContent && data.contact) {
+    if (!isComplexSubBuilding && contactWrap && contactContent && data.contact) {
       contactContent.innerHTML =
         (data.contact.phone ? `📞 ${data.contact.phone}<br>` : '') +
         (data.contact.email ? `✉️ ${data.contact.email}` : '');
@@ -1191,48 +1283,52 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       contactWrap.style.display = 'none';
     }
 
-    // ── "View 3D Model" button (visible on ALL cards, calls designated model from Supabase/data) ──
+    // ── "View 3D Model" button (only on main buildings, not complex sub-buildings) ──
     if (viewBtnWrap && viewBtn) {
-      viewBtnWrap.style.display = '';
+      if (isComplexSubBuilding) {
+        viewBtnWrap.style.display = 'none';
+      } else {
+        viewBtnWrap.style.display = '';
 
-      const handleOpen3D = async () => {
-        // 1. If 3D model URL is already known/cached, open immediately
-        if (data.model3d) {
-          openBuildingViewer(data.model3d, data.name);
-          return;
-        }
-
-        // 2. Otherwise fetch live model URL from Supabase on demand
-        try {
-          const originalText = viewBtn.innerHTML;
-          viewBtn.innerHTML = `<span class="view3d-icon-wrap"><span class="mdi mdi-loading mdi-spin"></span></span> <span class="view3d-text">Loading 3D Model...</span>`;
-          viewBtn.disabled = true;
-
-          let dbB = null;
-          if (data.supabaseId) {
-            dbB = await getBuildingDetails(data.supabaseId);
-          } else {
-            dbB = await getBuildingByNameOrKey(key);
+        const handleOpen3D = async () => {
+          // 1. If 3D model URL is already known/cached, open immediately
+          if (data.model3d) {
+            openBuildingViewer(data.model3d, data.name);
+            return;
           }
 
-          const modelUrl = extractModelUrl(dbB);
-          viewBtn.innerHTML = originalText;
-          viewBtn.disabled = false;
+          // 2. Otherwise fetch live model URL from Supabase on demand
+          try {
+            const originalText = viewBtn.innerHTML;
+            viewBtn.innerHTML = `<span class="view3d-icon-wrap"><span class="mdi mdi-loading mdi-spin"></span></span> <span class="view3d-text">Loading 3D Model...</span>`;
+            viewBtn.disabled = true;
 
-          if (modelUrl) {
-            data.model3d = modelUrl;
-            openBuildingViewer(modelUrl, data.name || dbB?.Building_name);
-          } else {
-            console.warn(`[MapOverlay] No 3D model found in Supabase for "${data.name}"`);
-            alert(`No 3D model URL is configured for "${data.name}" yet.`);
+            let dbB = null;
+            if (data.supabaseId) {
+              dbB = await getBuildingDetails(data.supabaseId);
+            } else {
+              dbB = await getBuildingByNameOrKey(key);
+            }
+
+            const modelUrl = extractModelUrl(dbB);
+            viewBtn.innerHTML = originalText;
+            viewBtn.disabled = false;
+
+            if (modelUrl) {
+              data.model3d = modelUrl;
+              openBuildingViewer(modelUrl, data.name || dbB?.Building_name);
+            } else {
+              console.warn(`[MapOverlay] No 3D model found in Supabase for "${data.name}"`);
+              alert(`No 3D model URL is configured for "${data.name}" yet.`);
+            }
+          } catch (e) {
+            console.error('[MapOverlay] Error loading 3D model from Supabase:', e);
+            viewBtn.disabled = false;
           }
-        } catch (e) {
-          console.error('[MapOverlay] Error loading 3D model from Supabase:', e);
-          viewBtn.disabled = false;
-        }
-      };
+        };
 
-      viewBtn.onclick = handleOpen3D;
+        viewBtn.onclick = handleOpen3D;
+      } // end else (!isComplexSubBuilding)
     }
   }
 
@@ -1261,39 +1357,43 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
         iconEl.style.background = 'transparent';
       }
 
-      // Check and attach live Supabase 3D model URL
-      const liveModelUrl = extractModelUrl(dbBuilding);
-      if (liveModelUrl) {
-        data.model3d = liveModelUrl;
-        if (viewBtnWrap && viewBtn) {
-          viewBtn.onclick = () => openBuildingViewer(liveModelUrl, dbBuilding.Building_name || data.name);
-          viewBtnWrap.style.display = '';
+      // Check and attach live Supabase 3D model URL (only for main buildings)
+      if (!isComplexSubBuilding) {
+        const liveModelUrl = extractModelUrl(dbBuilding);
+        if (liveModelUrl) {
+          data.model3d = liveModelUrl;
+          if (viewBtnWrap && viewBtn) {
+            viewBtn.onclick = () => openBuildingViewer(liveModelUrl, dbBuilding.Building_name || data.name);
+            viewBtnWrap.style.display = '';
+          }
         }
       }
 
-      // Dynamic Faculties & Offices from Supabase
-      const hasSupabaseRooms = (
-        (dbBuilding.ROOMS && dbBuilding.ROOMS.length > 0) ||
-        (dbBuilding.OFFICES && dbBuilding.OFFICES.length > 0) ||
-        (dbBuilding.FACILITIES && dbBuilding.FACILITIES.length > 0)
-      );
+      // Dynamic Faculties & Offices from Supabase (skip for complex sub-buildings)
+      if (!isComplexSubBuilding) {
+        const hasSupabaseRooms = (
+          (dbBuilding.ROOMS && dbBuilding.ROOMS.length > 0) ||
+          (dbBuilding.OFFICES && dbBuilding.OFFICES.length > 0) ||
+          (dbBuilding.FACILITIES && dbBuilding.FACILITIES.length > 0)
+        );
 
-      if (deptsWrap && deptsList) {
-        if (hasSupabaseRooms) {
-          const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
-          renderFloorSection(floors, deptsList);
-          deptsWrap.style.display = '';
-        } else {
-          deptsList.innerHTML = '';
-          deptsWrap.style.display = 'none';
+        if (deptsWrap && deptsList) {
+          if (hasSupabaseRooms) {
+            const floors = parseSupabaseFloors(dbBuilding, highlightRoom);
+            renderFloorSection(floors, deptsList);
+            deptsWrap.style.display = '';
+          } else {
+            deptsList.innerHTML = '';
+            deptsWrap.style.display = 'none';
+          }
         }
       }
 
-      // Dynamic Contact info from Supabase
+      // Dynamic Contact info from Supabase (skip for complex sub-buildings)
       const dbPhone = dbBuilding.Phone_number || dbBuilding.phone_number || dbBuilding.Contact_Number || dbBuilding.contact_number || dbBuilding.Phone || dbBuilding.phone || '';
       const dbEmail = dbBuilding.Contact_Email || dbBuilding.contact_email || dbBuilding.Email || dbBuilding.email || '';
 
-      if (contactWrap && contactContent) {
+      if (!isComplexSubBuilding && contactWrap && contactContent) {
         if (dbPhone || dbEmail) {
           contactContent.innerHTML =
             (dbPhone ? `📞 ${dbPhone}<br>` : '') +
@@ -1374,7 +1474,7 @@ function _createPinForKey(key) {
   if (!container) return;
 
   const data = BUILDING_DATA[key];
-  if (!data) return;
+  if (!data || data.hidePin) return;
 
   // Don't create duplicate pins for the same key
   if (pinList.some(p => p.key === key)) return;
@@ -1392,6 +1492,12 @@ function _createPinForKey(key) {
   // Elevate the pin above the building's top face
   const height = _box.max.y - _box.min.y;
   worldPos.y = _box.max.y + Math.max(0.15, height * 0.05);
+
+  if (data.pinOffset && Array.isArray(data.pinOffset)) {
+    worldPos.x += data.pinOffset[0] || 0;
+    worldPos.y += data.pinOffset[1] || 0;
+    worldPos.z += data.pinOffset[2] || 0;
+  }
 
   const el = document.createElement('div');
   el.className = 'bldg-pin';
@@ -1420,11 +1526,14 @@ function _createPinForKey(key) {
       if (input) input.value = data.name;
       _selectBuilding(key, true);
     });
-  } else {
+  } else if (!data.isCAAComplexMember && !data.isKalinawComplexMember) {
+    // Only show static floating label for non-complex non-interactive buildings
     el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
     el.innerHTML = `
       <div class="pin-label-static">${data.shortName || data.name}</div>
     `;
+  } else {
+    return; // Complex sub-buildings: no floating label shown
   }
 
   container.appendChild(el);
