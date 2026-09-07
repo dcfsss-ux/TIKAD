@@ -431,11 +431,11 @@ const BUILDING_DATA = {
   "bio_diagnostic_laboratory": { name: "Bio-Diagnostic Laboratory", shortName: "Bio-Diag Lab", interactive: false },
   "bookstore_and_orgms_office": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & Orgs Office", shortName: "Bookstore", emoji: "📚", hidePin: true, isKalinawComplexMember: true, desc: "University bookstore and student organizations administrative office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", emoji: "🔬", hidePin: true, isCAAComplexMember: true, desc: "Diagnostic laboratory providing plant pathology and soil chemistry analysis.", depts: [{ name: "Pathology & Soil Testing Lab", sub: "Floor 1", icon: "🔬" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
-  "caa_layering_house": { glbName: "CAA LAYERING HOUSE", name: "Layering House", shortName: "Layering House", emoji: "🥚", hidePin: true, isVillaresComplexMember: true, desc: "Commercial poultry egg layer house and aviary husbandry research station.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "caa_layering_house": { glbName: "CAA LAYERING HOUSE", name: "Layering House", shortName: "Layering House", emoji: "🥚", hidePin: true, isNativeChickenComplexMember: true, desc: "Commercial poultry egg layer house and aviary husbandry research station.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "caa_restroom": { name: "CAA Restroom", shortName: "CAA Restroom", interactive: false },
-  "caa_swine_laboratory": { glbName: "CAA SWINE LABORATORY", name: "Swine Lab", shortName: "Swine Lab", emoji: "🐖", hidePin: true, isVillaresComplexMember: true, desc: "Swine herd management, breeding research, and veterinary nutrition laboratory.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
-  "chicken_coop": { glbName: "Chicken Coop", name: "Chicken Coop", shortName: "Chicken Coop", emoji: "🐣", hidePin: true, isVillaresComplexMember: true, desc: "Poultry flock management, egg collection, and brooding facility.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
-  "caraga_black_native_chicken": { glbName: "CARAGA BLACK NATIVE CHICKEN", name: "Native Chicken", shortName: "Native Chicken", emoji: "🐔", hidePin: true, isVillaresComplexMember: true, desc: "Preservation, selective breeding, and genetic research facility for Caraga black native chickens.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "caa_swine_laboratory": { glbName: "CAA SWINE LABORATORY", name: "Swine Lab", shortName: "Swine Lab", emoji: "🐖", hidePin: true, isNativeChickenComplexMember: true, desc: "Swine herd management, breeding research, and veterinary nutrition laboratory.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "chicken_coop": { glbName: "Chicken Coop", name: "Chicken Coop", shortName: "Chicken Coop", emoji: "🐣", hidePin: true, isNativeChickenComplexMember: true, desc: "Poultry flock management, egg collection, and brooding facility.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "caraga_black_native_chicken": { glbName: "CARAGA BLACK NATIVE CHICKEN", name: "Native Chicken", shortName: "Native Chicken", emoji: "🐔", interactive: true, no3dViewer: true, isNativeChickenComplexMember: true, desc: "Preservation, selective breeding, and genetic research facility for Caraga black native chickens.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_covered_court": { name: "CAS Covered Court", shortName: "CAS Court", interactive: false },
   "cas_student_center": { glbName: "CAS STUDENT CENTER", name: "Student Office", shortName: "Student Office", emoji: "👥", hidePin: true, isKalinawComplexMember: true, desc: "Administrative office for student council and campus student services.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "catching_coral": { glbName: "CATCHING CORAL", name: "Catching Coral", shortName: "Catching Coral", emoji: "🪵", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Livestock penning, corral sorting, and veterinary animal handling grounds.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
@@ -445,7 +445,7 @@ const BUILDING_DATA = {
   "eco_lodge": { glbName: "ECO lodge", name: "Eco Lodge", shortName: "Eco Lodge", emoji: "🏡", hidePin: true, isOldCASComplexMember: true, desc: "Ecological lodge offering campus retreat rooms, sustainable lodging, and conference accommodations.", gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)" },
   "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
   "executive_house": { name: "Executive House", shortName: "Executive House", interactive: false },
-  "farm_nursery": { glbName: "FARM NURSERY", name: "Farm Nursery", shortName: "Farm Nursery", emoji: "🌱", hidePin: true, isVillaresComplexMember: true, desc: "Horticultural and agro-forestry seedling propagation and hardening nursery.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "farm_nursery": { glbName: "FARM NURSERY", name: "Farm Nursery", shortName: "Farm Nursery", emoji: "🌱", hidePin: true, isNativeChickenComplexMember: true, desc: "Horticultural and agro-forestry seedling propagation and hardening nursery.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
   "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
   "gents'_dormitory_(_under_cons)": { name: "Gent's Dormitory (Under Const.)", shortName: "Gent's Dorm", interactive: false },
@@ -457,13 +457,13 @@ const BUILDING_DATA = {
   "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
   "old_ccaarrd_building": { name: "Old CCAARRD Building", shortName: "Old CCAARRD", interactive: false },
   "old_cegsttloresearch_services_office": { name: "Old Research Services Office", shortName: "Old Research Ofc.", interactive: false },
-  "old_farm_mechanization_center": { glbName: "OLD Farm Mechanization", name: "Old Farm Mech", shortName: "Old Farm Mech", emoji: "🚜", hidePin: true, isOldCASComplexMember: true, desc: "Agricultural mechanization service facility and historic farm machinery workshop.", gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)" },
+  "old_farm_mechanization_center": { glbName: "OLD Farm Mechanization", name: "Old Farm Mech", shortName: "Old Farm Mech", interactive: false },
   "power_house001": { name: "Power House", shortName: "Power House", interactive: false },
   "rooting_recovery": { name: "Rooting Recovery Area", shortName: "Rooting Area", interactive: false },
   "rotc_office": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC Office", emoji: "🛡️", hidePin: true, isKalinawComplexMember: true, desc: "Reserve Officers' Training Corps campus headquarters and tactical training office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
   "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", emoji: "🧫", hidePin: true, isCAAComplexMember: true, desc: "Biotechnology laboratory dedicated to plant tissue culture micropropagation.", depts: [{ name: "Micropropagation Unit", sub: "Floor 1", icon: "🧫" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
-  "vermi_house": { glbName: "VERMI HOUSE", name: "Vermi House", shortName: "Vermi House", emoji: "🪱", hidePin: true, isVillaresComplexMember: true, desc: "Vermiculture processing facility producing organic vermicast fertilizer and organic compost.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "vermi_house": { glbName: "VERMI HOUSE", name: "Vermi House", shortName: "Vermi House", emoji: "🪱", hidePin: true, isNativeChickenComplexMember: true, desc: "Vermiculture processing facility producing organic vermicast fertilizer and organic compost.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_canteen": { name: "CAS Canteen", shortName: "CAS Canteen", interactive: false },
   "ced_lsg_office": { glbName: "CED LSG OFFICE -", name: "CED LSG", shortName: "CED LSG", emoji: "👥", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education Local Student Government (CED LSG) student council headquarters.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "ttlo": { glbName: "TTLO -", name: "TTLO", shortName: "TTLO", emoji: "💡", hidePin: true, isCHEDComplexMember: true, desc: "Technology Transfer and Licensing Office (TTLO) commercializing research innovations and intellectual properties.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
@@ -845,8 +845,7 @@ const COMPLEX_CONFIGS = {
       { key: 'old_cas', name: 'Old CAS', icon: 'mdi-bank-outline' },
       { key: 'church', name: 'Chapel', icon: 'mdi-church' },
       { key: 'eco_lodge', name: 'Eco Lodge', icon: 'mdi-home-outline' },
-      { key: 'eco_park_building', name: 'Eco Park', icon: 'mdi-tree-outline' },
-      { key: 'old_farm_mechanization_center', name: 'Old Farm Mech', icon: 'mdi-tractor' }
+      { key: 'eco_park_building', name: 'Eco Park', icon: 'mdi-tree-outline' }
     ]
   },
   villares: {
@@ -857,13 +856,20 @@ const COMPLEX_CONFIGS = {
       { key: 'Villares', name: 'Villares', icon: 'mdi-bank-outline' },
       { key: 'oatc', name: 'OATC', icon: 'mdi-office-building-outline' },
       { key: 'cofes_annex', name: 'COFES Annex', icon: 'mdi-pine-tree' },
+      { key: 'micoriza_green_house', name: 'Micoriza GreenHouse/GH', icon: 'mdi-greenhouse' }
+    ]
+  },
+  native_chicken: {
+    title: "Native Chicken Complex",
+    icon: "mdi-feather",
+    mainKey: 'caraga_black_native_chicken',
+    items: [
       { key: 'caraga_black_native_chicken', name: 'Native Chicken', icon: 'mdi-feather' },
       { key: 'chicken_coop', name: 'Chicken Coop', icon: 'mdi-egg-outline' },
       { key: 'caa_swine_laboratory', name: 'Swine Lab', icon: 'mdi-flask-outline' },
       { key: 'caa_layering_house', name: 'Layering House', icon: 'mdi-home-roof' },
       { key: 'vermi_house', name: 'Vermi House', icon: 'mdi-sprout' },
-      { key: 'farm_nursery', name: 'Farm Nursery', icon: 'mdi-flower-outline' },
-      { key: 'micoriza_green_house', name: 'Micoriza GreenHouse/GH', icon: 'mdi-greenhouse' }
+      { key: 'farm_nursery', name: 'Farm Nursery', icon: 'mdi-flower-outline' }
     ]
   },
   carabao_center: {
@@ -891,6 +897,7 @@ function _getComplexTypeForBuilding(key, data) {
   if (data?.isOldCASComplexMember || key === 'old_cas') return 'old_cas';
   if (data?.isVillaresComplexMember || key === 'Villares' || key === 'villares') return 'villares';
   if (data?.isCarabaoCenterComplexMember || key === 'carabao_center') return 'carabao_center';
+  if (data?.isNativeChickenComplexMember || key === 'caraga_black_native_chicken' || key === 'native_chicken') return 'native_chicken';
   return null;
 }
 
@@ -1376,7 +1383,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
     // ── "View 3D Model" button (only on main buildings, not complex sub-buildings or disabled buildings) ──
     if (viewBtnWrap && viewBtn) {
-      if (isComplexSubBuilding || data.no3dViewer || data.disable3dViewer || key === 'carabao_center') {
+      if (isComplexSubBuilding || data.no3dViewer || data.disable3dViewer || key === 'carabao_center' || key === 'caraga_black_native_chicken') {
         viewBtnWrap.style.display = 'none';
       } else {
         viewBtnWrap.style.display = '';

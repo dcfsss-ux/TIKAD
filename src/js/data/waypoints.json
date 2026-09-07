@@ -813,7 +813,9 @@
     "Villares": "bld_villares",
     "villares": "bld_villares",
     "carabao_center": "bld_caa",
-    "carabao": "bld_caa"
+    "carabao": "bld_caa",
+    "caraga_black_native_chicken": "bld_villares",
+    "native_chicken": "bld_villares"
   },
   "buildingCategorizedRoutes": {
     "caa_building": {
@@ -1681,6 +1683,56 @@
         "road 26"
       ],
       "far": [
+        "road 17"
+      ]
+    },
+    "caraga_black_native_chicken": {
+      "nearest": [
+        "road 9",
+        "road 8",
+        "road 35",
+        "road 36",
+        "road 7",
+        "road 30",
+        "road 5",
+        "road 1"
+      ],
+      "near": [
+        "road 9",
+        "road 32",
+        "road 28",
+        "road 25",
+        "road 26"
+      ],
+      "far": [
+        "road 11",
+        "road 13",
+        "road 15",
+        "road 17"
+      ]
+    },
+    "native_chicken": {
+      "nearest": [
+        "road 9",
+        "road 8",
+        "road 35",
+        "road 36",
+        "road 7",
+        "road 30",
+        "road 5",
+        "road 1"
+      ],
+      "near": [
+        "road 9",
+        "road 32",
+        "road 28",
+        "road 25",
+        "road 26"
+      ],
+      "far": [
+        "road 11",
+        "road 13",
+        "road 15",
         "road 17"
       ]
     }
