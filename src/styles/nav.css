@@ -92,6 +92,13 @@ nav.scrolled {
   font-weight: 600;
 }
 
+/* ── NAV ACTIONS ── */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* ── NAV CTA (Redesigned Capsule with 3D Badge & Gold Glow) ── */
 .nav-cta {
   display: inline-flex;
@@ -185,6 +192,56 @@ nav.scrolled {
   box-shadow: 0 0 8px rgba(237, 221, 83, 0.5);
 }
 
+/* ── Admin Pill Button ── */
+.nav-admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 7px 14px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.nav-admin .mdi,
+.nav-admin .icon-shield-user {
+  font-size: 15px;
+  color: rgba(237, 221, 83, 0.7);
+  transition: color 0.2s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-admin:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(237, 221, 83, 0.5);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), 0 0 10px rgba(237, 221, 83, 0.15);
+}
+
+.nav-admin:hover .mdi,
+.nav-admin:hover .icon-shield-user {
+  color: #EDDD53;
+  transform: scale(1.2) rotate(-5deg);
+}
+
+.nav-admin:active {
+  transform: translateY(0.5px) scale(0.98);
+}
+
 /* Mobile menu button toggle */
 .nav-toggle {
   display: none;
@@ -247,13 +304,16 @@ nav.scrolled {
     order: 1;
   }
 
-  .nav-cta {
+  .nav-actions {
     order: 2;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .nav-cta {
     padding: 6px 12px 6px 10px;
     font-size: 12.5px;
     gap: 6px;
-    margin-left: auto;
-    margin-right: 0;
   }
 
   .nav-cta-icon {
@@ -264,6 +324,10 @@ nav.scrolled {
   .nav-cta-badge {
     font-size: 9px;
     padding: 1px 4px;
+  }
+
+  .nav-admin {
+    display: none;
   }
 
   .nav-toggle {

@@ -14,9 +14,178 @@
     href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display&family=Noto+Sans+Tagalog&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
   <link rel="stylesheet" href="/src/styles/admin.css" />
+  <link rel="stylesheet" href="/src/styles/preloader.css" />
 </head>
 
 <body>
+
+  <!-- ── Balangay Preloader ───────────────────────────────────────────────── -->
+  <div id="balangay-preloader" class="balangay-preloader" aria-label="Loading" role="status">
+    <div class="balangay-sky-bg"></div>
+
+    <!-- Sun / Halo -->
+    <div class="balangay-sun-wrap">
+      <svg class="balangay-sun" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="adm-sunGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff7a1" />
+            <stop offset="40%" stop-color="#f9dc07" />
+            <stop offset="100%" stop-color="#ff9900" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="60" cy="60" r="28" fill="url(#adm-sunGrad)" />
+        <circle cx="60" cy="60" r="22" fill="#fff176" opacity="0.9" />
+        <circle cx="60" cy="60" r="16" fill="#ffffff" opacity="0.95" />
+      </svg>
+    </div>
+
+    <!-- Ocean SVG Stage -->
+    <div class="balangay-svg-stage">
+      <svg class="balangay-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="adm-oceanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#006600" />
+            <stop offset="100%" stop-color="#003300" />
+          </linearGradient>
+          <linearGradient id="adm-waveBackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#007700" />
+            <stop offset="100%" stop-color="#004400" />
+          </linearGradient>
+          <linearGradient id="adm-waveMidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#005500" />
+            <stop offset="100%" stop-color="#003300" />
+          </linearGradient>
+          <linearGradient id="adm-hullGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ff9900" />
+            <stop offset="100%" stop-color="#5c3a1e" />
+          </linearGradient>
+          <linearGradient id="adm-goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f9dc07" />
+            <stop offset="100%" stop-color="#ff9900" />
+          </linearGradient>
+        </defs>
+
+        <!-- Ocean base -->
+        <rect x="-400" y="240" width="2000" height="120" fill="url(#adm-oceanGrad)" />
+
+        <!-- Background Wave Layer -->
+        <g class="balangay-wave-layer-back">
+          <path
+            d="M -400 258 Q -300 248 -200 258 T 0 258 T 200 258 T 400 258 T 600 258 T 800 258 T 1000 258 T 1200 258 T 1400 258 T 1600 258 L 1600 360 L -400 360 Z"
+            fill="url(#adm-waveBackGrad)" />
+        </g>
+
+        <!-- Vessel Group -->
+        <g class="balangay-vessel-group">
+          <!-- Wake Ripples -->
+          <g transform="translate(230, 265)">
+            <ellipse cx="0" cy="0" rx="24" ry="4" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7" class="balangay-wake-ripple-1" />
+            <ellipse cx="-15" cy="1" rx="32" ry="5" fill="none" stroke="#f9dc07" stroke-width="1.3" opacity="0.5" class="balangay-wake-ripple-2" />
+            <ellipse cx="-30" cy="2" rx="40" ry="6" fill="none" stroke="#ff9900" stroke-width="1" opacity="0.3" class="balangay-wake-ripple-3" />
+          </g>
+          <!-- Far Outrigger -->
+          <g opacity="0.7">
+            <path d="M 320 236 Q 360 216 410 230" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 440 238 Q 470 218 510 232" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 350 232 Q 450 220 540 230 Q 450 235 350 232 Z" fill="#946030" stroke="#2b1b0e" stroke-width="1" />
+          </g>
+          <!-- Mast & Pennant -->
+          <line x1="325" y1="245" x2="305" y2="150" stroke="#2b1b0e" stroke-width="3" stroke-linecap="round" />
+          <line x1="325" y1="245" x2="305" y2="150" stroke="#ff9900" stroke-width="1.2" />
+          <g class="balangay-pennant">
+            <polygon points="305,152 235,160 305,170" fill="#009900" stroke="#f9dc07" stroke-width="1.2" />
+            <polygon points="305,158 260,163 305,166" fill="#f9dc07" />
+          </g>
+          <!-- Hull -->
+          <path d="M 215 228 C 240 248 310 266 410 266 C 510 266 565 248 595 212 C 585 242 510 274 410 274 C 300 274 235 248 215 228 Z"
+            fill="url(#adm-hullGrad)" stroke="#2b1b0e" stroke-width="2" stroke-linejoin="round" />
+          <path d="M 215 228 C 260 246 340 254 415 254 C 490 254 555 242 595 212"
+            fill="none" stroke="#f9dc07" stroke-width="2.8" stroke-linecap="round" />
+          <path d="M 595 212 C 608 198 614 186 612 178 C 610 172 602 170 598 176 C 594 182 598 190 603 194"
+            fill="none" stroke="#f9dc07" stroke-width="3" stroke-linecap="round" />
+          <circle cx="608" cy="182" r="3.5" fill="#ff9900" stroke="#f9dc07" stroke-width="1" />
+          <path d="M 215 228 C 205 218 198 206 195 198 C 193 192 201 190 205 196 C 209 202 206 210 212 216"
+            fill="none" stroke="#f9dc07" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 226 238 C 275 254 345 260 415 260 C 485 260 540 252 575 230"
+            fill="none" stroke="rgba(255,153,0,0.65)" stroke-width="1.5" />
+          <!-- Rower -->
+          <g class="balangay-rower-torso">
+            <path d="M 368 245 L 374 218 L 388 220 L 385 245 Z" fill="#009900" stroke="#2b1b0e" stroke-width="1.4" stroke-linejoin="round" />
+            <rect x="377" y="212" width="5" height="6" fill="#d99f6b" />
+            <circle cx="380" cy="206" r="7.5" fill="#d99f6b" stroke="#2b1b0e" stroke-width="1.2" />
+            <path d="M 372 205 C 375 200 385 200 388 204 L 388 208 C 385 204 375 204 372 208 Z" fill="#f9dc07" stroke="#ff9900" stroke-width="1" />
+            <path d="M 372 205 Q 365 203 362 208" fill="none" stroke="#f9dc07" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M 374 222 L 366 230 L 382 233" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 386 222 L 396 232 L 388 238" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+          <!-- Paddle -->
+          <g class="balangay-paddle-assembly">
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#946030" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#f9dc07" stroke-width="1" />
+            <path d="M 364 268 C 372 280 368 296 358 306 C 352 296 354 280 360 268 Z"
+              fill="url(#adm-goldGrad)" stroke="#ff9900" stroke-width="1.5" stroke-linejoin="round" />
+          </g>
+          <!-- Paddle Splash -->
+          <g class="balangay-paddle-splash">
+            <circle cx="352" cy="266" r="2.5" fill="#ffffff" />
+            <circle cx="368" cy="264" r="2" fill="#f9dc07" />
+            <circle cx="346" cy="272" r="1.8" fill="#ffffff" />
+          </g>
+          <!-- Front Outrigger (Katig) -->
+          <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round" />
+          <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+          <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round" />
+          <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+          <path d="M 360 284 C 420 278 510 278 570 284 C 510 290 420 290 360 284 Z" fill="#f9dc07" stroke="#ff9900" stroke-width="1.8" />
+        </g>
+
+        <!-- Mid Wave -->
+        <g class="balangay-wave-layer-mid">
+          <path
+            d="M -400 270 Q -320 258 -240 270 T -80 270 T 80 270 T 240 270 T 400 270 T 560 270 T 720 270 T 880 270 T 1040 270 T 1200 270 T 1360 270 T 1520 270 T 1680 270 L 1680 360 L -400 360 Z"
+            fill="url(#adm-waveMidGrad)" opacity="0.85" />
+          <path
+            d="M -400 270 Q -320 258 -240 270 M -80 270 Q 0 258 80 270 M 240 270 Q 320 258 400 270 M 560 270 Q 640 258 720 270 M 880 270 Q 960 258 1040 270"
+            fill="none" stroke="#f9dc07" stroke-width="1.8" stroke-linecap="round" opacity="0.75" />
+        </g>
+
+        <!-- Front Wave -->
+        <g class="balangay-wave-layer-front">
+          <path
+            d="M -400 286 Q -350 276 -300 286 T -200 286 T -100 286 T 0 286 T 100 286 T 200 286 T 300 286 T 400 286 T 500 286 T 600 286 T 700 286 T 800 286 T 900 286 T 1000 286 T 1100 286 T 1200 286 T 1300 286 T 1400 286 T 1500 286 T 1600 286 L 1600 360 L -400 360 Z"
+            fill="rgba(0, 51, 0, 0.95)" />
+          <path
+            d="M -400 286 Q -350 276 -300 286 M -200 286 Q -150 276 -100 286 M 0 286 Q 50 276 100 286 M 200 286 Q 250 276 300 286 M 400 286 Q 450 276 500 286 M 600 286 Q 650 276 700 286 M 800 286 Q 850 276 900 286 M 1000 286 Q 1050 276 1100 286"
+            fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.9" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Info Box -->
+    <div class="balangay-info-box">
+      <div class="balangay-title-row">
+        <div class="balangay-loading-title" id="adm-preloader-title">
+          <span>Navigating to Admin</span>
+        </div>
+        <span class="balangay-dots">
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+        </span>
+      </div>
+      <div class="balangay-progress-wrap">
+        <div class="balangay-progress-track">
+          <div class="balangay-progress-bar" id="adm-preloader-bar" style="width:0%"></div>
+        </div>
+        <span class="balangay-progress-pct" id="adm-preloader-pct">0%</span>
+      </div>
+      <div class="balangay-values-pills">
+        <span class="balangay-pill balangay-pill-green">Competence</span>
+        <span class="balangay-pill balangay-pill-gold">Service</span>
+        <span class="balangay-pill balangay-pill-orange">Uprightness</span>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Login Screen ────────────────────────────────────────────────────── -->
   <div id="login-screen">

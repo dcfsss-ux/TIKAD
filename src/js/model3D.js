@@ -19,6 +19,7 @@ import { fetchBuildingSeals, getHeroShowcaseBuildings } from './supabaseClient.j
 const PREVIEW_MODELS = [
   { key: 'admin', name: 'Admin Building', category: 'Administration', icon: '/images/logo ccis.jpg', path: '/models/textured-admin-building.draco.glb', aliases: ['admin', 'new administration building', 'new admin building', 'administration', 'admin building'] },
   { key: 'old-admin', name: 'Old Admin', category: 'Administrative Offices', icon: '/images/logo ccis.jpg', path: '/models/map/old admin -.glb', aliases: ['old admin', 'old administration building', 'old administration', 'old admin building'] },
+  { key: 'old-cas', name: 'Old CAS', category: 'Heritage Complex', icon: '/images/logo cegs.jpg', path: '/models/map/Old CAS.glb', aliases: ['old cas', 'old cas building', 'old cas complex'] },
   { key: 'library', name: 'State Library', category: 'Learning & Resource Hub', icon: '/images/logo ccis.jpg', path: '/models/textured-library.draco.glb', aliases: ['library', 'state-of-the-art library', 'state library'] },
   { key: 'masawa', name: 'Masawa Hall', category: 'College of Computing (CCIS)', icon: '/images/logo ccis.jpg', path: '/models/map/masawa building.glb', aliases: ['masawa', 'masawa hall', 'masawa building'] },
   { key: 'hinang', name: 'Hinang Building', category: 'College of Engineering (CEGS)', icon: '/images/logo cegs.jpg', path: '/models/hinang.draco.glb', aliases: ['hinang', 'hinang building'] },
@@ -26,11 +27,12 @@ const PREVIEW_MODELS = [
   { key: 'kinaadman', name: 'Kinaadman Hall', category: 'College of Humanities (CHASS)', icon: '/images/logo chass.jpg', path: '/models/kinaadman.draco.glb', aliases: ['kinaadman', 'kinaadman hall'] },
   { key: 'batok', name: 'Batok Hall', category: 'Multi-Purpose Auditorium', icon: '/images/logo chass.jpg', path: '/models/nsb-batok.draco.glb', aliases: ['batok', 'batok hall', 'nsb batok'] },
   { key: 'ced', name: 'CED Building', category: 'College of Education', icon: '/images/logo cegs.jpg', path: '/models/map/CED -.glb', aliases: ['ced', 'ced building', 'iwag', 'iwag building', 'college of education'] },
-  { key: 'ched-lgu', name: 'CHED-LGU', category: 'Regional Development Center', icon: 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/CHED.png', path: '/models/map/ched_lgu -.glb', aliases: ['ched', 'ched-lgu', 'ched-lgu building', 'ched lgu'] },
+  { key: 'ched-lgu', name: 'CHED-LGU', category: 'Regional Development Center', icon: 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/CHED.png', path: '/models/map/ched_lgu -.glb', aliases: ['ched', 'ched-lgu', 'ched-lgu building', 'ched lgu', 'ched complex'] },
   { key: 'dost', name: 'DOST Center', category: 'Research & Technology Center', icon: '/images/logo ccis.jpg', path: '/models/map/DOST -.glb', aliases: ['dost', 'dost building', 'dost center'] },
-  { key: 'villares', name: 'Villares Center', category: 'Academic & Training Center', icon: '/images/logo cegs.jpg', path: '/models/map/Villares Center.glb', aliases: ['villares', 'villares center', 'villares building'] },
+  { key: 'villares', name: 'Villares Center', category: 'Academic & Training Center', icon: '/images/logo cegs.jpg', path: '/models/map/Villares Center.glb', aliases: ['villares', 'villares center', 'villares building', 'villares complex'] },
+  { key: 'carabao', name: 'Carabao Center', category: 'Livestock & Buffalo Center', icon: '/images/carabao_center_logo.jpg', path: '/models/map/Carabao Center.glb', aliases: ['carabao center', 'carabao', 'carabao center complex'] },
   { key: 'gymnasium', name: 'Gymnasium', category: 'Sports & Recreation Center', icon: '/images/logo chass.jpg', path: '/models/textured-gym-building.draco.glb', aliases: ['gymnasium', 'gym', 'university gymnasium', 'university gym'] },
-  { key: 'kalinaw', name: 'Kalinaw Hall', category: 'Executive Seminar Center', icon: '/images/logo chass.jpg', path: '/models/map/KALINAW.glb', aliases: ['kalinaw', 'kalinaw hall'] },
+  { key: 'kalinaw', name: 'Kalinaw Hall', category: 'Executive Seminar Center', icon: '/images/logo chass.jpg', path: '/models/map/KALINAW.glb', aliases: ['kalinaw', 'kalinaw hall', 'kalinaw complex'] },
   { key: 'caa', name: 'CAA Building', category: 'Agriculture & Forestry', icon: '/images/logo cegs.jpg', path: '/models/map/CAA Building.glb', aliases: ['caa', 'caa building', 'caa complex'] },
 ];
 
