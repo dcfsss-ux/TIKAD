@@ -79,10 +79,16 @@ async function _syncSupabaseModels() {
             bData.Logo_URL = logoUrl;
             bData.logo = logoUrl;
           }
+          if (dbB.Description) {
+            bData.desc = dbB.Description;
+          }
+          if (dbB.Building_name && !bData.name) {
+            bData.name = dbB.Building_name;
+          }
           if (!bData.supabaseId && dbB.Building_ID) {
             bData.supabaseId = dbB.Building_ID;
           }
-          console.log(`[MapOverlay] ✅ Synced Supabase data for "${bData.name}":`, { modelUrl, logoUrl });
+          console.log(`[MapOverlay] ✅ Synced Supabase data for "${bData.name}":`, { modelUrl, logoUrl, desc: dbB.Description });
         }
       }
     });
@@ -285,10 +291,23 @@ const BUILDING_DATA = {
     supabaseNames: ['Hostel', 'University Hostel'],
     gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)"
   },
-  "school_of_medicine_(_under_cons_)": {
+  "school_of_medicine_under_cons": {
     glbName: "SCHOOL OF MEDICINE ( UNDER CONS. )",
-    name: "School of Medicine", shortName: "Medicine", emoji: "🏥",
+    name: "School of Medicine",
+    shortName: "Medicine",
+    abbrev: "Medicine",
+    emoji: "🏥",
     desc: "Future medical education facility currently under construction to support healthcare degree programs.",
+    supabaseId: 192,
+    supabaseNames: [
+      "Shool of Medicine",
+      "School of Medicine",
+      "School of Medicine (Under Const.)",
+      "School of Medicine ( UNDER CONS. )",
+      "school_of_medicine_under_cons",
+      "school_of_medicine_(_under_cons_)"
+    ],
+    model3d: "/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb",
     gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)"
   },
   "csu_gym": {
@@ -316,11 +335,19 @@ const BUILDING_DATA = {
   },
   "old_cas": {
     glbName: "OLD CAS BUILDING",
-    name: "Old CAS Building", shortName: "Old CAS", emoji: "🏫",
-    desc: "Former College of Arts and Sciences building housing general lecture rooms and department offices.",
-    interactive: false,
+    name: "Old CAS Building",
+    shortName: "Old CAS",
+    abbrev: "Old CAS",
+    emoji: "🏫",
+    desc: "The Old CAS Building is one of the university's older academic facilities. It continues to support instruction, meetings, and other university activities.",
+    depts: [
+      { name: "Lecture Classrooms", sub: "Floor 1-2", icon: "🏫" },
+      { name: "Faculty & Administrative Offices", sub: "Floor 1", icon: "🏢" }
+    ],
+    contact: { phone: "(085) 341-2798", email: "cas@csu.edu.ph" },
     supabaseId: 20,
-    supabaseNames: ['Old CAS', 'Old CAS Building'],
+    supabaseNames: ['Old CAS', 'Old CAS Building', 'old_cas', 'OLD CAS BUILDING'],
+    model3d: '/models/map/Old%20CAS.glb',
     gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)"
   },
   "sports_office": {
@@ -350,6 +377,32 @@ const BUILDING_DATA = {
     supabaseId: null,
     supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
+  },
+  "gents_dormitory_under_cons": {
+    glbName: "GENTS' DORMITORY ( UNDER CONS.)",
+    name: "Gent's Dormitory (Under Const.)",
+    shortName: "Gent's Dorm",
+    abbrev: "Gent's Dorm",
+    emoji: "🏗️",
+    desc: "New multi-story male student dormitory expansion currently under construction.",
+    supabaseId: 73,
+    supabaseNames: ["Gent's Dormitory (Under Const.)", "Gent's Dormitory (Under Cons.)", "Gents Dormitory (Under Const.)", "Gent's Dormitory", "Gents Dormitory", "gents_dormitory_under_cons", "gents'_dormitory_(_under_cons)"],
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/UNDER_CONS.png",
+    model3d: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/GENTS'%20DORMITORY%20(%20UNDER%20CONS.).glb",
+    gradient: "linear-gradient(135deg, #1f3a52 0%, #3a6080 100%)"
+  },
+  "ladies_dormitory_under_cons": {
+    glbName: "LADIES' DORMITORY ( UNDER CONS.)",
+    name: "Ladies' Dormitory (Under Const.)",
+    shortName: "Ladies' Dorm",
+    abbrev: "Ladies' Dorm",
+    emoji: "🏗️",
+    desc: "New female student dormitory facility currently under development.",
+    supabaseId: 74,
+    supabaseNames: ["Ladies' Dormitory (Under Const.)", "Ladies' Dormitory (Under Cons.)", "Ladies Dormitory (Under Const.)", "Ladies' Dormitory", "Ladies Dormitory", "ladies_dormitory_under_cons", "ladies'_dormitory_(_under_cons)"],
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/UNDER_CONS.png",
+    model3d: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/LADIES'%20DORMITORY%20(%20UNDER%20CONS.).glb",
+    gradient: "linear-gradient(135deg, #4a2040 0%, #7d3568 100%)"
   },
 
   // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
@@ -419,10 +472,8 @@ const BUILDING_DATA = {
   "farm_nursery": { name: "Farm Nursery", shortName: "Farm Nursery", interactive: false },
   "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
   "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
-  "gents'_dormitory_(_under_cons)": { name: "Gent's Dormitory (Under Const.)", shortName: "Gent's Dorm", interactive: false },
   "hardenning_area": { name: "Hardening Area", shortName: "Hardening Area", interactive: false },
   "hero_statue": { name: "Hero Statue", shortName: "Hero Statue", interactive: false },
-  "ladies'_dormitory_(_under_cons)": { name: "Ladies' Dormitory (Under Const.)", shortName: "Ladies' Dorm", interactive: false },
   "mechanical_dryer": { name: "Mechanical Dryer", shortName: "Mech. Dryer", interactive: false },
   "micoriza_office": { name: "Micoriza Office", shortName: "Micoriza Office", interactive: false },
   "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
