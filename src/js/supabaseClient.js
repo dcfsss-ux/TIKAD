@@ -175,14 +175,14 @@ export async function searchCampusEntities(query) {
   const officesPromise = supabase
     .from('OFFICES')
     .select('*, BUILDINGS ( Building_ID, Building_name )')
-    .ilike('Office_name', `%${trimmed}%`)
+    .or(`Office_name.ilike.${q},Abbreviations.ilike.${q},Room_number.ilike.${q}`)
     .limit(8);
 
   // Search Facilities with parent Building
   const facilitiesPromise = supabase
     .from('FACILITIES')
     .select('*, BUILDINGS ( Building_ID, Building_name )')
-    .ilike('Facility_name', `%${trimmed}%`)
+    .or(`Facility_name.ilike.${q},Abbreviations.ilike.${q},Room_number.ilike.${q}`)
     .limit(8);
 
   // Search Buildings

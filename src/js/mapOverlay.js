@@ -74,7 +74,13 @@ async function _syncSupabaseModels() {
         }
 
         if (isMatch) {
-          if (modelUrl) bData.model3d = modelUrl;
+          if (modelUrl) {
+            if (key === 'old_cas' && (modelUrl.includes('old%20admin') || modelUrl.includes('old admin'))) {
+              bData.model3d = 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb';
+            } else {
+              bData.model3d = modelUrl;
+            }
+          }
           if (logoUrl) {
             bData.Logo_URL = logoUrl;
             bData.logo = logoUrl;
@@ -347,7 +353,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 341-2798", email: "cas@csu.edu.ph" },
     supabaseId: 20,
     supabaseNames: ['Old CAS', 'Old CAS Building', 'old_cas', 'OLD CAS BUILDING'],
-    model3d: '/models/map/Old%20CAS.glb',
+    model3d: 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb',
     gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)"
   },
   "sports_office": {
@@ -1008,8 +1014,19 @@ function renderFloorRooms(floor) {
       iconContent = `<i class="mdi mdi-door-sliding" aria-hidden="true"></i>`;
     }
 
-    const codeBadge = room.code ? `<span class="room-code">${room.code}</span>` : '';
-    const subText = room.sub ? `<span class="room-sub">${room.sub}</span>` : '';
+    // Avoid redundant badge if code is empty or identical to name or sub
+    const hasDuplicateCode = !room.code ||
+      room.code.trim().toLowerCase() === room.name.trim().toLowerCase() ||
+      (room.sub && room.code.trim().toLowerCase() === room.sub.trim().toLowerCase());
+
+    const codeBadge = !hasDuplicateCode ? `<span class="room-code">${room.code}</span>` : '';
+
+    // Avoid redundant sub if sub is empty or identical to name or code
+    const hasDuplicateSub = !room.sub ||
+      room.sub.trim().toLowerCase() === room.name.trim().toLowerCase() ||
+      (room.code && room.sub.trim().toLowerCase() === room.code.trim().toLowerCase());
+
+    const subText = !hasDuplicateSub ? `<span class="room-sub">${room.sub}</span>` : '';
     const matchBadge = room.isMatched ? `<span class="floor-match-badge"><i class="mdi mdi-check-circle"></i> MATCHED</span>` : '';
     const matchedClass = room.isMatched ? ' room-row--matched' : '';
 
@@ -1121,15 +1138,26 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   };
 
   (dbBuilding.ROOMS || []).forEach(r => {
-    const name = r.Room_number && r.Room_name ? r.Room_number : (r.Room_name || r.Room_number || 'Unnamed Room');
-    const sub = r.Room_number && r.Room_name ? r.Room_name : '';
+    let name = 'Unnamed Room';
+    let code = '';
+    let sub = '';
+
+    if (r.Room_name && r.Room_number) {
+      name = r.Room_name;
+      code = r.Room_number;
+    } else if (r.Room_name) {
+      name = r.Room_name;
+    } else if (r.Room_number) {
+      name = r.Room_number;
+    }
+
     const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(r.Floor, {
       name,
       sub,
-      code: r.Room_number || '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'room',
       iconHtml: '<i class="mdi mdi-door"></i>',
       isMatched
@@ -1137,14 +1165,37 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   });
 
   (dbBuilding.OFFICES || []).forEach(o => {
-    const sub = o.Abbreviations || o.Room_number || '';
+    let name = 'Unnamed Office';
+    let code = '';
+    let sub = '';
+
+    if (o.Office_name && o.Abbreviations) {
+      name = o.Office_name;
+      code = o.Abbreviations;
+      if (o.Room_number && o.Room_number !== o.Office_name && o.Room_number !== o.Abbreviations) {
+        sub = o.Room_number;
+      }
+    } else if (o.Office_name && o.Room_number) {
+      name = o.Office_name;
+      code = o.Room_number;
+    } else if (o.Office_name) {
+      name = o.Office_name;
+    } else if (o.Abbreviations && o.Room_number) {
+      name = o.Abbreviations;
+      code = o.Room_number;
+    } else if (o.Abbreviations) {
+      name = o.Abbreviations;
+    } else if (o.Room_number) {
+      name = o.Room_number;
+    }
+
     const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(o.Floor, {
-      name: o.Office_name,
-      sub,
-      code: o.Abbreviations || '',
+      name,
+      sub: (sub && sub.trim().toLowerCase() !== name.trim().toLowerCase() && sub.trim().toLowerCase() !== code.trim().toLowerCase()) ? sub : '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'office',
       iconHtml: '<i class="mdi mdi-briefcase-outline"></i>',
       isMatched
@@ -1152,14 +1203,37 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   });
 
   (dbBuilding.FACILITIES || []).forEach(f => {
-    const sub = f.Abbreviations || f.Room_number || '';
+    let name = 'Unnamed Facility';
+    let code = '';
+    let sub = '';
+
+    if (f.Facility_name && f.Abbreviations) {
+      name = f.Facility_name;
+      code = f.Abbreviations;
+      if (f.Room_number && f.Room_number !== f.Facility_name && f.Room_number !== f.Abbreviations) {
+        sub = f.Room_number;
+      }
+    } else if (f.Facility_name && f.Room_number) {
+      name = f.Facility_name;
+      code = f.Room_number;
+    } else if (f.Facility_name) {
+      name = f.Facility_name;
+    } else if (f.Abbreviations && f.Room_number) {
+      name = f.Abbreviations;
+      code = f.Room_number;
+    } else if (f.Abbreviations) {
+      name = f.Abbreviations;
+    } else if (f.Room_number) {
+      name = f.Room_number;
+    }
+
     const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(f.Floor, {
-      name: f.Facility_name,
-      sub,
-      code: f.Abbreviations || '',
+      name,
+      sub: (sub && sub.trim().toLowerCase() !== name.trim().toLowerCase() && sub.trim().toLowerCase() !== code.trim().toLowerCase()) ? sub : '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'facility',
       iconHtml: '<i class="mdi mdi-domain"></i>',
       isMatched
@@ -1393,7 +1467,10 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
       // Check and attach live Supabase 3D model URL (only for main buildings)
       if (!isComplexSubBuilding) {
-        const liveModelUrl = extractModelUrl(dbBuilding);
+        let liveModelUrl = extractModelUrl(dbBuilding);
+        if (key === 'old_cas' && liveModelUrl && (liveModelUrl.includes('old%20admin') || liveModelUrl.includes('old admin'))) {
+          liveModelUrl = 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb';
+        }
         if (liveModelUrl) {
           data.model3d = liveModelUrl;
           if (viewBtnWrap && viewBtn) {
@@ -1894,10 +1971,13 @@ async function _buildDropdown(query) {
   // 2. Render matched Offices
   offices.forEach(o => {
     const bName = o.BUILDINGS?.Building_name || 'Building';
+    const officeTitle = o.Office_name || o.Abbreviations || o.Room_number || 'Unnamed Office';
+    const target = o.Office_name || o.Abbreviations || o.Room_number || '';
+    const extra = (o.Office_name && o.Abbreviations) ? ` (${o.Abbreviations})` : (o.Room_number && o.Office_name ? ` — ${o.Room_number}` : '');
     html += `
-      <div data-type="office" data-building="${bName}" data-target="${o.Office_name}" class="search-dropdown-item">
+      <div data-type="office" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
         <span><i class="mdi mdi-briefcase-outline"></i></span>
-        <span>${o.Office_name}</span>
+        <span><strong>${officeTitle}</strong>${extra}</span>
         <span class="search-dropdown-item-type">in ${bName}</span>
       </div>`;
   });
@@ -1905,10 +1985,13 @@ async function _buildDropdown(query) {
   // 3. Render matched Facilities
   facilities.forEach(f => {
     const bName = f.BUILDINGS?.Building_name || 'Building';
+    const facilityTitle = f.Facility_name || f.Abbreviations || f.Room_number || 'Unnamed Facility';
+    const target = f.Facility_name || f.Abbreviations || f.Room_number || '';
+    const extra = (f.Facility_name && f.Abbreviations) ? ` (${f.Abbreviations})` : (f.Room_number && f.Facility_name ? ` — ${f.Room_number}` : '');
     html += `
-      <div data-type="facility" data-building="${bName}" data-target="${f.Facility_name}" class="search-dropdown-item">
+      <div data-type="facility" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
         <span><i class="mdi mdi-domain"></i></span>
-        <span>${f.Facility_name}</span>
+        <span><strong>${facilityTitle}</strong>${extra}</span>
         <span class="search-dropdown-item-type">in ${bName}</span>
       </div>`;
   });
