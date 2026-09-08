@@ -8,10 +8,23 @@
  */
 
 import * as THREE from 'three';
+import gsap from 'gsap';
 import Experience from '../../Experience/Experience.js';
 import { BalangayPreloader } from './balangayPreloader.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { initNavigation, handleBuildingRoute, handleCategorizedRoute, hasCategorizedRoutes, clearRouteHighlight, hasActiveRoute, getActiveRouteCategory } from './interactionHandler.js';
+import {
+  initNavigation,
+  handleBuildingRoute,
+  handleCategorizedRoute,
+  hasCategorizedRoutes,
+  clearRouteHighlight,
+  hasActiveRoute,
+  getActiveRouteCategory,
+  getCategorizedSegments,
+  getRouteBoundingBox,
+  getRouteEndpoint,
+  GATE_COORDINATES
+} from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
   searchCampusEntities,
@@ -884,6 +897,191 @@ function _hideComplexCard() {
   if (card) card.style.display = 'none';
 }
 
+let currentRouteCamTween = null;
+
+/**
+ * Automatically rotates and frames the 3D camera to face along the designated route towards the gate.
+ * Users no longer need to manually rotate, drag or pan to locate the path or gate.
+ *
+ * @param {string} key - Building key (e.g. 'kalinaw')
+ * @param {'nearest'|'near'|'far'} cat - Route category ('nearest' -> Main Gate, 'near' -> Green Gate, 'far' -> Back Gate)
+ */
+function _focusCameraOnRoute(key, cat) {
+  if (!experience || !experience.camera || !experience.controls) return;
+  const cam = experience.camera.orthographicCamera;
+  const controls = experience.controls.controls;
+  if (!cam || !controls) return;
+
+  // 1. Resolve building world position
+  let buildingPos = null;
+  const pin = pinList.find(p => p.key === key);
+  if (pin && pin.worldPos) {
+    buildingPos = pin.worldPos.clone();
+  } else {
+    const node = _findNode(key);
+    if (node) {
+      const b = new THREE.Box3().setFromObject(node);
+      buildingPos = b.getCenter(new THREE.Vector3());
+    }
+  }
+
+  // 2. Identify designated route segments and endpoint
+  const segments = getCategorizedSegments(key, cat);
+  const segBox = getRouteBoundingBox(segments);
+  let endPos = getRouteEndpoint(segments);
+
+  if (!endPos) {
+    if (cat === 'nearest') {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_main.x, 0, GATE_COORDINATES.gate_main.z);
+    } else if (cat === 'near') {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_second.x, 0, GATE_COORDINATES.gate_second.z);
+    } else {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_third.x, 0, 314);
+    }
+  }
+
+  // 3. Compute overall bounding box covering building and all route road meshes
+  const box = new THREE.Box3();
+  if (buildingPos) box.expandByPoint(buildingPos);
+  if (endPos) box.expandByPoint(endPos);
+  if (segBox) box.union(segBox);
+
+  // Target center of the route (centered on the active road journey)
+  const targetCenter = new THREE.Vector3();
+  box.getCenter(targetCenter);
+  targetCenter.y = 0; // Keep target level with the ground surface
+
+  // 4. Calculate forward direction vector of the designated way (building -> route endpoint)
+  let dirX = 0;
+  let dirZ = -1;
+  if (buildingPos && endPos) {
+    const dx = endPos.x - buildingPos.x;
+    const dz = endPos.z - buildingPos.z;
+    const len = Math.hypot(dx, dz);
+    if (len > 1) {
+      dirX = dx / len;
+      dirZ = dz / len;
+    }
+  } else if (cat === 'far') {
+    dirZ = 1;
+  } else if (cat === 'near') {
+    dirX = 1;
+    dirZ = -0.5;
+  } else {
+    dirZ = -1;
+  }
+
+  // 5. Compute target zoom to fit the route comfortably
+  const size = box.getSize(new THREE.Vector3());
+  const maxSpan = Math.max(size.x, size.z);
+  // Frustum is 200, padding factor ensures breathing room around panels
+  let targetZoom = 200 / (Math.max(120, maxSpan) * 1.35);
+  targetZoom = Math.min(1.0, Math.max(0.48, targetZoom));
+
+  // 6. Smooth camera tween with spherical polar angle interpolation
+  if (currentRouteCamTween) {
+    currentRouteCamTween.kill();
+    currentRouteCamTween = null;
+  }
+
+  const is2D = !!experience.controls.is2D;
+
+  if (is2D) {
+    // 2D straight-down view: pan target and zoom
+    const startState = {
+      tx: controls.target.x,
+      ty: controls.target.y,
+      tz: controls.target.z,
+      cx: cam.position.x,
+      cy: cam.position.y,
+      cz: cam.position.z,
+      zoom: cam.zoom,
+    };
+
+    currentRouteCamTween = gsap.to(startState, {
+      tx: targetCenter.x,
+      ty: targetCenter.y,
+      tz: targetCenter.z,
+      cx: targetCenter.x,
+      cy: targetCenter.y + 20,
+      cz: targetCenter.z,
+      zoom: targetZoom,
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        cam.position.set(startState.cx, startState.cy, startState.cz);
+        controls.target.set(startState.tx, startState.ty, startState.tz);
+        cam.zoom = startState.zoom;
+        cam.updateProjectionMatrix();
+        controls.update();
+        if (experience.renderer) experience.renderer.requestRender();
+      },
+      onComplete: () => {
+        currentRouteCamTween = null;
+        experience.controls?.saveCameraState?.();
+      }
+    });
+  } else {
+    // 3D view:
+    // Looking in direction u = (dirX, 0, dirZ) towards target means camera is placed at:
+    // angle phiEnd = Math.atan2(-dirZ, -dirX);
+    const phiEnd = Math.atan2(-dirZ, -dirX);
+    const targetRH = 13.5;
+    const targetOffsetY = 9.5;
+
+    // Current camera state relative to current controls.target
+    const curDx = cam.position.x - controls.target.x;
+    const curDz = cam.position.z - controls.target.z;
+    const curRH = Math.max(2.5, Math.min(22, Math.hypot(curDx, curDz)));
+    const curOffsetY = Math.max(2, cam.position.y - controls.target.y);
+    const phiStart = Math.atan2(curDz, curDx);
+
+    // Shortest angular rotation path
+    let deltaPhi = phiEnd - phiStart;
+    while (deltaPhi > Math.PI) deltaPhi -= 2 * Math.PI;
+    while (deltaPhi < -Math.PI) deltaPhi += 2 * Math.PI;
+    const targetPhi = phiStart + deltaPhi;
+
+    const animState = {
+      tx: controls.target.x,
+      ty: controls.target.y,
+      tz: controls.target.z,
+      phi: phiStart,
+      rH: curRH,
+      offsetY: curOffsetY,
+      zoom: cam.zoom,
+    };
+
+    currentRouteCamTween = gsap.to(animState, {
+      tx: targetCenter.x,
+      ty: targetCenter.y,
+      tz: targetCenter.z,
+      phi: targetPhi,
+      rH: targetRH,
+      offsetY: targetOffsetY,
+      zoom: targetZoom,
+      duration: 1.3,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        const px = animState.tx + animState.rH * Math.cos(animState.phi);
+        const pz = animState.tz + animState.rH * Math.sin(animState.phi);
+        const py = animState.ty + animState.offsetY;
+
+        cam.position.set(px, py, pz);
+        controls.target.set(animState.tx, animState.ty, animState.tz);
+        cam.zoom = animState.zoom;
+        cam.updateProjectionMatrix();
+        controls.update();
+        if (experience.renderer) experience.renderer.requestRender();
+      },
+      onComplete: () => {
+        currentRouteCamTween = null;
+        experience.controls?.saveCameraState?.();
+      }
+    });
+  }
+}
+
 function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highlightRoom = null, searchMode = false) {
   _resetHighlight();
   activeKey = key;
@@ -963,6 +1161,11 @@ function _resetHighlight() {
 
   // Clear road segment route highlights
   clearRouteHighlight();
+
+  if (currentRouteCamTween) {
+    currentRouteCamTween.kill();
+    currentRouteCamTween = null;
+  }
 
   // Clear active state from all route category buttons
   document.querySelectorAll('.route-category-btn').forEach(btn => {
@@ -1369,12 +1572,18 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
               // Toggle off — clear the highlight
               clearRouteHighlight();
               allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
+              if (currentRouteCamTween) {
+                currentRouteCamTween.kill();
+                currentRouteCamTween = null;
+              }
             } else {
               // Activate this category's route
               const success = handleCategorizedRoute(key, cat);
               allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
               if (success && hasActiveRoute()) {
                 btn.classList.add('active-route-btn');
+                // Automatically rotate / face designated way
+                _focusCameraOnRoute(key, cat);
               }
             }
           };
