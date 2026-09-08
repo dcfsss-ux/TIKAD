@@ -802,749 +802,191 @@
     "dost": "bld_dost",
     "old_administrative_building": "bld_old_admin",
     "old_cas": "bld_old_cas",
+    "old-cas": "bld_old_cas",
+    "Old CAS": "bld_old_cas",
     "csu_student_center": "bld_student_ctr",
     "hostel": "bld_hostel",
     "food_innovation_center": "bld_fic",
     "ched_lgu": "bld_ched_lgu",
+    "ched": "bld_ched_lgu",
     "sports_office": "bld_sports",
-    "Villares": "bld_villares"
+    "Villares": "bld_villares",
+    "villares": "bld_villares",
+    "carabao_center": "bld_caa",
+    "carabao": "bld_caa",
+    "caraga_black_native_chicken": "bld_villares",
+    "native_chicken": "bld_villares"
   },
   "buildingCategorizedRoutes": {
     "caa_building": {
-      "nearest": [
-        "road 37",
-        "road 1"
-      ],
-      "near": [
-        "road 37",
-        "road 31",
-        "road 26",
-        "road 24",
-        "road 5",
-        "road 6"
-      ],
-      "far": [
-        "road 5",
-        "road 7",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17",
-        "road 30",
-        "road 35",
-        "road 36",
-        "road 37"
-      ]
+      "nearest": ["road 37", "road 1", "road 41", "road 38", "road 40"],
+      "near": ["road 41", "road 38", "road 37", "road 40", "road 5", "road 43", "road 6", "road 44", "road 24", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 41", "road 38", "road 37", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "caa": {
-      "nearest": [
-        "road 37",
-        "road 1"
-      ],
-      "near": [
-        "road 37",
-        "road 31",
-        "road 26",
-        "road 24",
-        "road 5",
-        "road 6"
-      ],
-      "far": [
-        "road 5",
-        "road 7",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17",
-        "road 30",
-        "road 35",
-        "road 36",
-        "road 37"
-      ]
+      "nearest": ["road 37", "road 1", "road 41", "road 38", "road 40"],
+      "near": ["road 41", "road 38", "road 37", "road 40", "road 5", "road 43", "road 6", "road 44", "road 24", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 41", "road 38", "road 37", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "ced_building": {
-      "nearest": [
-        "road 1",
-        "road 2"
-      ],
-      "near": [
-        "road 2",
-        "road 31",
-        "road 26",
-        "road 24",
-        "road 5",
-        "road 6"
-      ],
-      "far": [
-        "road 5",
-        "road 7",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17",
-        "road 30",
-        "road 35",
-        "road 36",
-        "road 2"
-      ]
+      "nearest": ["road 1", "road 2", "road 40"],
+      "near": ["road 2", "road 40", "road 5", "road 43", "road 6", "road 44", "road 24", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 2", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "ced": {
-      "nearest": [
-        "road 1",
-        "road 2"
-      ],
-      "near": [
-        "road 2",
-        "road 31",
-        "road 26",
-        "road 24",
-        "road 5",
-        "road 6"
-      ],
-      "far": [
-        "road 5",
-        "road 7",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17",
-        "road 30",
-        "road 35",
-        "road 36",
-        "road 2"
-      ]
+      "nearest": ["road 1", "road 2", "road 40"],
+      "near": ["road 2", "road 40", "road 5", "road 43", "road 6", "road 44", "road 24", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 2", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "state-of-the-art-library": {
-      "nearest": [
-        "road 22",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "near": [
-        "road 22",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "far": [
-        "road 22",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 30", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "library": {
-      "nearest": [
-        "road 22",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "near": [
-        "road 22",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "far": [
-        "road 22",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 30", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "batok_hall": {
-      "nearest": [
-        "road 1",
-        "road 5",
-        "road 6"
-      ],
-      "near": [
-        "road 6",
-        "road 24",
-        "road 31",
-        "road 26"
-      ],
-      "far": [
-        "road 30",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 30", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "batok": {
-      "nearest": [
-        "road 1",
-        "road 5",
-        "road 6"
-      ],
-      "near": [
-        "road 6",
-        "road 24",
-        "road 31",
-        "road 26"
-      ],
-      "far": [
-        "road 30",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 30", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "new_administrative_bldg": {
-      "nearest": [
-        "circle road sa new admin",
-        "road 7",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "near": [
-        "circle road sa new admin",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "circle road sa new admin",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["circle road sa new admin", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["circle road sa new admin", "road 66", "road 7", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["circle road sa new admin", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "new_admin": {
-      "nearest": [
-        "circle road sa new admin",
-        "road 7",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "near": [
-        "circle road sa new admin",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "circle road sa new admin",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["circle road sa new admin", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["circle road sa new admin", "road 66", "road 7", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["circle road sa new admin", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "old_administrative_building": {
-      "nearest": [
-        "road 36",
-        "road 7",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "near": [
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 36", "road 67", "road 66", "road 7", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "old_admin": {
-      "nearest": [
-        "road 36",
-        "road 7",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "near": [
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 36", "road 67", "road 66", "road 7", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "kalinaw": {
-      "nearest": [
-        "road 22",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "near": [
-        "road 22",
-        "road 21",
-        "road 31",
-        "road 26"
-      ],
-      "far": [
-        "road 22",
-        "road 7",
-        "road 36",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 46", "road 22", "road 45", "road 21", "road 47", "road 31", "road 48", "road 26"],
+      "far": ["road 46", "road 22", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "kinaadman_hall": {
-      "nearest": [
-        "kh kalsada",
-        "road 35",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "kh kalsada",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "kh kalsada",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["kh kalsada", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["kh kalsada", "road 63", "road 64", "road 65", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["kh kalsada", "road 63", "road 64", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "kinaadman": {
-      "nearest": [
-        "kh kalsada",
-        "road 35",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "kh kalsada",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "kh kalsada",
-        "road 35",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["kh kalsada", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["kh kalsada", "road 63", "road 64", "road 65", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["kh kalsada", "road 63", "road 64", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "csu_gym": {
-      "nearest": [
-        "road 33",
-        "road 34",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 33",
-        "road 34",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 33",
-        "road 34",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "gymnasium": {
-      "nearest": [
-        "road 33",
-        "road 34",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 33",
-        "road 34",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 33",
-        "road 34",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "gym": {
-      "nearest": [
-        "road 33",
-        "road 34",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 33",
-        "road 34",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 33",
-        "road 34",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
+    },
+    "old_cas": {
+      "nearest": ["road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 65", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
+    },
+    "old-cas": {
+      "nearest": ["road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 65", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
+    },
+    "Old CAS": {
+      "nearest": ["road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 65", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "hiraya_building": {
-      "nearest": [
-        "hiraya road",
-        "road 8",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "hiraya road",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "hiraya road",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["hiraya road", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["hiraya road", "road 8", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["hiraya road", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "hiraya": {
-      "nearest": [
-        "hiraya road",
-        "road 8",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "hiraya road",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "hiraya road",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["hiraya road", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["hiraya road", "road 8", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["hiraya road", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "hinang_building": {
-      "nearest": [
-        "hinang road",
-        "road 8",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "hinang road",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "hinang road",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["hinang road", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["hinang road", "road 8", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["hinang road", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "hinang": {
-      "nearest": [
-        "hinang road",
-        "road 8",
-        "road 27",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "hinang road",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "hinang road",
-        "road 8",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["hinang road", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["hinang road", "road 8", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["hinang road", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "masawa_building": {
-      "nearest": [
-        "road 32",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 32",
-        "road 27",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 32",
-        "road 28",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 32", "road 49", "road 25", "road 48", "road 31", "road 47", "road 24", "road 44", "road 6", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 32", "road 50", "road 28", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "masawa": {
-      "nearest": [
-        "road 32",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 32",
-        "road 27",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 32",
-        "road 28",
-        "road 9",
-        "road 11",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 32", "road 49", "road 25", "road 48", "road 31", "road 47", "road 24", "road 44", "road 6", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 32", "road 50", "road 28", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "dost": {
-      "nearest": [
-        "road 12",
-        "road 11",
-        "road 9",
-        "road 32",
-        "road 28",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 12",
-        "road 11",
-        "road 9",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 12",
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 12", "road 55", "road 11", "road 54", "road 9", "road 53", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 12", "road 55", "road 11", "road 54", "road 9", "road 53", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 12", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "Villares": {
-      "nearest": [
-        "road 11",
-        "road 9",
-        "road 32",
-        "road 28",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 11",
-        "road 9",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 13", "road 55", "road 11", "road 54", "road 9", "road 53", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 13", "road 55", "road 11", "road 54", "road 9", "road 53", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "villares": {
-      "nearest": [
-        "road 11",
-        "road 9",
-        "road 32",
-        "road 28",
-        "road 25",
-        "road 26"
-      ],
-      "near": [
-        "road 11",
-        "road 9",
-        "road 8",
-        "road 35",
-        "road 36",
-        "road 7",
-        "road 30",
-        "road 5",
-        "road 1"
-      ],
-      "far": [
-        "road 13",
-        "road 15",
-        "road 17"
-      ]
+      "nearest": ["road 13", "road 55", "road 11", "road 54", "road 9", "road 53", "road 8", "road 52", "road 65", "road 63", "road 64", "road 35", "road 36", "road 67", "road 66", "road 7", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "near": ["road 13", "road 55", "road 11", "road 54", "road 9", "road 53", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 13", "road 56", "road 15", "road 57", "road 17"]
+    },
+    "carabao_center": {
+      "nearest": ["road 1", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"],
+      "near": ["road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 17"]
+    },
+    "carabao": {
+      "nearest": ["road 1", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"],
+      "near": ["road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 17"]
+    },
+    "caraga_black_native_chicken": {
+      "nearest": ["road 10", "road 1", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54"],
+      "near": ["road 10", "road 54", "road 9", "road 53", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 10", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
+    },
+    "native_chicken": {
+      "nearest": ["road 10", "road 1", "road 40", "road 5", "road 43", "road 30", "road 45", "road 7", "road 66", "road 67", "road 36", "road 35", "road 64", "road 63", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54"],
+      "near": ["road 10", "road 54", "road 9", "road 53", "road 28", "road 50", "road 32", "road 49", "road 25", "road 48", "road 26"],
+      "far": ["road 10", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     }
   }
 }

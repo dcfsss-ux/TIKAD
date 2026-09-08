@@ -246,7 +246,7 @@ const BUILDING_DATA = {
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
   },
   "ced_building": {
-    glbName: "CED BUILDING",
+    glbName: "CED",
     name: "CED Building", shortName: "CED", emoji: "🏫",
     desc: "College of Education facility dedicated to teacher education, laboratory schools, curriculum development, and educational research.",
     depts: [
@@ -255,8 +255,9 @@ const BUILDING_DATA = {
       { name: "Demonstration & Tech Labs", sub: "Floor 2", icon: "🖥" }
     ],
     contact: { phone: "(085) 341-2793", email: "ced@csu.edu.ph" },
+    isCEDComplexMember: true,
     supabaseId: 7,
-    supabaseNames: ['Iwag', 'IWAG', 'CED Building', 'CED'],
+    supabaseNames: ['CED', 'CED Building', 'CED Complex', 'Iwag', 'IWAG'],
     gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)"
   },
   "caa_building": {
@@ -364,8 +365,10 @@ const BUILDING_DATA = {
       { name: "Faculty & Administrative Offices", sub: "Floor 1", icon: "🏢" }
     ],
     contact: { phone: "(085) 341-2798", email: "cas@csu.edu.ph" },
+    interactive: true,
+    isOldCASComplexMember: true,
     supabaseId: 20,
-    supabaseNames: ['Old CAS', 'Old CAS Building', 'old_cas', 'OLD CAS BUILDING'],
+    supabaseNames: ['Old CAS', 'Old CAS Building', 'old_cas', 'OLD CAS BUILDING', 'Old CAS Complex'],
     model3d: 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb',
     gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)"
   },
@@ -379,23 +382,42 @@ const BUILDING_DATA = {
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
   "Villares": {
-    name: "Villares", shortName: "Villares", emoji: "🏆",
-    desc: "Villares research center supporting agricultural technology and extension programs.",
+    name: "Villares", shortName: "Villares", abbrev: "Villares", emoji: "🏆",
+    desc: "Villares research center supporting agricultural technology, farm laboratories, and agricultural extension programs.",
     depts: [{ name: "Research & Seminar Rooms", sub: "Floor 1", icon: "🌱" }],
     contact: { phone: "(085) 341-2797", email: "villares@csu.edu.ph" },
+    interactive: true,
+    isVillaresComplexMember: true,
     supabaseId: 9,
-    supabaseNames: ['Villares'],
+    supabaseNames: ['Villares', 'Villares Center', 'Villares Complex'],
     gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
   },
   "ched_lgu": {
     glbName: "CHED_LGU -",
-    name: "CHED-LGU", shortName: "CHED-LGU", abbrev: "CHED-LGU", emoji: "🏛",
+    name: "CHED", shortName: "CHED", abbrev: "CHED", emoji: "🏛",
     desc: "Commission on Higher Education (CHED Caraga) regional office and Local Government Unit partnership facility.",
     depts: [{ name: "CHED Caraga Regional Office", sub: "Floor 1", icon: "🏛" }],
     contact: { phone: "(085) 342-5253", email: "chedcaraga@ched.gov.ph" },
+    interactive: true,
+    isCHEDComplexMember: true,
     supabaseId: null,
-    supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
+    supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -', 'CHED Complex'],
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
+  },
+  "carabao_center": {
+    glbName: "Carabao Center",
+    name: "Carabao Center", shortName: "Carabao Center", abbrev: "Carabao Center", emoji: "🐃",
+    logo: "/images/carabao_center_logo.jpg",
+    Logo_URL: "/images/carabao_center_logo.jpg",
+    image: "/images/carabao_center_logo.jpg",
+    desc: "Philippine Carabao Center at CSU facility for dairy buffalo research, artificial insemination, and livestock development.",
+    depts: [{ name: "Carabao Research & Breeding Division", sub: "Floor 1", icon: "🐃" }],
+    contact: { phone: "(085) 341-2794", email: "carabao@csu.edu.ph" },
+    interactive: true,
+    no3dViewer: true,
+    isCarabaoCenterComplexMember: true,
+    supabaseNames: ['Carabao Center', 'Philippine Carabao Center', 'Carabao Center Complex'],
+    gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)"
   },
   "gents_dormitory_under_cons": {
     glbName: "GENTS' DORMITORY ( UNDER CONS.)",
@@ -424,10 +446,10 @@ const BUILDING_DATA = {
     gradient: "linear-gradient(135deg, #4a2040 0%, #7d3568 100%)"
   },
 
-  // ── NON-INTERACTIVE LANDMARKS (Static labels, no info panels) ──
+  // ── NON-INTERACTIVE LANDMARKS & COMPLEX MEMBERS ──
   "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", emoji: "☕", hidePin: true, isKalinawComplexMember: true, desc: "Campus cafeteria providing meals and refreshments for students, faculty, and guests.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", emoji: "🍽️", hidePin: true, isKalinawComplexMember: true, desc: "University canteen serving hot meals, snacks, and beverages.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
-  "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", interactive: false },
+  "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", emoji: "🍽️", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education canteen serving hot meals, snacks, and refreshments.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", emoji: "🍽️", hidePin: true, isCAAComplexMember: true, desc: "CAA dining hall and cafeteria serving students and research personnel.", depts: [{ name: "CAA Canteen Dining Area", sub: "Floor 1", icon: "🍽️" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
   "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
@@ -435,22 +457,22 @@ const BUILDING_DATA = {
   "harrison_statue": { glbName: "HARRISON STATUE", name: "Harrison Statue", shortName: "Harrison Statue", interactive: false },
   "ochoa_statue": { glbName: "OCHOA STATUE", name: "Ochoa Statue", shortName: "Ochoa Statue", interactive: false },
   "green_house": { glbName: "GREEN HOUSE", name: "Green House", shortName: "Green House", interactive: false },
-  "micoriza_green_house": { glbName: "MICORIZA GREEN HOUSE", name: "Micoriza Green House", shortName: "Micoriza GH", interactive: false },
-  "church": { glbName: "CHAPEL", name: "Campus Chapel", shortName: "Chapel", interactive: false },
-  "eco_park_building": { glbName: "ECO PARK", name: "Eco Park", shortName: "Eco Park", interactive: false },
+  "micoriza_green_house": { glbName: "MICORIZA GREEN HOUSE", name: "Micoriza GreenHouse/GH", shortName: "Micoriza GH", emoji: "🌿", hidePin: true, isVillaresComplexMember: true, desc: "Controlled climate greenhouse for mycorrhizal fungal inoculant testing and root symbiosis research.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "church": { glbName: "CHAPEL", name: "Chapel", shortName: "Chapel", emoji: "⛪", hidePin: true, isOldCASComplexMember: true, desc: "University Ecumenical Chapel providing spiritual fellowship, religious gatherings, and reflection spaces.", gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)" },
+  "eco_park_building": { glbName: "ECO PARK", name: "Eco Park", shortName: "Eco Park", emoji: "🌳", hidePin: true, isOldCASComplexMember: true, desc: "CSU Eco Park sanctuary dedicated to environmental biodiversity, nature walks, and ecological research.", gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)" },
   "reservoir": { glbName: "RESERVOIR", name: "Water Reservoir", shortName: "Reservoir", interactive: false },
   "mrf": { glbName: "MRF", name: "Materials Recovery Facility", shortName: "MRF", interactive: false },
-  "feedmill": { glbName: "FEEDMILL", name: "Feedmill", shortName: "Feedmill", interactive: false },
+  "feedmill": { glbName: "FEEDMILL", name: "Feed Mill", shortName: "Feed Mill", emoji: "🏭", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Livestock feed processing and grain milling plant producing customized feeds and concentrates.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
   "milk_processing_facility": { glbName: "MILK PROCESSING FACILITY", name: "Milk Processing Facility", shortName: "Milk Facility", emoji: "🥛", hidePin: true, isCAAComplexMember: true, desc: "Dairy science processing plant for pasteurization and milk product development.", depts: [{ name: "Dairy Processing & Bottling", sub: "Floor 1", icon: "🥛" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "da_dairy_processing_center": { glbName: "DA DAIRY PROCESSING CENTER", name: "Dairy Processing Center", shortName: "Dairy Center", interactive: false },
   "caretaker_house": { glbName: "CARETAKER HOUSE", name: "Caretaker House", shortName: "Caretaker", interactive: false },
-  "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Beef Cattle Shed", shortName: "Cattle Shed", interactive: false },
-  "barn_house": { glbName: "BARN HOUSE", name: "Barn House", shortName: "Barn House", interactive: false },
-  "goat_house": { glbName: "GOAT HOUSE", name: "Goat House", shortName: "Goat House", interactive: false },
-  "sheep_house": { glbName: "SHEEP HOUSE", name: "Sheep House", shortName: "Sheep House", interactive: false },
+  "beef_cattle_building": { glbName: "BEEF CATTLE BUILDING", name: "Cattle Shed", shortName: "Cattle Shed", emoji: "🐂", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Sheltered cattle barn and feedlot for beef livestock breeding and nutritional trials.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
+  "barn_house": { glbName: "BARN HOUSE", name: "Barn House", shortName: "Barn House", emoji: "🛖", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Storage barn and silo facility for hay, silage, forage grains, and agricultural equipment.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
+  "goat_house": { glbName: "GOAT HOUSE", name: "Goat House", shortName: "Goat House", emoji: "🐐", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Elevated caprine barn for dairy and meat goat breeding and management.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
+  "sheep_house": { glbName: "SHEEP HOUSE", name: "Sheep House", shortName: "Sheep House", emoji: "🐑", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Dedicated ovine housing and pasture shelter for sheep stock research.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
   "agro_forestry_shed": { glbName: "AGRO-FORESTRY SHED", name: "Agro-Forestry Shed", shortName: "Agro Shed", interactive: false },
   "wood_workshop": { glbName: "WOOD WORKSHOP/TECH VOC BUILDING", name: "Wood Workshop Tech Voc", shortName: "Wood Workshop", interactive: false },
-  "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", interactive: false },
+  "oatc": { glbName: "OATC", name: "OATC", shortName: "OATC", emoji: "🏢", hidePin: true, isVillaresComplexMember: true, desc: "Organic Agriculture Training Center (OATC) facilitating bio-farming workshops and agricultural extension.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "rotc": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC", hidePin: true, isKalinawComplexMember: true },
   "bookstore": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & ORGMS", shortName: "Bookstore", hidePin: true, isKalinawComplexMember: true },
   "power_house": { glbName: "POWER HOUSE", name: "Power House", shortName: "Power House", interactive: false },
@@ -459,11 +481,14 @@ const BUILDING_DATA = {
   // ── ADDITIONAL CAMPUS STRUCTURES ──
   "agri-workshop_2": { name: "Agri Workshop 2", shortName: "Agri Workshop 2", emoji: "🛠️", hidePin: true, isCAAComplexMember: true, desc: "Agricultural engineering workshop for machinery testing and fabrication.", depts: [{ name: "Machinery Workshop", sub: "Floor 1", icon: "🛠️" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "alumni_office": {
+    glbName: "ALUMNI OFFICE -",
     name: "Alumni Center", shortName: "Alumni Center", emoji: "🎓",
-    interactive: false,
+    hidePin: true,
+    isCHEDComplexMember: true,
+    desc: "CSU Alumni Center coordinating graduate affairs, alumni network events, and institutional development.",
     supabaseId: 17,
     supabaseNames: ['Alumni Center', 'Alumni Office'],
-    gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)"
+    gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
   },
   "Annex 3": { glbName: "ANNEX 3", name: "Annex 3", shortName: "Annex 3", emoji: "🏬", hidePin: true, isKalinawComplexMember: true },
   "amante_building": { glbName: "AMANTE BUILDING", name: "Amante Building", shortName: "Amante Bldg.", emoji: "🏛️", hidePin: true, isKalinawComplexMember: true, desc: "Academic and administrative facility supporting university instruction and research.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
@@ -474,21 +499,21 @@ const BUILDING_DATA = {
   "bio_diagnostic_laboratory": { name: "Bio-Diagnostic Laboratory", shortName: "Bio-Diag Lab", interactive: false },
   "bookstore_and_orgms_office": { glbName: "BOOKSTORE AND ORGMS OFFICE", name: "Bookstore & Orgs Office", shortName: "Bookstore", emoji: "📚", hidePin: true, isKalinawComplexMember: true, desc: "University bookstore and student organizations administrative office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "caa_diagnostic_laboratory": { name: "CAA Diagnostic Laboratory", shortName: "CAA Diag Lab", emoji: "🔬", hidePin: true, isCAAComplexMember: true, desc: "Diagnostic laboratory providing plant pathology and soil chemistry analysis.", depts: [{ name: "Pathology & Soil Testing Lab", sub: "Floor 1", icon: "🔬" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
-  "caa_layering_house": { name: "CAA Layering House", shortName: "Layering House", interactive: false },
+  "caa_layering_house": { glbName: "CAA LAYERING HOUSE", name: "Layering House", shortName: "Layering House", emoji: "🥚", hidePin: true, isNativeChickenComplexMember: true, desc: "Commercial poultry egg layer house and aviary husbandry research station.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "caa_restroom": { name: "CAA Restroom", shortName: "CAA Restroom", interactive: false },
-  "caa_swine_laboratory": { name: "CAA Swine Laboratory", shortName: "Swine Lab", interactive: false },
-  "chicken_coop": { name: "Chicken Coop", shortName: "Chicken Coop", interactive: false },
-  "caraga_black_native_chicken": { name: "Caraga Black Native Chicken House", shortName: "Native Chicken", interactive: false },
+  "caa_swine_laboratory": { glbName: "CAA SWINE LABORATORY", name: "Swine Lab", shortName: "Swine Lab", emoji: "🐖", hidePin: true, isNativeChickenComplexMember: true, desc: "Swine herd management, breeding research, and veterinary nutrition laboratory.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "chicken_coop": { glbName: "Chicken Coop", name: "Chicken Coop", shortName: "Chicken Coop", emoji: "🐣", hidePin: true, isNativeChickenComplexMember: true, desc: "Poultry flock management, egg collection, and brooding facility.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "caraga_black_native_chicken": { glbName: "CARAGA BLACK NATIVE CHICKEN", name: "Native Chicken", shortName: "Native Chicken", emoji: "🐔", interactive: true, no3dViewer: true, isNativeChickenComplexMember: true, desc: "Preservation, selective breeding, and genetic research facility for Caraga black native chickens.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_covered_court": { name: "CAS Covered Court", shortName: "CAS Court", interactive: false },
   "cas_student_center": { glbName: "CAS STUDENT CENTER", name: "Student Office", shortName: "Student Office", emoji: "👥", hidePin: true, isKalinawComplexMember: true, desc: "Administrative office for student council and campus student services.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
-  "catching_coral": { name: "Catching Coral", shortName: "Catching Coral", interactive: false },
+  "catching_coral": { glbName: "CATCHING CORAL", name: "Catching Coral", shortName: "Catching Coral", emoji: "🪵", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Livestock penning, corral sorting, and veterinary animal handling grounds.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
   "ccard_office": { glbName: "CCARD OFFICE", name: "CCARD Office", shortName: "CCARD Office", emoji: "📁", hidePin: true, isKalinawComplexMember: true, desc: "Caraga Center for Agricultural and Resource Development research office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
-  "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", interactive: false },
-  "cofes_annex": { name: "COFES Annex", shortName: "COFES Annex", interactive: false },
-  "eco_lodge": { name: "Eco Lodge", shortName: "Eco Lodge", interactive: false },
+  "ced_restroom": { name: "CED Restroom", shortName: "CED Restroom", emoji: "🚻", hidePin: true, isCEDComplexMember: true, desc: "College of Education restroom and sanitary facilities.", gradient: "linear-gradient(135deg, #4d2020 0%, #853e3e 100%)" },
+  "cofes_annex": { glbName: "COFES annex", name: "COFES Annex", shortName: "COFES Annex", emoji: "🌲", hidePin: true, isVillaresComplexMember: true, desc: "College of Forestry and Environmental Science extension facility for dendrology and forest ecology.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "eco_lodge": { glbName: "ECO lodge", name: "Eco Lodge", shortName: "Eco Lodge", emoji: "🏡", hidePin: true, isOldCASComplexMember: true, desc: "Ecological lodge offering campus retreat rooms, sustainable lodging, and conference accommodations.", gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)" },
   "emb_machine": { name: "EMB Machine", shortName: "EMB Machine", interactive: false },
   "executive_house": { name: "Executive House", shortName: "Executive House", interactive: false },
-  "farm_nursery": { name: "Farm Nursery", shortName: "Farm Nursery", interactive: false },
+  "farm_nursery": { glbName: "FARM NURSERY", name: "Farm Nursery", shortName: "Farm Nursery", emoji: "🌱", hidePin: true, isNativeChickenComplexMember: true, desc: "Horticultural and agro-forestry seedling propagation and hardening nursery.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
   "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
   "hardenning_area": { name: "Hardening Area", shortName: "Hardening Area", interactive: false },
@@ -498,19 +523,23 @@ const BUILDING_DATA = {
   "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
   "old_ccaarrd_building": { name: "Old CCAARRD Building", shortName: "Old CCAARRD", interactive: false },
   "old_cegsttloresearch_services_office": { name: "Old Research Services Office", shortName: "Old Research Ofc.", interactive: false },
-  "old_farm_mechanization_center": { name: "Old Farm Mechanization Center", shortName: "Old Farm Mech.", interactive: false },
+  "old_farm_mechanization_center": { glbName: "OLD Farm Mechanization", name: "Old Farm Mech", shortName: "Old Farm Mech", interactive: false },
   "power_house001": { name: "Power House", shortName: "Power House", interactive: false },
   "rooting_recovery": { name: "Rooting Recovery Area", shortName: "Rooting Area", interactive: false },
   "rotc_office": { glbName: "ROTC OFFICE", name: "ROTC Office", shortName: "ROTC Office", emoji: "🛡️", hidePin: true, isKalinawComplexMember: true, desc: "Reserve Officers' Training Corps campus headquarters and tactical training office.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "state-of-the_art_sports_complex001": { name: "State-of-the-Art Sports Complex", shortName: "Field", interactive: false },
   "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", emoji: "🧫", hidePin: true, isCAAComplexMember: true, desc: "Biotechnology laboratory dedicated to plant tissue culture micropropagation.", depts: [{ name: "Micropropagation Unit", sub: "Floor 1", icon: "🧫" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
-  "vermi_house": { name: "Vermi House", shortName: "Vermi House", interactive: false },
+  "vermi_house": { glbName: "VERMI HOUSE", name: "Vermi House", shortName: "Vermi House", emoji: "🪱", hidePin: true, isNativeChickenComplexMember: true, desc: "Vermiculture processing facility producing organic vermicast fertilizer and organic compost.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_canteen": { name: "CAS Canteen", shortName: "CAS Canteen", interactive: false },
-  "ced_lsg_office": { name: "CED LSG Office", shortName: "CED LSG", interactive: false },
-  "ttlo": { name: "TTLO Office", shortName: "TTLO", interactive: false },
+  "ced_lsg_office": { glbName: "CED LSG OFFICE -", name: "CED LSG", shortName: "CED LSG", emoji: "👥", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education Local Student Government (CED LSG) student council headquarters.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
+  "ttlo": { glbName: "TTLO -", name: "TTLO", shortName: "TTLO", emoji: "💡", hidePin: true, isCHEDComplexMember: true, desc: "Technology Transfer and Licensing Office (TTLO) commercializing research innovations and intellectual properties.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "caa": { name: "CAA Complex", shortName: "CAA Complex", hidePin: true, isCAAComplexMember: true },
-  "carabao_center": { name: "Carabao Center", shortName: "Carabao Ctr.", interactive: false },
-  "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false }
+  "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false },
+  "parking_space_1": { glbName: "Parking Space 1", name: "Parking Space 1", shortName: "P", interactive: false },
+  "parking_space_2": { glbName: "Parking Space 2", name: "Parking Space 2", shortName: "P", hidePin: true, interactive: false },
+  "parking_space_3": { glbName: "Parking Space 3", name: "Parking Space 3", shortName: "P", interactive: false },
+  "parking_space_4": { glbName: "Parking Space 4", name: "Parking Space 4", shortName: "P", interactive: false },
+  "parking_space_5": { glbName: "Parking Space 5", name: "Parking Space 5", shortName: "P", interactive: false }
 };
 
 // ── Building → individual GLB path map ───────────────────────────────────────
@@ -697,6 +726,11 @@ function _bootExperience() {
       });
     }
 
+    // Create pins for all base model landmarks, unclickable items, and parking spaces
+    Object.keys(BUILDING_DATA).forEach(key => {
+      _createPinForKey(key);
+    });
+
     // ── Navigation system init ─────────────────────────────────────────────
     const navSceneRoot = experience.scene || campusBaseScene;
     if (navSceneRoot) {
@@ -829,6 +863,7 @@ const COMPLEX_CONFIGS = {
   caa: {
     title: "CAA Complex",
     icon: "mdi-office-building-marker-outline",
+    mainKey: 'caa_building',
     items: [
       { key: 'caa_building', name: 'Main CAA Building', icon: 'mdi-bank-outline' },
       { key: 'agri-workshop_2', name: 'Agri Workshop 2', icon: 'mdi-storefront-outline' },
@@ -842,6 +877,7 @@ const COMPLEX_CONFIGS = {
   kalinaw: {
     title: "Kalinaw Complex",
     icon: "mdi-home-city-outline",
+    mainKey: 'kalinaw',
     items: [
       { key: 'kalinaw', name: 'Main Kalinaw Building', icon: 'mdi-bank-outline' },
       { key: 'bbc_cafeteria', name: 'BBC Cafeteria', icon: 'mdi-coffee-outline' },
@@ -853,8 +889,93 @@ const COMPLEX_CONFIGS = {
       { key: 'amante_building', name: 'Amante Bldg', icon: 'mdi-office-building-outline' },
       { key: 'annex_3', name: 'Annex 3', icon: 'mdi-layers-outline' }
     ]
+  },
+  ced: {
+    title: "CED Complex",
+    icon: "mdi-school-outline",
+    mainKey: 'ced_building',
+    items: [
+      { key: 'ced_building', name: 'Main CED Building', icon: 'mdi-bank-outline' },
+      { key: 'ced_lsg_office', name: 'CED LSG', icon: 'mdi-account-group-outline' },
+      { key: 'ced_canteen', name: 'CED Canteen', icon: 'mdi-silverware-fork-knife' },
+      { key: 'ced_restroom', name: 'CED Restroom', icon: 'mdi-restroom' }
+    ]
+  },
+  ched: {
+    title: "CHED Complex",
+    icon: "mdi-school-outline",
+    mainKey: 'ched_lgu',
+    items: [
+      { key: 'ched_lgu', name: 'CHED', icon: 'mdi-bank-outline' },
+      { key: 'alumni_office', name: 'Alumni Center', icon: 'mdi-school-outline' },
+      { key: 'ttlo', name: 'TTLO', icon: 'mdi-lightbulb-outline' },
+      { key: 'ced_lsg_office', name: 'CED LSG', icon: 'mdi-account-group-outline' },
+      { key: 'ced_canteen', name: 'CED Canteen', icon: 'mdi-silverware-fork-knife' }
+    ]
+  },
+  old_cas: {
+    title: "Old CAS Complex",
+    icon: "mdi-home-city-outline",
+    mainKey: 'old_cas',
+    items: [
+      { key: 'old_cas', name: 'Old CAS', icon: 'mdi-bank-outline' },
+      { key: 'church', name: 'Chapel', icon: 'mdi-church' },
+      { key: 'eco_lodge', name: 'Eco Lodge', icon: 'mdi-home-outline' },
+      { key: 'eco_park_building', name: 'Eco Park', icon: 'mdi-tree-outline' }
+    ]
+  },
+  villares: {
+    title: "Villares Complex",
+    icon: "mdi-sprout-outline",
+    mainKey: 'Villares',
+    items: [
+      { key: 'Villares', name: 'Villares', icon: 'mdi-bank-outline' },
+      { key: 'oatc', name: 'OATC', icon: 'mdi-office-building-outline' },
+      { key: 'cofes_annex', name: 'COFES Annex', icon: 'mdi-pine-tree' },
+      { key: 'micoriza_green_house', name: 'Micoriza GreenHouse/GH', icon: 'mdi-greenhouse' }
+    ]
+  },
+  native_chicken: {
+    title: "Native Chicken Complex",
+    icon: "mdi-feather",
+    mainKey: 'caraga_black_native_chicken',
+    items: [
+      { key: 'caraga_black_native_chicken', name: 'Native Chicken', icon: 'mdi-feather' },
+      { key: 'chicken_coop', name: 'Chicken Coop', icon: 'mdi-egg-outline' },
+      { key: 'caa_swine_laboratory', name: 'Swine Lab', icon: 'mdi-flask-outline' },
+      { key: 'caa_layering_house', name: 'Layering House', icon: 'mdi-home-roof' },
+      { key: 'vermi_house', name: 'Vermi House', icon: 'mdi-sprout' },
+      { key: 'farm_nursery', name: 'Farm Nursery', icon: 'mdi-flower-outline' }
+    ]
+  },
+  carabao_center: {
+    title: "Carabao Center Complex",
+    icon: "mdi-barn",
+    mainKey: 'carabao_center',
+    items: [
+      { key: 'carabao_center', name: 'Carabao Center', icon: 'mdi-bank-outline' },
+      { key: 'catching_coral', name: 'Catching Coral', icon: 'mdi-fence' },
+      { key: 'beef_cattle_building', name: 'Cattle Shed', icon: 'mdi-cow' },
+      { key: 'goat_house', name: 'Goat House', icon: 'mdi-sheep' },
+      { key: 'barn_house', name: 'Barn House', icon: 'mdi-barn' },
+      { key: 'sheep_house', name: 'Sheep House', icon: 'mdi-sheep' },
+      { key: 'feedmill', name: 'Feed Mill', icon: 'mdi-factory' }
+    ]
   }
 };
+
+function _getComplexTypeForBuilding(key, data) {
+  if (!data && BUILDING_DATA[key]) data = BUILDING_DATA[key];
+  if (data?.isCAAComplexMember || key === 'caa_building' || key === 'caa') return 'caa';
+  if (data?.isKalinawComplexMember || key === 'kalinaw') return 'kalinaw';
+  if (data?.isCEDComplexMember || key === 'ced_building' || key === 'ced') return 'ced';
+  if (data?.isCHEDComplexMember || key === 'ched_lgu' || key === 'ched') return 'ched';
+  if (data?.isOldCASComplexMember || key === 'old_cas') return 'old_cas';
+  if (data?.isVillaresComplexMember || key === 'Villares' || key === 'villares') return 'villares';
+  if (data?.isCarabaoCenterComplexMember || key === 'carabao_center') return 'carabao_center';
+  if (data?.isNativeChickenComplexMember || key === 'caraga_black_native_chicken' || key === 'native_chicken') return 'native_chicken';
+  return null;
+}
 
 function renderComplexCard(type = 'caa', activeSubKey = null) {
   const card = document.getElementById('caa-complex-card');
@@ -869,7 +990,7 @@ function renderComplexCard(type = 'caa', activeSubKey = null) {
   if (titleEl) titleEl.textContent = config.title;
   if (iconEl) iconEl.className = `caa-card-icon mdi ${config.icon}`;
 
-  const currentActiveKey = activeSubKey || (type === 'kalinaw' ? 'kalinaw' : 'caa_building');
+  const currentActiveKey = activeSubKey || config.mainKey || config.items[0]?.key;
 
   body.innerHTML = config.items.map(item => {
     const isActive = item.key === currentActiveKey;
@@ -1089,10 +1210,9 @@ function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highli
   const data = BUILDING_DATA[key];
 
   // Show bottom-left Complex Card if selecting a Complex member
-  if (data?.isCAAComplexMember || key === 'caa_building' || key === 'caa') {
-    renderComplexCard('caa', key);
-  } else if (data?.isKalinawComplexMember || key === 'kalinaw') {
-    renderComplexCard('kalinaw', key);
+  const complexType = _getComplexTypeForBuilding(key, data);
+  if (complexType) {
+    renderComplexCard(complexType, key);
   } else {
     _hideComplexCard();
   }
@@ -1499,8 +1619,9 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
   }
 
   // Complex sub-buildings (not the main building) show no depts / facilities
-  const isComplexSubBuilding = (data.isCAAComplexMember && key !== 'caa_building') ||
-    (data.isKalinawComplexMember && key !== 'kalinaw');
+  const complexType = _getComplexTypeForBuilding(key, data);
+  const isComplexMain = complexType && COMPLEX_CONFIGS[complexType]?.mainKey === key;
+  const isComplexSubBuilding = complexType && !isComplexMain;
 
   // Populate local fallback departments formatted into dynamic floor tabs
   const deptsWrap = document.getElementById('panel-depts-wrap');
@@ -1600,9 +1721,9 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
       contactWrap.style.display = 'none';
     }
 
-    // ── "View 3D Model" button (only on main buildings, not complex sub-buildings) ──
+    // ── "View 3D Model" button (only on main buildings, not complex sub-buildings or disabled buildings) ──
     if (viewBtnWrap && viewBtn) {
-      if (isComplexSubBuilding) {
+      if (isComplexSubBuilding || data.no3dViewer || data.disable3dViewer || key === 'carabao_center' || key === 'caraga_black_native_chicken') {
         viewBtnWrap.style.display = 'none';
       } else {
         viewBtnWrap.style.display = '';
@@ -1846,7 +1967,7 @@ function _createPinForKey(key) {
       if (input) input.value = data.name;
       _selectBuilding(key, true);
     });
-  } else if (!data.isCAAComplexMember && !data.isKalinawComplexMember) {
+  } else if (!_getComplexTypeForBuilding(key, data)) {
     // Only show static floating label for non-complex non-interactive buildings
     el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
     el.innerHTML = `
@@ -1927,6 +2048,172 @@ function _createPins() {
   // No-op: pins now created one-at-a-time in _registerBuildingScene()
 }
 
+// ── Parking Space Pin Helpers ──────────────────────────────────────────────────
+function _findParkingNode(targetStr) {
+  if (!targetStr) return null;
+  const cleanTarget = targetStr.toLowerCase().trim();
+  const normTarget = cleanTarget.replace(/[^a-z0-9]/g, '');
+
+  if (meshIndex[cleanTarget]) return meshIndex[cleanTarget];
+
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK === normTarget) return node;
+  }
+
+  let match = null;
+  const searchRoot = experience?.scene || experience?.world?.plateforme10?.scene;
+  if (searchRoot) {
+    searchRoot.traverse((node) => {
+      if (match || !node.name) return;
+      const cleanName = node.name.toLowerCase().trim();
+      const normName = cleanName.replace(/[^a-z0-9]/g, '');
+      if (cleanName === cleanTarget || normName === normTarget) {
+        match = node;
+      }
+    });
+  }
+  if (match) return match;
+
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK && (normK.includes(normTarget) || normTarget.includes(normK))) {
+      return node;
+    }
+  }
+
+  if (searchRoot) {
+    searchRoot.traverse((node) => {
+      if (match || !node.name) return;
+      const normName = node.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normName && normName.includes(normTarget)) {
+        match = node;
+      }
+    });
+  }
+
+  return match;
+}
+
+function _findParkingNodeList(targetList) {
+  for (const t of targetList) {
+    const node = _findParkingNode(t);
+    if (node) return node;
+  }
+  return null;
+}
+
+function _createParkingPins() {
+  const container = document.getElementById('mapPins');
+  if (!container) return;
+
+  for (let i = pinList.length - 1; i >= 0; i--) {
+    if (pinList[i].isParkingPin) {
+      if (pinList[i].el && pinList[i].el.parentNode) {
+        pinList[i].el.parentNode.removeChild(pinList[i].el);
+      }
+      pinList.splice(i, 1);
+    }
+  }
+
+  if (experience && experience.scene) {
+    experience.scene.updateMatrixWorld(true);
+  }
+
+  const parkingConfigs = [
+    {
+      id: 'parking_space_4',
+      label: 'Parking Space 4',
+      targets: ['Parking Space 4', 'parking space 4', 'parking_space_4', 'parkingspace4', 'parking 4'],
+      fallbackPos: new THREE.Vector3(-16.352, 0.2, 11.808)
+    },
+    {
+      id: 'parking_space_3',
+      label: 'Parking Space 3',
+      targets: ['Parking Space 3', 'parking space 3', 'parking_space_3', 'parkingspace3', 'parking 3'],
+      fallbackPos: new THREE.Vector3(-1.816, 0.2, 0.176)
+    },
+    {
+      id: 'parking_space_1_2',
+      label: 'Parking Space 1 & 2',
+      isCombined: true,
+      targets: [
+        ['Parking Space 1', 'parking space 1', 'parking_space_1', 'parkingspace1', 'parking 1'],
+        ['Parking Space 2', 'parking space 2', 'parking_space_2', 'parkingspace2', 'parking 2']
+      ],
+      fallbackPos: new THREE.Vector3(-29.807, 0.2, 53.169)
+    },
+    {
+      id: 'parking_space_5',
+      label: 'Parking Space 5',
+      targets: ['Parking Space 5', 'parking space 5', 'parking_space_5', 'parkingspace5', 'parking 5', 'Parking Space 4.001', 'parking space 4.001'],
+      fallbackPos: new THREE.Vector3(22.035, 0.2, 65.852)
+    }
+  ];
+
+  parkingConfigs.forEach(cfg => {
+    const worldPos = new THREE.Vector3();
+    let foundAnyNode = false;
+    let singleNode = null;
+    const nodes = [];
+
+    if (cfg.isCombined) {
+      const box = new THREE.Box3();
+      cfg.targets.forEach(targetList => {
+        const n = _findParkingNodeList(targetList);
+        if (n) {
+          nodes.push(n);
+          n.updateWorldMatrix(true, true);
+          box.expandByObject(n);
+          foundAnyNode = true;
+        }
+      });
+      if (foundAnyNode && !box.isEmpty()) {
+        box.getCenter(worldPos);
+        worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (cfg.fallbackPos) {
+        foundAnyNode = true;
+        worldPos.copy(cfg.fallbackPos);
+      }
+    } else {
+      singleNode = _findParkingNodeList(cfg.targets);
+      if (singleNode) {
+        foundAnyNode = true;
+        singleNode.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(singleNode);
+        box.getCenter(worldPos);
+        worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (cfg.fallbackPos) {
+        foundAnyNode = true;
+        worldPos.copy(cfg.fallbackPos);
+      }
+    }
+
+    if (!foundAnyNode) return;
+
+    const el = document.createElement('div');
+    el.className = 'parking-pin';
+    el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
+    el.innerHTML = `
+      <div class="pin-label-static" style="font-weight: 800; font-size: 11px; padding: 2px 7px;">P</div>
+    `;
+
+    container.appendChild(el);
+    pinList.push({
+      key: cfg.id,
+      worldPos,
+      fallbackPos: cfg.fallbackPos,
+      el,
+      interactive: false,
+      isParkingPin: true,
+      node: singleNode,
+      nodes: nodes.length > 0 ? nodes : null
+    });
+  });
+
+  console.log(`[GIYA Parking] Initialized ${pinList.filter(p => p.isParkingPin).length} parking indicators.`);
+}
+
 /**
  * _updatePins()
  * Project 3D world coordinates to 2D screen positions and perform
@@ -1942,6 +2229,49 @@ function _updatePins() {
   const visiblePins = [];
 
   pinList.forEach((pin) => {
+    if (pin.isParkingPin) {
+      if (!showAllUnclickable || zoom < 0.3) {
+        pin.el.style.display = 'none';
+        return;
+      }
+
+      if (experience.scene) experience.scene.updateMatrixWorld(true);
+
+      if (pin.nodes && pin.nodes.length > 0) {
+        const box = new THREE.Box3();
+        pin.nodes.forEach(n => {
+          if (n) {
+            n.updateWorldMatrix(true, true);
+            box.expandByObject(n);
+          }
+        });
+        if (!box.isEmpty()) {
+          box.getCenter(pin.worldPos);
+          pin.worldPos.y = Math.max(0.2, box.max.y + 0.3);
+        } else if (pin.fallbackPos) {
+          pin.worldPos.copy(pin.fallbackPos);
+        }
+      } else if (pin.node) {
+        pin.node.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(pin.node);
+        box.getCenter(pin.worldPos);
+        pin.worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (pin.fallbackPos) {
+        pin.worldPos.copy(pin.fallbackPos);
+      }
+
+      _projVec.copy(pin.worldPos).project(cam);
+
+      const screenX = (_projVec.x * 0.5 + 0.5) * W;
+      const screenY = (_projVec.y * -0.5 + 0.5) * H;
+
+      pin.el.style.display = '';
+      pin.el.style.visibility = 'visible';
+      pin.el.style.left = screenX + 'px';
+      pin.el.style.top = screenY + 'px';
+      return;
+    }
+
     _projVec.copy(pin.worldPos).project(cam);
     if (_projVec.z > 1) {
       pin.el.style.visibility = 'hidden';
@@ -2208,7 +2538,7 @@ async function _buildDropdown(query) {
   // 4. Render matched Local Buildings
   const qLower = query.toLowerCase();
   const localMatches = Object.entries(BUILDING_DATA).filter(([k, b]) =>
-    b.interactive !== false &&
+    (b.interactive !== false || Boolean(_getComplexTypeForBuilding(k, b))) &&
     (k.toLowerCase().includes(qLower) ||
       b.name.toLowerCase().includes(qLower) ||
       (b.shortName && b.shortName.toLowerCase().includes(qLower)) ||
@@ -2415,7 +2745,7 @@ export function initMapOverlay() {
       if (intersects.length > 0) {
         const hitMesh = intersects[0].object;
         for (const [key, bData] of Object.entries(BUILDING_DATA)) {
-          if (bData.interactive === false) continue;
+          if (bData.interactive === false && !_getComplexTypeForBuilding(key, bData)) continue;
           const node = _findNode(key);
           if (node) {
             let matched = false;
