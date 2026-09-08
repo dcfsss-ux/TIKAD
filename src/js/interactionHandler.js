@@ -8,8 +8,20 @@
  */
 
 import { loadGraph, findNearestWaypoint, getBuildingExitRouteSegments } from './pathfinding.js';
-import { buildMeshLookup, highlightCategorizedSegments, highlightSegments, clearHighlight, hasActiveHighlight, getActiveCategory } from './highlightRenderer.js';
+import { buildMeshLookup, highlightCategorizedSegments, highlightSegments, clearHighlight, hasActiveHighlight, getActiveCategory, getRouteBoundingBox, getRouteEndpoint } from './highlightRenderer.js';
 import waypointsData from './data/waypoints.json';
+
+export { getRouteBoundingBox, getRouteEndpoint };
+
+/**
+ * Confirmed 3D coordinates for all CSU campus entrance/exit gates
+ */
+export const GATE_COORDINATES = {
+  gate_main:   { x: -41.8841, y: 0.162292, z: -486.505 }, // Main Gate (National Highway entrance)
+  gate_second: { x: 211.586,  y: 0.897858, z: -204.351 }, // 2nd Gate / Green Gate (East CED entrance)
+  gate_third:  { x: 180.3,    y: 2.04004,  z: 818.803 },  // 3rd Gate / Back Gate (South perimeter entrance)
+  gate_fourth: { x: 270.374,  y: 0.522324, z: 168.275 },  // 4th Gate (Southeast entrance near Hiraya)
+};
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let graph = null;
@@ -127,6 +139,18 @@ export function handleBuildingRoute(buildingKey, buildingWorldPos = null) {
  */
 export function hasCategorizedRoutes(buildingKey) {
   return _getCategorizedRoutes(buildingKey) !== null;
+}
+
+/**
+ * Retrieve the array of segment names for a specific building and route category.
+ *
+ * @param {string} buildingKey
+ * @param {'nearest'|'near'|'far'} category
+ * @returns {string[]}
+ */
+export function getCategorizedSegments(buildingKey, category = 'nearest') {
+  const categorized = _getCategorizedRoutes(buildingKey);
+  return (categorized && categorized[category]) ? [...categorized[category]] : [];
 }
 
 /**

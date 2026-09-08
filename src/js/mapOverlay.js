@@ -8,10 +8,23 @@
  */
 
 import * as THREE from 'three';
+import gsap from 'gsap';
 import Experience from '../../Experience/Experience.js';
 import { BalangayPreloader } from './balangayPreloader.js';
 import { openBuildingViewer, closeBuildingViewer } from './buildingViewer.js';
-import { initNavigation, handleBuildingRoute, handleCategorizedRoute, hasCategorizedRoutes, clearRouteHighlight, hasActiveRoute, getActiveRouteCategory } from './interactionHandler.js';
+import {
+  initNavigation,
+  handleBuildingRoute,
+  handleCategorizedRoute,
+  hasCategorizedRoutes,
+  clearRouteHighlight,
+  hasActiveRoute,
+  getActiveRouteCategory,
+  getCategorizedSegments,
+  getRouteBoundingBox,
+  getRouteEndpoint,
+  GATE_COORDINATES
+} from './interactionHandler.js';
 import {
   getBuildingByNameOrKey,
   searchCampusEntities,
@@ -74,19 +87,27 @@ async function _syncSupabaseModels() {
         }
 
         if (isMatch) {
-          if (key === 'old_cas') {
-            bData.model3d = '/models/map/Old%20CAS.glb';
-          } else if (modelUrl) {
-            bData.model3d = modelUrl;
+          if (modelUrl) {
+            if (key === 'old_cas' && (modelUrl.includes('old%20admin') || modelUrl.includes('old admin'))) {
+              bData.model3d = 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb';
+            } else {
+              bData.model3d = modelUrl;
+            }
           }
           if (logoUrl) {
             bData.Logo_URL = logoUrl;
             bData.logo = logoUrl;
           }
+          if (dbB.Description) {
+            bData.desc = dbB.Description;
+          }
+          if (dbB.Building_name && !bData.name) {
+            bData.name = dbB.Building_name;
+          }
           if (!bData.supabaseId && dbB.Building_ID) {
             bData.supabaseId = dbB.Building_ID;
           }
-          console.log(`[MapOverlay] ✅ Synced Supabase data for "${bData.name}":`, { modelUrl: bData.model3d, logoUrl });
+          console.log(`[MapOverlay] ✅ Synced Supabase data for "${bData.name}":`, { modelUrl, logoUrl, desc: dbB.Description });
         }
       }
     });
@@ -290,10 +311,23 @@ const BUILDING_DATA = {
     supabaseNames: ['Hostel', 'University Hostel'],
     gradient: "linear-gradient(135deg, #1b3d35 0%, #30665a 100%)"
   },
-  "school_of_medicine_(_under_cons_)": {
+  "school_of_medicine_under_cons": {
     glbName: "SCHOOL OF MEDICINE ( UNDER CONS. )",
-    name: "School of Medicine", shortName: "Medicine", emoji: "🏥",
+    name: "School of Medicine",
+    shortName: "Medicine",
+    abbrev: "Medicine",
+    emoji: "🏥",
     desc: "Future medical education facility currently under construction to support healthcare degree programs.",
+    supabaseId: 192,
+    supabaseNames: [
+      "Shool of Medicine",
+      "School of Medicine",
+      "School of Medicine (Under Const.)",
+      "School of Medicine ( UNDER CONS. )",
+      "school_of_medicine_under_cons",
+      "school_of_medicine_(_under_cons_)"
+    ],
+    model3d: "/models/map/SCHOOL%20OF%20MEDICINE%20(%20UNDER%20CONS.%20).glb",
     gradient: "linear-gradient(135deg, #1c4558 0%, #2f6983 100%)"
   },
   "csu_gym": {
@@ -320,14 +354,22 @@ const BUILDING_DATA = {
     gradient: "linear-gradient(135deg, #3d3b5c 0%, #696599 100%)"
   },
   "old_cas": {
-    glbName: "OLD CAS",
-    name: "Old CAS", shortName: "Old CAS", abbrev: "Old CAS", emoji: "🏫",
-    desc: "Former College of Arts and Sciences building housing academic lecture halls, department offices, and heritage campus grounds.",
+    glbName: "OLD CAS BUILDING",
+    name: "Old CAS Building",
+    shortName: "Old CAS",
+    abbrev: "Old CAS",
+    emoji: "🏫",
+    desc: "The Old CAS Building is one of the university's older academic facilities. It continues to support instruction, meetings, and other university activities.",
+    depts: [
+      { name: "Lecture Classrooms", sub: "Floor 1-2", icon: "🏫" },
+      { name: "Faculty & Administrative Offices", sub: "Floor 1", icon: "🏢" }
+    ],
+    contact: { phone: "(085) 341-2798", email: "cas@csu.edu.ph" },
     interactive: true,
     isOldCASComplexMember: true,
-    model3d: "/models/map/Old%20CAS.glb",
     supabaseId: 20,
-    supabaseNames: ['Old CAS', 'Old CAS Building', 'Old CAS Complex'],
+    supabaseNames: ['Old CAS', 'Old CAS Building', 'old_cas', 'OLD CAS BUILDING', 'Old CAS Complex'],
+    model3d: 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb',
     gradient: "linear-gradient(135deg, #2a3a1a 0%, #4a6a2a 100%)"
   },
   "sports_office": {
@@ -376,6 +418,32 @@ const BUILDING_DATA = {
     isCarabaoCenterComplexMember: true,
     supabaseNames: ['Carabao Center', 'Philippine Carabao Center', 'Carabao Center Complex'],
     gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)"
+  },
+  "gents_dormitory_under_cons": {
+    glbName: "GENTS' DORMITORY ( UNDER CONS.)",
+    name: "Gent's Dormitory (Under Const.)",
+    shortName: "Gent's Dorm",
+    abbrev: "Gent's Dorm",
+    emoji: "🏗️",
+    desc: "New multi-story male student dormitory expansion currently under construction.",
+    supabaseId: 73,
+    supabaseNames: ["Gent's Dormitory (Under Const.)", "Gent's Dormitory (Under Cons.)", "Gents Dormitory (Under Const.)", "Gent's Dormitory", "Gents Dormitory", "gents_dormitory_under_cons", "gents'_dormitory_(_under_cons)"],
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/UNDER_CONS.png",
+    model3d: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/GENTS'%20DORMITORY%20(%20UNDER%20CONS.).glb",
+    gradient: "linear-gradient(135deg, #1f3a52 0%, #3a6080 100%)"
+  },
+  "ladies_dormitory_under_cons": {
+    glbName: "LADIES' DORMITORY ( UNDER CONS.)",
+    name: "Ladies' Dormitory (Under Const.)",
+    shortName: "Ladies' Dorm",
+    abbrev: "Ladies' Dorm",
+    emoji: "🏗️",
+    desc: "New female student dormitory facility currently under development.",
+    supabaseId: 74,
+    supabaseNames: ["Ladies' Dormitory (Under Const.)", "Ladies' Dormitory (Under Cons.)", "Ladies Dormitory (Under Const.)", "Ladies' Dormitory", "Ladies Dormitory", "ladies_dormitory_under_cons", "ladies'_dormitory_(_under_cons)"],
+    Logo_URL: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/college_logos/UNDER_CONS.png",
+    model3d: "https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/LADIES'%20DORMITORY%20(%20UNDER%20CONS.).glb",
+    gradient: "linear-gradient(135deg, #4a2040 0%, #7d3568 100%)"
   },
 
   // ── NON-INTERACTIVE LANDMARKS & COMPLEX MEMBERS ──
@@ -448,10 +516,8 @@ const BUILDING_DATA = {
   "farm_nursery": { glbName: "FARM NURSERY", name: "Farm Nursery", shortName: "Farm Nursery", emoji: "🌱", hidePin: true, isNativeChickenComplexMember: true, desc: "Horticultural and agro-forestry seedling propagation and hardening nursery.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "gas_station": { name: "Gas Station", shortName: "Gas Station", interactive: false },
   "gent's_dormitory": { name: "Gent's Dormitory", shortName: "Gent's Dorm", interactive: false },
-  "gents'_dormitory_(_under_cons)": { name: "Gent's Dormitory (Under Const.)", shortName: "Gent's Dorm", interactive: false },
   "hardenning_area": { name: "Hardening Area", shortName: "Hardening Area", interactive: false },
   "hero_statue": { name: "Hero Statue", shortName: "Hero Statue", interactive: false },
-  "ladies'_dormitory_(_under_cons)": { name: "Ladies' Dormitory (Under Const.)", shortName: "Ladies' Dorm", interactive: false },
   "mechanical_dryer": { name: "Mechanical Dryer", shortName: "Mech. Dryer", interactive: false },
   "micoriza_office": { name: "Micoriza Office", shortName: "Micoriza Office", interactive: false },
   "motorpool": { name: "Motorpool", shortName: "Motorpool", interactive: false },
@@ -952,6 +1018,191 @@ function _hideComplexCard() {
   if (card) card.style.display = 'none';
 }
 
+let currentRouteCamTween = null;
+
+/**
+ * Automatically rotates and frames the 3D camera to face along the designated route towards the gate.
+ * Users no longer need to manually rotate, drag or pan to locate the path or gate.
+ *
+ * @param {string} key - Building key (e.g. 'kalinaw')
+ * @param {'nearest'|'near'|'far'} cat - Route category ('nearest' -> Main Gate, 'near' -> Green Gate, 'far' -> Back Gate)
+ */
+function _focusCameraOnRoute(key, cat) {
+  if (!experience || !experience.camera || !experience.controls) return;
+  const cam = experience.camera.orthographicCamera;
+  const controls = experience.controls.controls;
+  if (!cam || !controls) return;
+
+  // 1. Resolve building world position
+  let buildingPos = null;
+  const pin = pinList.find(p => p.key === key);
+  if (pin && pin.worldPos) {
+    buildingPos = pin.worldPos.clone();
+  } else {
+    const node = _findNode(key);
+    if (node) {
+      const b = new THREE.Box3().setFromObject(node);
+      buildingPos = b.getCenter(new THREE.Vector3());
+    }
+  }
+
+  // 2. Identify designated route segments and endpoint
+  const segments = getCategorizedSegments(key, cat);
+  const segBox = getRouteBoundingBox(segments);
+  let endPos = getRouteEndpoint(segments);
+
+  if (!endPos) {
+    if (cat === 'nearest') {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_main.x, 0, GATE_COORDINATES.gate_main.z);
+    } else if (cat === 'near') {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_second.x, 0, GATE_COORDINATES.gate_second.z);
+    } else {
+      endPos = new THREE.Vector3(GATE_COORDINATES.gate_third.x, 0, 314);
+    }
+  }
+
+  // 3. Compute overall bounding box covering building and all route road meshes
+  const box = new THREE.Box3();
+  if (buildingPos) box.expandByPoint(buildingPos);
+  if (endPos) box.expandByPoint(endPos);
+  if (segBox) box.union(segBox);
+
+  // Target center of the route (centered on the active road journey)
+  const targetCenter = new THREE.Vector3();
+  box.getCenter(targetCenter);
+  targetCenter.y = 0; // Keep target level with the ground surface
+
+  // 4. Calculate forward direction vector of the designated way (building -> route endpoint)
+  let dirX = 0;
+  let dirZ = -1;
+  if (buildingPos && endPos) {
+    const dx = endPos.x - buildingPos.x;
+    const dz = endPos.z - buildingPos.z;
+    const len = Math.hypot(dx, dz);
+    if (len > 1) {
+      dirX = dx / len;
+      dirZ = dz / len;
+    }
+  } else if (cat === 'far') {
+    dirZ = 1;
+  } else if (cat === 'near') {
+    dirX = 1;
+    dirZ = -0.5;
+  } else {
+    dirZ = -1;
+  }
+
+  // 5. Compute target zoom to fit the route comfortably
+  const size = box.getSize(new THREE.Vector3());
+  const maxSpan = Math.max(size.x, size.z);
+  // Frustum is 200, padding factor ensures breathing room around panels
+  let targetZoom = 200 / (Math.max(120, maxSpan) * 1.35);
+  targetZoom = Math.min(1.0, Math.max(0.48, targetZoom));
+
+  // 6. Smooth camera tween with spherical polar angle interpolation
+  if (currentRouteCamTween) {
+    currentRouteCamTween.kill();
+    currentRouteCamTween = null;
+  }
+
+  const is2D = !!experience.controls.is2D;
+
+  if (is2D) {
+    // 2D straight-down view: pan target and zoom
+    const startState = {
+      tx: controls.target.x,
+      ty: controls.target.y,
+      tz: controls.target.z,
+      cx: cam.position.x,
+      cy: cam.position.y,
+      cz: cam.position.z,
+      zoom: cam.zoom,
+    };
+
+    currentRouteCamTween = gsap.to(startState, {
+      tx: targetCenter.x,
+      ty: targetCenter.y,
+      tz: targetCenter.z,
+      cx: targetCenter.x,
+      cy: targetCenter.y + 20,
+      cz: targetCenter.z,
+      zoom: targetZoom,
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        cam.position.set(startState.cx, startState.cy, startState.cz);
+        controls.target.set(startState.tx, startState.ty, startState.tz);
+        cam.zoom = startState.zoom;
+        cam.updateProjectionMatrix();
+        controls.update();
+        if (experience.renderer) experience.renderer.requestRender();
+      },
+      onComplete: () => {
+        currentRouteCamTween = null;
+        experience.controls?.saveCameraState?.();
+      }
+    });
+  } else {
+    // 3D view:
+    // Looking in direction u = (dirX, 0, dirZ) towards target means camera is placed at:
+    // angle phiEnd = Math.atan2(-dirZ, -dirX);
+    const phiEnd = Math.atan2(-dirZ, -dirX);
+    const targetRH = 13.5;
+    const targetOffsetY = 9.5;
+
+    // Current camera state relative to current controls.target
+    const curDx = cam.position.x - controls.target.x;
+    const curDz = cam.position.z - controls.target.z;
+    const curRH = Math.max(2.5, Math.min(22, Math.hypot(curDx, curDz)));
+    const curOffsetY = Math.max(2, cam.position.y - controls.target.y);
+    const phiStart = Math.atan2(curDz, curDx);
+
+    // Shortest angular rotation path
+    let deltaPhi = phiEnd - phiStart;
+    while (deltaPhi > Math.PI) deltaPhi -= 2 * Math.PI;
+    while (deltaPhi < -Math.PI) deltaPhi += 2 * Math.PI;
+    const targetPhi = phiStart + deltaPhi;
+
+    const animState = {
+      tx: controls.target.x,
+      ty: controls.target.y,
+      tz: controls.target.z,
+      phi: phiStart,
+      rH: curRH,
+      offsetY: curOffsetY,
+      zoom: cam.zoom,
+    };
+
+    currentRouteCamTween = gsap.to(animState, {
+      tx: targetCenter.x,
+      ty: targetCenter.y,
+      tz: targetCenter.z,
+      phi: targetPhi,
+      rH: targetRH,
+      offsetY: targetOffsetY,
+      zoom: targetZoom,
+      duration: 1.3,
+      ease: 'power2.inOut',
+      onUpdate: () => {
+        const px = animState.tx + animState.rH * Math.cos(animState.phi);
+        const pz = animState.tz + animState.rH * Math.sin(animState.phi);
+        const py = animState.ty + animState.offsetY;
+
+        cam.position.set(px, py, pz);
+        controls.target.set(animState.tx, animState.ty, animState.tz);
+        cam.zoom = animState.zoom;
+        cam.updateProjectionMatrix();
+        controls.update();
+        if (experience.renderer) experience.renderer.requestRender();
+      },
+      onComplete: () => {
+        currentRouteCamTween = null;
+        experience.controls?.saveCameraState?.();
+      }
+    });
+  }
+}
+
 function _selectBuilding(key, openPanel = true, suppress3dViewer = false, highlightRoom = null, searchMode = false) {
   _resetHighlight();
   activeKey = key;
@@ -1031,6 +1282,11 @@ function _resetHighlight() {
   // Clear road segment route highlights
   clearRouteHighlight();
 
+  if (currentRouteCamTween) {
+    currentRouteCamTween.kill();
+    currentRouteCamTween = null;
+  }
+
   // Clear active state from all route category buttons
   document.querySelectorAll('.route-category-btn').forEach(btn => {
     btn.classList.remove('active-route-btn');
@@ -1081,8 +1337,19 @@ function renderFloorRooms(floor) {
       iconContent = `<i class="mdi mdi-door-sliding" aria-hidden="true"></i>`;
     }
 
-    const codeBadge = room.code ? `<span class="room-code">${room.code}</span>` : '';
-    const subText = room.sub ? `<span class="room-sub">${room.sub}</span>` : '';
+    // Avoid redundant badge if code is empty or identical to name or sub
+    const hasDuplicateCode = !room.code ||
+      room.code.trim().toLowerCase() === room.name.trim().toLowerCase() ||
+      (room.sub && room.code.trim().toLowerCase() === room.sub.trim().toLowerCase());
+
+    const codeBadge = !hasDuplicateCode ? `<span class="room-code">${room.code}</span>` : '';
+
+    // Avoid redundant sub if sub is empty or identical to name or code
+    const hasDuplicateSub = !room.sub ||
+      room.sub.trim().toLowerCase() === room.name.trim().toLowerCase() ||
+      (room.code && room.sub.trim().toLowerCase() === room.code.trim().toLowerCase());
+
+    const subText = !hasDuplicateSub ? `<span class="room-sub">${room.sub}</span>` : '';
     const matchBadge = room.isMatched ? `<span class="floor-match-badge"><i class="mdi mdi-check-circle"></i> MATCHED</span>` : '';
     const matchedClass = room.isMatched ? ' room-row--matched' : '';
 
@@ -1194,15 +1461,26 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   };
 
   (dbBuilding.ROOMS || []).forEach(r => {
-    const name = r.Room_number && r.Room_name ? r.Room_number : (r.Room_name || r.Room_number || 'Unnamed Room');
-    const sub = r.Room_number && r.Room_name ? r.Room_name : '';
+    let name = 'Unnamed Room';
+    let code = '';
+    let sub = '';
+
+    if (r.Room_name && r.Room_number) {
+      name = r.Room_name;
+      code = r.Room_number;
+    } else if (r.Room_name) {
+      name = r.Room_name;
+    } else if (r.Room_number) {
+      name = r.Room_number;
+    }
+
     const searchStr = `${r.Room_number || ''} ${r.Room_name || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(r.Floor, {
       name,
       sub,
-      code: r.Room_number || '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'room',
       iconHtml: '<i class="mdi mdi-door"></i>',
       isMatched
@@ -1210,14 +1488,37 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   });
 
   (dbBuilding.OFFICES || []).forEach(o => {
-    const sub = o.Abbreviations || o.Room_number || '';
+    let name = 'Unnamed Office';
+    let code = '';
+    let sub = '';
+
+    if (o.Office_name && o.Abbreviations) {
+      name = o.Office_name;
+      code = o.Abbreviations;
+      if (o.Room_number && o.Room_number !== o.Office_name && o.Room_number !== o.Abbreviations) {
+        sub = o.Room_number;
+      }
+    } else if (o.Office_name && o.Room_number) {
+      name = o.Office_name;
+      code = o.Room_number;
+    } else if (o.Office_name) {
+      name = o.Office_name;
+    } else if (o.Abbreviations && o.Room_number) {
+      name = o.Abbreviations;
+      code = o.Room_number;
+    } else if (o.Abbreviations) {
+      name = o.Abbreviations;
+    } else if (o.Room_number) {
+      name = o.Room_number;
+    }
+
     const searchStr = `${o.Office_name || ''} ${o.Abbreviations || ''} ${o.Room_number || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(o.Floor, {
-      name: o.Office_name,
-      sub,
-      code: o.Abbreviations || '',
+      name,
+      sub: (sub && sub.trim().toLowerCase() !== name.trim().toLowerCase() && sub.trim().toLowerCase() !== code.trim().toLowerCase()) ? sub : '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'office',
       iconHtml: '<i class="mdi mdi-briefcase-outline"></i>',
       isMatched
@@ -1225,14 +1526,37 @@ function parseSupabaseFloors(dbBuilding, highlightRoom = null) {
   });
 
   (dbBuilding.FACILITIES || []).forEach(f => {
-    const sub = f.Abbreviations || f.Room_number || '';
+    let name = 'Unnamed Facility';
+    let code = '';
+    let sub = '';
+
+    if (f.Facility_name && f.Abbreviations) {
+      name = f.Facility_name;
+      code = f.Abbreviations;
+      if (f.Room_number && f.Room_number !== f.Facility_name && f.Room_number !== f.Abbreviations) {
+        sub = f.Room_number;
+      }
+    } else if (f.Facility_name && f.Room_number) {
+      name = f.Facility_name;
+      code = f.Room_number;
+    } else if (f.Facility_name) {
+      name = f.Facility_name;
+    } else if (f.Abbreviations && f.Room_number) {
+      name = f.Abbreviations;
+      code = f.Room_number;
+    } else if (f.Abbreviations) {
+      name = f.Abbreviations;
+    } else if (f.Room_number) {
+      name = f.Room_number;
+    }
+
     const searchStr = `${f.Facility_name || ''} ${f.Abbreviations || ''} ${f.Room_number || ''}`.toLowerCase();
     const isMatched = highlightRoom && searchStr.includes(highlightRoom.toLowerCase());
 
     addToFloor(f.Floor, {
-      name: f.Facility_name,
-      sub,
-      code: f.Abbreviations || '',
+      name,
+      sub: (sub && sub.trim().toLowerCase() !== name.trim().toLowerCase() && sub.trim().toLowerCase() !== code.trim().toLowerCase()) ? sub : '',
+      code: (code && code.trim().toLowerCase() !== name.trim().toLowerCase()) ? code : '',
       type: 'facility',
       iconHtml: '<i class="mdi mdi-domain"></i>',
       isMatched
@@ -1369,12 +1693,18 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
               // Toggle off — clear the highlight
               clearRouteHighlight();
               allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
+              if (currentRouteCamTween) {
+                currentRouteCamTween.kill();
+                currentRouteCamTween = null;
+              }
             } else {
               // Activate this category's route
               const success = handleCategorizedRoute(key, cat);
               allRouteBtns.forEach(b => b && b.classList.remove('active-route-btn'));
               if (success && hasActiveRoute()) {
                 btn.classList.add('active-route-btn');
+                // Automatically rotate / face designated way
+                _focusCameraOnRoute(key, cat);
               }
             }
           };
@@ -1467,7 +1797,10 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
       // Check and attach live Supabase 3D model URL (only for main buildings)
       if (!isComplexSubBuilding) {
-        const liveModelUrl = extractModelUrl(dbBuilding);
+        let liveModelUrl = extractModelUrl(dbBuilding);
+        if (key === 'old_cas' && liveModelUrl && (liveModelUrl.includes('old%20admin') || liveModelUrl.includes('old admin'))) {
+          liveModelUrl = 'https://zgzwcxmsewzcyegauilf.supabase.co/storage/v1/object/public/giya_assets/buildings_3d/Old%20CAS.glb';
+        }
         if (liveModelUrl) {
           data.model3d = liveModelUrl;
           if (viewBtnWrap && viewBtn) {
@@ -2177,10 +2510,13 @@ async function _buildDropdown(query) {
   // 2. Render matched Offices
   offices.forEach(o => {
     const bName = o.BUILDINGS?.Building_name || 'Building';
+    const officeTitle = o.Office_name || o.Abbreviations || o.Room_number || 'Unnamed Office';
+    const target = o.Office_name || o.Abbreviations || o.Room_number || '';
+    const extra = (o.Office_name && o.Abbreviations) ? ` (${o.Abbreviations})` : (o.Room_number && o.Office_name ? ` — ${o.Room_number}` : '');
     html += `
-      <div data-type="office" data-building="${bName}" data-target="${o.Office_name}" class="search-dropdown-item">
+      <div data-type="office" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
         <span><i class="mdi mdi-briefcase-outline"></i></span>
-        <span>${o.Office_name}</span>
+        <span><strong>${officeTitle}</strong>${extra}</span>
         <span class="search-dropdown-item-type">in ${bName}</span>
       </div>`;
   });
@@ -2188,10 +2524,13 @@ async function _buildDropdown(query) {
   // 3. Render matched Facilities
   facilities.forEach(f => {
     const bName = f.BUILDINGS?.Building_name || 'Building';
+    const facilityTitle = f.Facility_name || f.Abbreviations || f.Room_number || 'Unnamed Facility';
+    const target = f.Facility_name || f.Abbreviations || f.Room_number || '';
+    const extra = (f.Facility_name && f.Abbreviations) ? ` (${f.Abbreviations})` : (f.Room_number && f.Facility_name ? ` — ${f.Room_number}` : '');
     html += `
-      <div data-type="facility" data-building="${bName}" data-target="${f.Facility_name}" class="search-dropdown-item">
+      <div data-type="facility" data-building="${bName}" data-target="${target}" class="search-dropdown-item">
         <span><i class="mdi mdi-domain"></i></span>
-        <span>${f.Facility_name}</span>
+        <span><strong>${facilityTitle}</strong>${extra}</span>
         <span class="search-dropdown-item-type">in ${bName}</span>
       </div>`;
   });

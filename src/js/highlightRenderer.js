@@ -344,6 +344,46 @@ export function getActiveCategory() {
   return activeCategory;
 }
 
+/**
+ * Compute the 3D world bounding box enclosing all meshes of the given road segments.
+ *
+ * @param {string[]} segments — array of road segment mesh names
+ * @returns {THREE.Box3|null} — bounding box or null if no meshes found
+ */
+export function getRouteBoundingBox(segments = []) {
+  if (!segments || segments.length === 0) return null;
+  const box = new THREE.Box3();
+  let foundAny = false;
+
+  for (const segName of segments) {
+    const node = _findMesh(segName);
+    if (node) {
+      box.expandByObject(node);
+      foundAny = true;
+    }
+  }
+
+  return foundAny ? box : null;
+}
+
+/**
+ * Retrieve the center 3D position of the final road segment in the given route.
+ *
+ * @param {string[]} segments — array of road segment mesh names
+ * @returns {THREE.Vector3|null}
+ */
+export function getRouteEndpoint(segments = []) {
+  if (!segments || segments.length === 0) return null;
+  for (let i = segments.length - 1; i >= 0; i--) {
+    const node = _findMesh(segments[i]);
+    if (node) {
+      const b = new THREE.Box3().setFromObject(node);
+      return b.getCenter(new THREE.Vector3());
+    }
+  }
+  return null;
+}
+
 // ── Pulsing animation (optional eye-drawing effect) ───────────────────────────
 
 const PULSE_MIN = 1.2;
