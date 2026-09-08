@@ -894,17 +894,17 @@
       "far": ["kh kalsada", "road 63", "road 64", "road 65", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "csu_gym": {
-      "nearest": ["road 33", "road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
       "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
       "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "gymnasium": {
-      "nearest": ["road 33", "road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
       "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
       "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },
     "gym": {
-      "nearest": ["road 33", "road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
+      "nearest": ["road 23", "road 46", "road 22", "road 45", "road 30", "road 43", "road 5", "road 40", "road 1"],
       "near": ["road 33", "road 51", "road 34", "road 52", "road 27", "road 49", "road 25", "road 48", "road 26"],
       "far": ["road 33", "road 51", "road 34", "road 52", "road 8", "road 53", "road 9", "road 54", "road 11", "road 55", "road 13", "road 56", "road 15", "road 57", "road 17"]
     },

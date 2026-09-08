@@ -468,7 +468,12 @@ const BUILDING_DATA = {
   "ced_lsg_office": { glbName: "CED LSG OFFICE -", name: "CED LSG", shortName: "CED LSG", emoji: "👥", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education Local Student Government (CED LSG) student council headquarters.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "ttlo": { glbName: "TTLO -", name: "TTLO", shortName: "TTLO", emoji: "💡", hidePin: true, isCHEDComplexMember: true, desc: "Technology Transfer and Licensing Office (TTLO) commercializing research innovations and intellectual properties.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "caa": { name: "CAA Complex", shortName: "CAA Complex", hidePin: true, isCAAComplexMember: true },
-  "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false }
+  "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false },
+  "parking_space_1": { glbName: "Parking Space 1", name: "Parking Space 1", shortName: "P", interactive: false },
+  "parking_space_2": { glbName: "Parking Space 2", name: "Parking Space 2", shortName: "P", hidePin: true, interactive: false },
+  "parking_space_3": { glbName: "Parking Space 3", name: "Parking Space 3", shortName: "P", interactive: false },
+  "parking_space_4": { glbName: "Parking Space 4", name: "Parking Space 4", shortName: "P", interactive: false },
+  "parking_space_5": { glbName: "Parking Space 5", name: "Parking Space 5", shortName: "P", interactive: false }
 };
 
 // ── Building → individual GLB path map ───────────────────────────────────────
@@ -654,6 +659,11 @@ function _bootExperience() {
         }
       });
     }
+
+    // Create pins for all base model landmarks, unclickable items, and parking spaces
+    Object.keys(BUILDING_DATA).forEach(key => {
+      _createPinForKey(key);
+    });
 
     // ── Navigation system init ─────────────────────────────────────────────
     const navSceneRoot = experience.scene || campusBaseScene;
@@ -1705,6 +1715,172 @@ function _createPins() {
   // No-op: pins now created one-at-a-time in _registerBuildingScene()
 }
 
+// ── Parking Space Pin Helpers ──────────────────────────────────────────────────
+function _findParkingNode(targetStr) {
+  if (!targetStr) return null;
+  const cleanTarget = targetStr.toLowerCase().trim();
+  const normTarget = cleanTarget.replace(/[^a-z0-9]/g, '');
+
+  if (meshIndex[cleanTarget]) return meshIndex[cleanTarget];
+
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK === normTarget) return node;
+  }
+
+  let match = null;
+  const searchRoot = experience?.scene || experience?.world?.plateforme10?.scene;
+  if (searchRoot) {
+    searchRoot.traverse((node) => {
+      if (match || !node.name) return;
+      const cleanName = node.name.toLowerCase().trim();
+      const normName = cleanName.replace(/[^a-z0-9]/g, '');
+      if (cleanName === cleanTarget || normName === normTarget) {
+        match = node;
+      }
+    });
+  }
+  if (match) return match;
+
+  for (const [k, node] of Object.entries(meshIndex)) {
+    const normK = k.replace(/[^a-z0-9]/g, '');
+    if (normK && (normK.includes(normTarget) || normTarget.includes(normK))) {
+      return node;
+    }
+  }
+
+  if (searchRoot) {
+    searchRoot.traverse((node) => {
+      if (match || !node.name) return;
+      const normName = node.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normName && normName.includes(normTarget)) {
+        match = node;
+      }
+    });
+  }
+
+  return match;
+}
+
+function _findParkingNodeList(targetList) {
+  for (const t of targetList) {
+    const node = _findParkingNode(t);
+    if (node) return node;
+  }
+  return null;
+}
+
+function _createParkingPins() {
+  const container = document.getElementById('mapPins');
+  if (!container) return;
+
+  for (let i = pinList.length - 1; i >= 0; i--) {
+    if (pinList[i].isParkingPin) {
+      if (pinList[i].el && pinList[i].el.parentNode) {
+        pinList[i].el.parentNode.removeChild(pinList[i].el);
+      }
+      pinList.splice(i, 1);
+    }
+  }
+
+  if (experience && experience.scene) {
+    experience.scene.updateMatrixWorld(true);
+  }
+
+  const parkingConfigs = [
+    {
+      id: 'parking_space_4',
+      label: 'Parking Space 4',
+      targets: ['Parking Space 4', 'parking space 4', 'parking_space_4', 'parkingspace4', 'parking 4'],
+      fallbackPos: new THREE.Vector3(-16.352, 0.2, 11.808)
+    },
+    {
+      id: 'parking_space_3',
+      label: 'Parking Space 3',
+      targets: ['Parking Space 3', 'parking space 3', 'parking_space_3', 'parkingspace3', 'parking 3'],
+      fallbackPos: new THREE.Vector3(-1.816, 0.2, 0.176)
+    },
+    {
+      id: 'parking_space_1_2',
+      label: 'Parking Space 1 & 2',
+      isCombined: true,
+      targets: [
+        ['Parking Space 1', 'parking space 1', 'parking_space_1', 'parkingspace1', 'parking 1'],
+        ['Parking Space 2', 'parking space 2', 'parking_space_2', 'parkingspace2', 'parking 2']
+      ],
+      fallbackPos: new THREE.Vector3(-29.807, 0.2, 53.169)
+    },
+    {
+      id: 'parking_space_5',
+      label: 'Parking Space 5',
+      targets: ['Parking Space 5', 'parking space 5', 'parking_space_5', 'parkingspace5', 'parking 5', 'Parking Space 4.001', 'parking space 4.001'],
+      fallbackPos: new THREE.Vector3(22.035, 0.2, 65.852)
+    }
+  ];
+
+  parkingConfigs.forEach(cfg => {
+    const worldPos = new THREE.Vector3();
+    let foundAnyNode = false;
+    let singleNode = null;
+    const nodes = [];
+
+    if (cfg.isCombined) {
+      const box = new THREE.Box3();
+      cfg.targets.forEach(targetList => {
+        const n = _findParkingNodeList(targetList);
+        if (n) {
+          nodes.push(n);
+          n.updateWorldMatrix(true, true);
+          box.expandByObject(n);
+          foundAnyNode = true;
+        }
+      });
+      if (foundAnyNode && !box.isEmpty()) {
+        box.getCenter(worldPos);
+        worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (cfg.fallbackPos) {
+        foundAnyNode = true;
+        worldPos.copy(cfg.fallbackPos);
+      }
+    } else {
+      singleNode = _findParkingNodeList(cfg.targets);
+      if (singleNode) {
+        foundAnyNode = true;
+        singleNode.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(singleNode);
+        box.getCenter(worldPos);
+        worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (cfg.fallbackPos) {
+        foundAnyNode = true;
+        worldPos.copy(cfg.fallbackPos);
+      }
+    }
+
+    if (!foundAnyNode) return;
+
+    const el = document.createElement('div');
+    el.className = 'parking-pin';
+    el.style.cssText = 'position:absolute;transform:translate(-50%,-50%);cursor:default;pointer-events:none;z-index:4;';
+    el.innerHTML = `
+      <div class="pin-label-static" style="font-weight: 800; font-size: 11px; padding: 2px 7px;">P</div>
+    `;
+
+    container.appendChild(el);
+    pinList.push({
+      key: cfg.id,
+      worldPos,
+      fallbackPos: cfg.fallbackPos,
+      el,
+      interactive: false,
+      isParkingPin: true,
+      node: singleNode,
+      nodes: nodes.length > 0 ? nodes : null
+    });
+  });
+
+  console.log(`[GIYA Parking] Initialized ${pinList.filter(p => p.isParkingPin).length} parking indicators.`);
+}
+
 /**
  * _updatePins()
  * Project 3D world coordinates to 2D screen positions and perform
@@ -1720,6 +1896,49 @@ function _updatePins() {
   const visiblePins = [];
 
   pinList.forEach((pin) => {
+    if (pin.isParkingPin) {
+      if (!showAllUnclickable || zoom < 0.3) {
+        pin.el.style.display = 'none';
+        return;
+      }
+
+      if (experience.scene) experience.scene.updateMatrixWorld(true);
+
+      if (pin.nodes && pin.nodes.length > 0) {
+        const box = new THREE.Box3();
+        pin.nodes.forEach(n => {
+          if (n) {
+            n.updateWorldMatrix(true, true);
+            box.expandByObject(n);
+          }
+        });
+        if (!box.isEmpty()) {
+          box.getCenter(pin.worldPos);
+          pin.worldPos.y = Math.max(0.2, box.max.y + 0.3);
+        } else if (pin.fallbackPos) {
+          pin.worldPos.copy(pin.fallbackPos);
+        }
+      } else if (pin.node) {
+        pin.node.updateWorldMatrix(true, true);
+        const box = new THREE.Box3().setFromObject(pin.node);
+        box.getCenter(pin.worldPos);
+        pin.worldPos.y = Math.max(0.2, box.max.y + 0.3);
+      } else if (pin.fallbackPos) {
+        pin.worldPos.copy(pin.fallbackPos);
+      }
+
+      _projVec.copy(pin.worldPos).project(cam);
+
+      const screenX = (_projVec.x * 0.5 + 0.5) * W;
+      const screenY = (_projVec.y * -0.5 + 0.5) * H;
+
+      pin.el.style.display = '';
+      pin.el.style.visibility = 'visible';
+      pin.el.style.left = screenX + 'px';
+      pin.el.style.top = screenY + 'px';
+      return;
+    }
+
     _projVec.copy(pin.worldPos).project(cam);
     if (_projVec.z > 1) {
       pin.el.style.visibility = 'hidden';
