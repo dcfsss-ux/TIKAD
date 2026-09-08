@@ -123,6 +123,12 @@
   box-shadow: 0 6px 20px rgba(237, 221, 83, 0.6);
 }
 
+.btn-primary svg {
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin-right: 6px;
+}
+
 .btn-outline {
   background: transparent;
   color: #fff;

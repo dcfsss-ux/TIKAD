@@ -14,197 +14,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
   <link rel="stylesheet" href="/src/styles/preloader.css" />
 
-  <!--
-    CRITICAL INLINE CSS — loaded before ANY external stylesheet or JS bundle.
-    Prevents Flash of Unstyled Content (FOUC) on first paint by immediately giving the
-    preloader its full layout, typography, SVG stage, and pill badge styles.
-  -->
-  <style>
-    :root {
-      --univ-green: #009900;
-      --univ-gold: #f9dc07;
-      --univ-orange: #ff9900;
-      --univ-white: #ffffff;
-      --univ-emerald: #003300;
-      --univ-emerald-deep: #001f00;
-    }
-
-    /* Lock down the page colour before any bundle arrives */
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background: #001f00;
-      overflow: hidden;
-      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-    }
-
-    /* Preloader shell */
-    #tikad-preloader,
-    .balangay-preloader {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 999999;
-      background: radial-gradient(circle at 50% 38%, #004d00 0%, #003300 55%, #001f00 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      color: #ffffff;
-      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-      user-select: none;
-    }
-
-    /* SVG Stage */
-    .balangay-svg-stage {
-      position: relative;
-      width: 100%;
-      max-width: 780px;
-      height: auto;
-      max-height: 50vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .balangay-svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      overflow: visible;
-    }
-
-    /* Info Box */
-    .balangay-info-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin-top: 14px;
-      z-index: 10;
-      max-width: 480px;
-      width: 90%;
-      color: #ffffff;
-    }
-
-    .balangay-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .balangay-loading-title {
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      color: #ffffff;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-    }
-
-    .balangay-dots {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      color: #f9dc07;
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .balangay-status-subtitle {
-      font-size: 12.5px;
-      color: #a8d5a8;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      font-weight: 500;
-      margin-bottom: 14px;
-      opacity: 0.9;
-    }
-
-    .balangay-progress-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      max-width: 360px;
-    }
-
-    .balangay-progress-track {
-      position: relative;
-      flex: 1;
-      max-width: 280px;
-      height: 7px;
-      background: rgba(0, 0, 0, 0.45);
-      border-radius: 9999px;
-      overflow: hidden;
-      border: 1px solid rgba(249, 220, 7, 0.25);
-    }
-
-    .balangay-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #009900, #f9dc07, #ff9900);
-      border-radius: 9999px;
-      transition: width 0.25s ease;
-    }
-
-    .balangay-progress-pct {
-      font-size: 13px;
-      font-weight: 700;
-      color: #f9dc07;
-      min-width: 40px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .balangay-values-pills {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .balangay-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .balangay-pill-green {
-      background: rgba(0, 153, 0, 0.18);
-      color: #a8e6a8;
-      border: 1px solid rgba(0, 153, 0, 0.4);
-    }
-
-    .balangay-pill-gold {
-      background: rgba(249, 220, 7, 0.18);
-      color: #f9dc07;
-      border: 1px solid rgba(249, 220, 7, 0.4);
-    }
-
-    .balangay-pill-orange {
-      background: rgba(255, 153, 0, 0.18);
-      color: #ff9900;
-      border: 1px solid rgba(255, 153, 0, 0.4);
-    }
-
-    /* Keep everything else invisible until the bundle paints it */
-    body>*:not(#tikad-preloader) {
-      visibility: hidden;
-    }
-  </style>
-
   <!-- Main entry: Vite handles CSS + JS bundling -->
   <script type="module" src="/src/main.js"></script>
 </head>
@@ -466,8 +275,7 @@
         <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
       </svg>
       <div>
-        <span class="giya-baybayin"
-          style="font-size: 20px; font-weight: 700; display: block; line-height: 1.2;">ᜄᜒᜌ</span>
+        <span class="giya-baybayin">ᜄᜒᜌ</span>
         <span>CSU Smart Campus</span>
       </div>
     </a>
@@ -516,7 +324,7 @@
         <a href="#" class="btn-primary" id="hero-explore-map">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-map" style="display: inline-block; vertical-align: text-bottom; margin-right: 6px;">
+            class="lucide lucide-map">
             <path
               d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" />
             <path d="M15 5.764v15" />
@@ -819,27 +627,21 @@
       </header>
 
       <!-- Map Body: canvas + info panel -->
-      <div style="
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-            position: relative;
-            min-height: 0;
-          ">
+      <div class="map-body">
         <!-- ── Three.js 3D Canvas ── -->
-        <div id="map-canvas-wrap" style="flex:1;position:relative;overflow:hidden;background:#d6d2ca;">
+        <div id="map-canvas-wrap">
 
           <!-- WebGL canvas — Experience engine mounts here -->
-          <canvas class="experience-canvas" style="display:block;width:100%;height:100%;"></canvas>
+          <canvas class="experience-canvas"></canvas>
 
           <!-- Vertical Directory Sidebar (populated by JS after model loads) -->
           <div id="map-chips-bar"></div>
 
           <!-- 3D-projected pin markers -->
-          <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
+          <div id="mapPins"></div>
 
           <!-- Floating Complex Buildings Card (Bottom Left) -->
-          <div id="caa-complex-card" class="caa-complex-card" style="display:none;">
+          <div id="caa-complex-card" class="caa-complex-card">
             <div class="caa-card-header">
               <span class="caa-card-icon mdi mdi-office-building-marker-outline" id="caa-card-icon"></span>
               <span class="caa-card-title" id="caa-card-title">Complex</span>
@@ -911,17 +713,17 @@
             <div class="panel-label">Description</div>
             <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details
               here.</p>
-            <div id="panel-depts-wrap" style="display:none;">
+            <div id="panel-depts-wrap">
               <div class="panel-label">Rooms, Faculties &amp; Facilities</div>
               <ul class="panel-facilities" id="panel-depts"></ul>
             </div>
-            <div id="panel-contact-wrap" style="display:none;">
+            <div id="panel-contact-wrap">
               <div class="panel-label">Contact</div>
               <p id="panel-contact"></p>
             </div>
             <!-- Action Buttons: Categorized Route Buttons & 3D Model Viewer -->
             <div id="panel-actions-wrap" class="panel-actions-wrap">
-              <div id="panel-route-section" class="panel-route-section" style="display:none;">
+              <div id="panel-route-section" class="panel-route-section">
                 <div class="panel-label">Route Options</div>
                 <div id="panel-route-btns-wrap" class="route-btns-group">
                   <button id="route-btn-nearest" class="route-category-btn route-nearest-btn"
@@ -950,7 +752,7 @@
                   </button>
                 </div>
               </div>
-              <div id="panel-view3d-wrap" style="display:none;">
+              <div id="panel-view3d-wrap">
                 <button id="panel-view3d-btn" class="panel-view3d-btn" title="Explore interactive 3D model">
                   <span class="view3d-icon-wrap"><span class="mdi mdi-cube-scan"></span></span>
                   <span class="view3d-text">View 3D Model</span>

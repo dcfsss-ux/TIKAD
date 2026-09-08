@@ -1,3 +1,45 @@
+/* ── MAP LAYOUT STRUCTURAL RULES (extracted from inline styles) ── */
+
+/* Map body: the flex row containing the canvas + info panel */
+.map-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  min-height: 0;
+}
+
+/* Canvas wrapper */
+#map-canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #d6d2ca;
+}
+
+/* Three.js WebGL canvas */
+.experience-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 3D-projected pin markers container */
+#mapPins {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* JS-toggled elements — hidden by default, shown via JS */
+#caa-complex-card,
+#panel-depts-wrap,
+#panel-contact-wrap,
+#panel-route-section,
+#panel-view3d-wrap {
+  display: none;
+}
+
 /* ── MAP OVERLAY ── */
 #map-overlay {
   position: fixed;

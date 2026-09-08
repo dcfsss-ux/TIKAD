@@ -407,16 +407,13 @@ const BUILDING_DATA = {
   "carabao_center": {
     glbName: "Carabao Center",
     name: "Carabao Center", shortName: "Carabao Center", abbrev: "Carabao Center", emoji: "🐃",
-    logo: "/images/carabao_center_logo.jpg",
-    Logo_URL: "/images/carabao_center_logo.jpg",
-    image: "/images/carabao_center_logo.jpg",
     desc: "Philippine Carabao Center at CSU facility for dairy buffalo research, artificial insemination, and livestock development.",
     depts: [{ name: "Carabao Research & Breeding Division", sub: "Floor 1", icon: "🐃" }],
     contact: { phone: "(085) 341-2794", email: "carabao@csu.edu.ph" },
     interactive: true,
     no3dViewer: true,
     isCarabaoCenterComplexMember: true,
-    supabaseNames: ['Carabao Center', 'Philippine Carabao Center', 'Carabao Center Complex'],
+    supabaseNames: ['Carabao Center', 'Philippine Carabao Center', 'Carabao Center Complex', 'PCC-CSU', 'PCC'],
     gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)"
   },
   "gents_dormitory_under_cons": {
@@ -503,7 +500,7 @@ const BUILDING_DATA = {
   "caa_restroom": { name: "CAA Restroom", shortName: "CAA Restroom", interactive: false },
   "caa_swine_laboratory": { glbName: "CAA SWINE LABORATORY", name: "Swine Lab", shortName: "Swine Lab", emoji: "🐖", hidePin: true, isNativeChickenComplexMember: true, desc: "Swine herd management, breeding research, and veterinary nutrition laboratory.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "chicken_coop": { glbName: "Chicken Coop", name: "Chicken Coop", shortName: "Chicken Coop", emoji: "🐣", hidePin: true, isNativeChickenComplexMember: true, desc: "Poultry flock management, egg collection, and brooding facility.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
-  "caraga_black_native_chicken": { glbName: "CARAGA BLACK NATIVE CHICKEN", name: "Native Chicken", shortName: "Native Chicken", emoji: "🐔", interactive: true, no3dViewer: true, isNativeChickenComplexMember: true, desc: "Preservation, selective breeding, and genetic research facility for Caraga black native chickens.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
+  "caraga_black_native_chicken": { glbName: "CARAGA BLACK NATIVE CHICKEN", name: "Caraga Black Native Chicken House", shortName: "Native Chicken House", abbrev: "CBNCH", emoji: "🐔", interactive: true, no3dViewer: true, isNativeChickenComplexMember: true, desc: "Preservation, selective breeding, and genetic research facility for Caraga black native chickens.", supabaseNames: ['Caraga Black Native Chicken', 'Caraga Black Native Chicken House', 'CARAGA BLACK NATIVE CHICKEN', 'Native Chicken House', 'CBNCH'], gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_covered_court": { name: "CAS Covered Court", shortName: "CAS Court", interactive: false },
   "cas_student_center": { glbName: "CAS STUDENT CENTER", name: "Student Office", shortName: "Student Office", emoji: "👥", hidePin: true, isKalinawComplexMember: true, desc: "Administrative office for student council and campus student services.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "catching_coral": { glbName: "CATCHING CORAL", name: "Catching Coral", shortName: "Catching Coral", emoji: "🪵", hidePin: true, isCarabaoCenterComplexMember: true, desc: "Livestock penning, corral sorting, and veterinary animal handling grounds.", gradient: "linear-gradient(135deg, #2d3b2a 0%, #4f6848 100%)" },
@@ -1592,7 +1589,7 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
   const buildingName = data.name;
   const buildingDesc = data.desc || '';
-  const buildingImg = data.image || '/images/kinaadman.jpg';
+  const buildingImg = data.image || null; // No fallback — let Supabase or gradient handle it
 
   // Set building logo (prioritizes Supabase Logo_URL)
   const logoUrl = data.Logo_URL || data.logo;
@@ -1615,7 +1612,12 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
 
   const imgEl = document.getElementById('panel-img-bg');
   if (imgEl) {
-    imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
+    if (buildingImg) {
+      imgEl.style.background = `url('${buildingImg}') center center / cover no-repeat`;
+    } else {
+      // No local image — clear background so Supabase can decide (or show gradient)
+      imgEl.style.background = data.gradient || 'linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)';
+    }
   }
 
   // Complex sub-buildings (not the main building) show no depts / facilities
@@ -1782,8 +1784,14 @@ async function _openPanel(key, highlightRoom = null, searchMode = false) {
     if (dbBuilding) {
       if (dbBuilding.Building_name) set('panel-name', dbBuilding.Building_name);
       if (dbBuilding.Description) set('panel-desc', dbBuilding.Description);
-      if (dbBuilding.Image_URL && imgEl) {
-        imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
+      if (imgEl) {
+        if (dbBuilding.Image_URL) {
+          // Supabase has an image — show it
+          imgEl.style.background = `url('${dbBuilding.Image_URL}') center center / cover no-repeat`;
+        } else {
+          // Image_URL is NULL in Supabase — clear any fallback image and show gradient
+          imgEl.style.background = data.gradient || 'linear-gradient(135deg, #1a3a5c 0%, #2d6a9f 100%)';
+        }
       }
 
       // Check and update live building logo from Supabase Logo_URL
