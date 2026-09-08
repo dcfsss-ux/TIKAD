@@ -293,6 +293,56 @@
   .view-toggle-btn {
     padding: 0 8px;
   }
+
+  /* Shrink panel to not overpower the map */
+  #info-panel {
+    width: 290px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* ── Bottom-sheet style on mobile ── */
+  #info-panel {
+    /* Unset the right-floating position */
+    top: auto;
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+    width: auto;
+    max-width: none;
+    /* Limit height so map is still visible above */
+    max-height: 52vh;
+    max-height: 52dvh;
+    border-radius: 20px;
+    /* Slide-up animation */
+    transform: translateY(0) scale(1);
+  }
+
+  #info-panel.panel-hidden {
+    transform: translateY(24px) scale(0.97);
+  }
+
+  /* Shorter image strip on small screens */
+  .panel-img {
+    height: 100px;
+  }
+
+  /* Tighter body padding */
+  .panel-body {
+    padding: 10px 12px 14px;
+  }
+
+  /* Slightly smaller room rows */
+  .room-row {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
+  .room-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -308,6 +358,34 @@
 
   .view-toggle-btn {
     padding: 0 10px;
+  }
+
+  /* Even more compact on very small phones */
+  #info-panel {
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    max-height: 48vh;
+    max-height: 48dvh;
+    border-radius: 18px;
+  }
+
+  .panel-img {
+    height: 88px;
+  }
+
+  .panel-img-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .panel-name {
+    font-size: 14px;
+  }
+
+  .panel-body {
+    padding: 8px 10px 12px;
   }
 }
 
@@ -1405,6 +1483,13 @@
   box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.35);
 }
 
+@media (max-width: 768px) {
+  /* Hide mouse-control legend — irrelevant on touch screens */
+  .controls-hint-card {
+    display: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   #info-panel {
     top: auto;
@@ -1420,21 +1505,7 @@
 }
 
 @media (max-width: 480px) {
-  .controls-hint-card {
-    bottom: 12px;
-    right: 12px;
-    padding: 8px 10px;
-    gap: 10px;
-  }
-
-  .controls-hint-card svg {
-    width: 28px;
-    height: 38px;
-  }
-
-  .controls-hint-item {
-    font-size: 10.5px;
-  }
+  /* .controls-hint-card already hidden above at 768px */
 }
 
 /* ── Floating CAA Complex Card (Bottom Left) ──────────────────────────────── */
