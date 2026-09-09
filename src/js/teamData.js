@@ -1,10 +1,10 @@
 // Team data and cutout image references
 
 export const cutout_steven_cres = "/images/man_3_buque-removebg-preview.png";
-export const cutout_greg        = "/images/man_2_calo-removebg-preview.png";
+export const cutout_greg = "/images/man_2_calo-removebg-preview.png";
 export const cutout_jhon_leovil = "/images/man_4_avelino-removebg-preview.png";
-export const cutout_roy         = "/images/man_5_bayotlang-removebg-preview.png";
-export const cutout_christian   = "/images/man_1_abamo-removebg-preview.png";
+export const cutout_roy = "/images/man_5_bayotlang-removebg-preview.png";
+export const cutout_christian = "/images/man_1_abamo-removebg-preview.png";
 
 export const backMembers = [
   {
@@ -27,7 +27,7 @@ export const backMembers = [
 
 export const frontMembers = [
   {
-    name: "Steven Cres",
+    name: "Cres Steven Buque",
     role: "Team lead",
     stat: "24 sprints led",
     fact: "Runs standup in under 6 minutes flat, and has the timer app to prove it.",
@@ -35,7 +35,7 @@ export const frontMembers = [
     cutout: cutout_steven_cres
   },
   {
-    name: "Greg",
+    name: "Greg Carl Calo",
     role: "Backend dev",
     stat: "99.98% uptime",
     fact: "Once debugged a race condition entirely by staring at logs on a whiteboard.",
@@ -43,7 +43,7 @@ export const frontMembers = [
     cutout: cutout_greg
   },
   {
-    name: "Jhon Leovil",
+    name: "Jhon Leovil Avelino",
     role: "Frontend dev",
     stat: "2,400 lines shipped",
     fact: "Cannot resist refactoring a component the moment he touches it.",
@@ -51,7 +51,7 @@ export const frontMembers = [
     cutout: cutout_jhon_leovil
   },
   {
-    name: "Roy",
+    name: "Roy Bayotlang",
     role: "QA engineer",
     stat: "58 bugs squashed",
     fact: "Found three edge cases before breakfast and wrote integration tests for all of them.",
@@ -59,7 +59,7 @@ export const frontMembers = [
     cutout: cutout_roy
   },
   {
-    name: "Christian",
+    name: "Christian Abamo",
     role: "DevOps engineer",
     stat: "140 deploys without rollback",
     fact: "Refuses to approve any PR that doesn't have at least one green checkmark from CI.",

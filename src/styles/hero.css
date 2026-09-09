@@ -6,7 +6,7 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 0;
-  background: #050f05;
+  background: #002600;
   position: relative;
   overflow: hidden;
 }
@@ -121,6 +121,12 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(237, 221, 83, 0.6);
+}
+
+.btn-primary svg {
+  display: inline-block;
+  vertical-align: text-bottom;
+  margin-right: 6px;
 }
 
 .btn-outline {

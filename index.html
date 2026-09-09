@@ -12,52 +12,7 @@
   <!-- Baybayin font loaded early so the character renders on first paint -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tagalog&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
-
-  <!--
-    CRITICAL INLINE CSS — loaded before ANY external stylesheet or JS bundle.
-    Prevents the white/unstyled flash on first paint by immediately giving the
-    preloader its dark background and hiding body overflow.
-  -->
-  <style>
-    /* Lock down the page colour before any bundle arrives */
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background: #050f05;
-      overflow: hidden;
-    }
-
-    /* Preloader shell — must match preloader.css so there's no jump */
-    #tikad-preloader {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: #050f05;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Baybayin character — absolutely positioned inside the ring */
-    .preloader-baybayin {
-      font-family: 'Noto Sans Tagalog', sans-serif;
-      font-size: 22px;
-      line-height: 1;
-      color: #EDDD53;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -55%);
-      z-index: 2;
-      white-space: nowrap;
-    }
-
-    /* Keep everything else invisible until the bundle paints it */
-    body>*:not(#tikad-preloader) {
-      visibility: hidden;
-    }
-  </style>
+  <link rel="stylesheet" href="/src/styles/preloader.css" />
 
   <!-- Main entry: Vite handles CSS + JS bundling -->
   <script type="module" src="/src/main.js"></script>
@@ -65,25 +20,248 @@
 
 <body>
 
-  <!-- ── PRELOADER ── -->
-  <div class="preloader" id="tikad-preloader">
-    <div class="preloader-bg-glow"></div>
-    <div class="preloader-content">
-      <div class="preloader-logo-ring">
-        <div class="preloader-logo-inner">
-          <span class="preloader-baybayin">ᜄᜒᜌ</span>
+  <!-- ── 🛶 BALANGAY PRELOADER ── -->
+  <div class="balangay-preloader preloader" id="tikad-preloader">
+    <div class="balangay-bg-glow"></div>
+    <div class="balangay-svg-stage">
+      <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" class="balangay-svg">
+        <defs>
+          <!-- Sun Radial Gradient -->
+          <radialGradient id="balangaySunGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#f9dc07" stop-opacity="1" />
+            <stop offset="65%" stop-color="#ff9900" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#ff9900" stop-opacity="0" />
+          </radialGradient>
+
+          <!-- Hull Wood Gradient -->
+          <linearGradient id="balangayHullGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7c4c23" />
+            <stop offset="50%" stop-color="#5a3517" />
+            <stop offset="100%" stop-color="#3b210c" />
+          </linearGradient>
+
+          <!-- Gold Shimmer Gradient -->
+          <linearGradient id="balangayGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff9900" />
+            <stop offset="50%" stop-color="#f9dc07" />
+            <stop offset="100%" stop-color="#ff9900" />
+          </linearGradient>
+
+          <!-- Wave Back Gradient -->
+          <linearGradient id="waveBackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(0, 100, 0, 0.55)" />
+            <stop offset="100%" stop-color="rgba(0, 31, 0, 0.85)" />
+          </linearGradient>
+
+          <!-- Wave Mid Gradient -->
+          <linearGradient id="waveMidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#009900" />
+            <stop offset="100%" stop-color="#003300" />
+          </linearGradient>
+        </defs>
+
+        <!-- Celestial Background -->
+        <g class="balangay-sun-disc">
+          <circle cx="400" cy="135" r="78" fill="url(#balangaySunGrad)" opacity="0.9" />
+          <circle cx="400" cy="135" r="48" fill="#f9dc07" opacity="0.85" />
+        </g>
+
+        <!-- Ancient Sun Rings -->
+        <g class="balangay-sun-ring">
+          <circle cx="400" cy="135" r="68" fill="none" stroke="#f9dc07" stroke-width="1.2" stroke-dasharray="3 6"
+            opacity="0.45" />
+          <circle cx="400" cy="135" r="88" fill="none" stroke="#ff9900" stroke-width="1" stroke-dasharray="5 12"
+            opacity="0.3" />
+        </g>
+
+        <!-- Distant Horizon Line with Gold Shimmer -->
+        <line x1="40" y1="255" x2="760" y2="255" stroke="rgba(249, 220, 7, 0.22)" stroke-width="1"
+          stroke-dasharray="8 16" />
+
+        <!-- Background Wave Layer -->
+        <g class="balangay-wave-layer-back">
+          <path
+            d="M -400 258 Q -300 248 -200 258 T 0 258 T 200 258 T 400 258 T 600 258 T 800 258 T 1000 258 T 1200 258 T 1400 258 T 1600 258 L 1600 360 L -400 360 Z"
+            fill="url(#waveBackGrad)" />
+        </g>
+
+        <!-- Main Vessel Group -->
+        <g class="balangay-vessel-group">
+          <!-- Stern Wake Ripples -->
+          <g transform="translate(230, 265)">
+            <ellipse cx="0" cy="0" rx="24" ry="4" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7"
+              class="balangay-wake-ripple-1" />
+            <ellipse cx="-15" cy="1" rx="32" ry="5" fill="none" stroke="#f9dc07" stroke-width="1.3" opacity="0.5"
+              class="balangay-wake-ripple-2" />
+            <ellipse cx="-30" cy="2" rx="40" ry="6" fill="none" stroke="#ff9900" stroke-width="1" opacity="0.3"
+              class="balangay-wake-ripple-3" />
+          </g>
+
+          <!-- Background Outrigger Arm & Float (Far side) -->
+          <g opacity="0.7">
+            <path d="M 320 236 Q 360 216 410 230" fill="none" stroke="#5c3a1e" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M 440 238 Q 470 218 510 232" fill="none" stroke="#5c3a1e" stroke-width="2.5"
+              stroke-linecap="round" />
+            <path d="M 350 232 Q 450 220 540 230 Q 450 235 350 232 Z" fill="#946030" stroke="#2b1b0e"
+              stroke-width="1" />
+          </g>
+
+          <!-- Balangay Mast & Fluttering University Pennant -->
+          <g>
+            <line x1="325" y1="245" x2="305" y2="150" stroke="#2b1b0e" stroke-width="3" stroke-linecap="round" />
+            <line x1="325" y1="245" x2="305" y2="150" stroke="#ff9900" stroke-width="1.2" />
+            <line x1="305" y1="150" x2="230" y2="242" stroke="rgba(249, 220, 7, 0.4)" stroke-width="1" />
+            <line x1="305" y1="150" x2="490" y2="245" stroke="rgba(249, 220, 7, 0.4)" stroke-width="1" />
+            <g class="balangay-pennant">
+              <polygon points="305,152 235,160 305,170" fill="#009900" stroke="#f9dc07" stroke-width="1.2" />
+              <polygon points="305,158 260,163 305,166" fill="#f9dc07" />
+            </g>
+          </g>
+
+          <!-- Balangay Main Hull -->
+          <g>
+            <path
+              d="M 215 228 C 240 248 310 266 410 266 C 510 266 565 248 595 212 C 585 242 510 274 410 274 C 300 274 235 248 215 228 Z"
+              fill="url(#balangayHullGrad)" stroke="#2b1b0e" stroke-width="2" stroke-linejoin="round" />
+            <path d="M 215 228 C 260 246 340 254 415 254 C 490 254 555 242 595 212" fill="none" stroke="#f9dc07"
+              stroke-width="2.8" stroke-linecap="round" />
+            <!-- Naga Prow Spiral -->
+            <path d="M 595 212 C 608 198 614 186 612 178 C 610 172 602 170 598 176 C 594 182 598 190 603 194"
+              fill="none" stroke="#f9dc07" stroke-width="3" stroke-linecap="round" />
+            <circle cx="608" cy="182" r="3.5" fill="#ff9900" stroke="#f9dc07" stroke-width="1" />
+            <!-- Stern Wing -->
+            <path d="M 215 228 C 205 218 198 206 195 198 C 193 192 201 190 205 196 C 209 202 206 210 212 216"
+              fill="none" stroke="#f9dc07" stroke-width="2.4" stroke-linecap="round" />
+            <!-- Plank Lines -->
+            <path d="M 226 238 C 275 254 345 260 415 260 C 485 260 540 252 575 230" fill="none"
+              stroke="rgba(255, 153, 0, 0.65)" stroke-width="1.5" />
+            <path d="M 240 248 C 290 262 355 267 415 267 C 475 267 520 260 550 244" fill="none"
+              stroke="rgba(249, 220, 7, 0.45)" stroke-width="1.3" />
+            <!-- Tambuko Lashings Pegs -->
+            <circle cx="250" cy="254" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="280" cy="256.1" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="310" cy="258.1" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="340" cy="259.6" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="370" cy="260.6" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="400" cy="261" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="430" cy="260.6" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="460" cy="259.6" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="490" cy="258.1" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="520" cy="256.1" r="1.4" fill="#f9dc07" opacity="0.8" />
+            <circle cx="550" cy="254" r="1.4" fill="#f9dc07" opacity="0.8" />
+          </g>
+
+          <!-- Animated Rower Figure -->
+          <g>
+            <path d="M 355 244 L 382 245 L 392 254 L 362 254 Z" fill="#003300" stroke="#2b1b0e" stroke-width="1" />
+            <g class="balangay-rower-torso">
+              <path d="M 368 245 L 374 218 L 388 220 L 385 245 Z" fill="#009900" stroke="#2b1b0e" stroke-width="1.4"
+                stroke-linejoin="round" />
+              <path d="M 373 222 L 385 244" stroke="#f9dc07" stroke-width="2" stroke-linecap="round" />
+              <path d="M 383 222 L 372 244" stroke="#ff9900" stroke-width="1.5" stroke-linecap="round" />
+              <rect x="377" y="212" width="5" height="6" fill="#d99f6b" />
+              <circle cx="380" cy="206" r="7.5" fill="#d99f6b" stroke="#2b1b0e" stroke-width="1.2" />
+              <path d="M 372 205 C 375 200 385 200 388 204 L 388 208 C 385 204 375 204 372 208 Z" fill="#f9dc07"
+                stroke="#ff9900" stroke-width="1" />
+              <path d="M 372 205 Q 365 203 362 208" fill="none" stroke="#f9dc07" stroke-width="1.8"
+                stroke-linecap="round" />
+              <path d="M 374 222 L 366 230 L 382 233" fill="none" stroke="#d99f6b" stroke-width="3.2"
+                stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M 386 222 L 396 232 L 388 238" fill="none" stroke="#d99f6b" stroke-width="3.2"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </g>
+
+          <!-- Animated Paddle Assembly (Sagwan) -->
+          <g class="balangay-paddle-assembly">
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#946030" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#f9dc07" stroke-width="1" />
+            <path d="M 364 268 C 372 280 368 296 358 306 C 352 296 354 280 360 268 Z" fill="url(#balangayGoldGrad)"
+              stroke="#ff9900" stroke-width="1.5" stroke-linejoin="round" />
+            <line x1="362" y1="268" x2="358" y2="304" stroke="#ffffff" stroke-width="1" />
+          </g>
+
+          <!-- Paddle Splash Drops -->
+          <g class="balangay-paddle-splash">
+            <circle cx="352" cy="266" r="2.5" fill="#ffffff" />
+            <circle cx="368" cy="264" r="2" fill="#f9dc07" />
+            <circle cx="346" cy="272" r="1.8" fill="#ffffff" />
+            <path d="M 358 268 Q 365 260 374 266" fill="none" stroke="#ffffff" stroke-width="1.5"
+              stroke-linecap="round" />
+          </g>
+
+          <!-- Foreground Outrigger Float & Booms (Katig) -->
+          <g>
+            <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#946030" stroke-width="3"
+              stroke-linecap="round" />
+            <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+            <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#946030" stroke-width="3"
+              stroke-linecap="round" />
+            <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+            <path d="M 360 284 C 420 278 510 278 570 284 C 510 290 420 290 360 284 Z" fill="#f9dc07" stroke="#ff9900"
+              stroke-width="1.8" />
+            <line x1="395" y1="280" x2="395" y2="288" stroke="#003300" stroke-width="1.5" />
+            <line x1="415" y1="280" x2="415" y2="288" stroke="#003300" stroke-width="1.5" />
+            <line x1="515" y1="280" x2="515" y2="288" stroke="#003300" stroke-width="1.5" />
+            <line x1="535" y1="280" x2="535" y2="288" stroke="#003300" stroke-width="1.5" />
+          </g>
+        </g>
+
+        <!-- Midground Animated Ocean Waves -->
+        <g class="balangay-wave-layer-mid">
+          <path
+            d="M -400 270 Q -320 258 -240 270 T -80 270 T 80 270 T 240 270 T 400 270 T 560 270 T 720 270 T 880 270 T 1040 270 T 1200 270 T 1360 270 T 1520 270 T 1680 270 L 1680 360 L -400 360 Z"
+            fill="url(#waveMidGrad)" opacity="0.85" />
+          <path
+            d="M -400 270 Q -320 258 -240 270 M -80 270 Q 0 258 80 270 M 240 270 Q 320 258 400 270 M 560 270 Q 640 258 720 270 M 880 270 Q 960 258 1040 270 M 1200 270 Q 1280 258 1360 270 M 1520 270 Q 1600 258 1680 270"
+            fill="none" stroke="#f9dc07" stroke-width="1.8" stroke-linecap="round" opacity="0.75" />
+        </g>
+
+        <!-- Foreground Water Foam & Wavelets -->
+        <g class="balangay-wave-layer-front">
+          <path
+            d="M -400 286 Q -350 276 -300 286 T -200 286 T -100 286 T 0 286 T 100 286 T 200 286 T 300 286 T 400 286 T 500 286 T 600 286 T 700 286 T 800 286 T 900 286 T 1000 286 T 1100 286 T 1200 286 T 1300 286 T 1400 286 T 1500 286 T 1600 286 L 1600 360 L -400 360 Z"
+            fill="rgba(0, 51, 0, 0.95)" />
+          <path
+            d="M -400 286 Q -350 276 -300 286 M -200 286 Q -150 276 -100 286 M 0 286 Q 50 276 100 286 M 200 286 Q 250 276 300 286 M 400 286 Q 450 276 500 286 M 600 286 Q 650 276 700 286 M 800 286 Q 850 276 900 286 M 1000 286 Q 1050 276 1100 286 M 1200 286 Q 1250 276 1300 286 M 1400 286 Q 1450 276 1500 286"
+            fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.9" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Info Box (Title, Subtitle, Progress, Values) -->
+    <div class="balangay-info-box">
+      <div class="balangay-title-row">
+        <div class="balangay-loading-title" id="preloader-title">
+          <span>Navigating the Course</span>
         </div>
-        <svg class="preloader-ring-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="60" r="54" stroke="rgba(237,221,83,0.15)" stroke-width="2" />
-          <circle class="preloader-ring-arc" cx="60" cy="60" r="54" stroke="#EDDD53" stroke-width="2.5"
-            stroke-linecap="round" stroke-dasharray="340" stroke-dashoffset="340" />
-        </svg>
+        <span class="balangay-dots">
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+        </span>
       </div>
-      <p class="preloader-label">Loading Campus Model</p>
-      <div class="preloader-bar-wrap">
-        <div class="preloader-bar" id="preloader-bar"></div>
+      <div class="balangay-status-subtitle" id="preloader-subtitle">Loading Campus Model & Environment</div>
+
+      <div class="balangay-progress-row">
+        <div class="balangay-progress-track">
+          <div class="balangay-progress-fill" id="preloader-bar"></div>
+        </div>
+        <span class="balangay-pct" id="loading-progress">0%</span>
       </div>
-      <span class="preloader-pct" id="loading-progress">0%</span>
+
+      <div class="balangay-values-pills">
+        <div class="balangay-pill balangay-pill-green" title="Competence">
+          <span class="balangay-pill-dot"></span> Competence
+        </div>
+        <div class="balangay-pill balangay-pill-gold" title="Service">
+          <span class="balangay-pill-dot"></span> Service
+        </div>
+        <div class="balangay-pill balangay-pill-orange" title="Uprightness">
+          <span class="balangay-pill-dot"></span> Uprightness
+        </div>
+      </div>
     </div>
   </div>
   <!-- ── NAV ── -->
@@ -97,22 +275,33 @@
         <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
       </svg>
       <div>
-        <span class="giya-baybayin"
-          style="font-size: 20px; font-weight: 700; display: block; line-height: 1.2;">ᜄᜒᜌ</span>
+        <span class="giya-baybayin">ᜄᜒᜌ</span>
         <span>CSU Smart Campus</span>
       </div>
     </a>
 
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Menu">
-      <span class="nav-toggle-icon"></span>
-    </button>
-
-    <ul class="nav-links">
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home">Home</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#features">Features & Team</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#team">Team</a></li>
     </ul>
 
-    <button class="nav-cta" id="nav-launch-map">Launch Map</button>
+    <div class="nav-actions">
+      <a href="/admin.html" class="nav-admin" id="nav-admin-link" title="Admin Panel">
+        <div class="icon-shield-user mdi mdi-shield-account"></div>
+        <span>Admin</span>
+      </a>
+
+      <button class="nav-cta" id="nav-launch-map">
+        <span class="nav-cta-icon mdi mdi-rocket-launch"></span>
+        <span class="nav-cta-text">Launch Map</span>
+      </button>
+    </div>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+      <span class="nav-toggle-icon"></span>
+    </button>
   </nav>
 
   <!-- ── HERO ── -->
@@ -135,7 +324,7 @@
         <a href="#" class="btn-primary" id="hero-explore-map">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="lucide lucide-map" style="display: inline-block; vertical-align: text-bottom; margin-right: 6px;">
+            class="lucide lucide-map">
             <path
               d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" />
             <path d="M15 5.764v15" />
@@ -170,141 +359,84 @@
 
   <!-- ── NAME ORIGIN ── -->
   <section class="name-origin" id="about">
+    <div class="name-origin-bg-glow"></div>
     <div class="name-origin-inner">
       <div class="word-card reveal">
+        <div class="word-card-glow"></div>
+        <div class="word-card-badge">Cultural Root</div>
         <span class="word-big giya-baybayin">ᜄᜒᜌ</span>
-        <span class="word-lang">Filipino · Bisaya</span>
-        <span class="word-meaning">"Guide" · "To Guide"</span>
+        <div class="word-phonetic">
+          <span class="phonetic-tag">[gî-yâ]</span>
+          <span class="word-lang">Filipino · Bisaya</span>
+        </div>
+        <span class="word-meaning">"To Guide" · "A Compass"</span>
         <p class="word-desc">
-          Derived from the Filipino and Bisaya word meaning to guide or direct —
-          perfectly capturing the spirit of this smart campus navigation platform.
+          Derived from the native Filipino and Bisaya word meaning to navigate, guide, or direct — capturing the core
+          mission of CSU's intelligent 3D campus navigation platform.
         </p>
+        <div class="word-tags">
+          <span class="word-chip"><i class="mdi mdi-compass-outline"></i> Smart Wayfinding</span>
+
+          <span class="word-chip"><i class="mdi mdi-cube-outline"></i> 3D Innovation</span>
+        </div>
       </div>
+
       <div class="name-detail reveal-right">
-        <p class="section-eyebrow">About the Project</p>
-        <h2 class="section-title">The Name Behind the Map</h2>
-        <p>
-          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a campus map. It is a guide — a
-          platform designed to help every student, faculty member, and visitor
-          navigate Caraga State University with ease and confidence.
+        <h2 class="section-title">The Name Behind <em>the Map</em></h2>
+        <p class="about-lead">
+          <span class="giya-baybayin">ᜄᜒᜌ</span> is more than a map — it is a platform designed to help every student,
+          faculty member, and visitor navigate Caraga State University with ease and confidence.
         </p>
-        <p>
-          Developed as an internship project by students of CSU, <span class="giya-baybayin">ᜄᜒᜌ</span> brings
-          the campus into the digital age with an interactive 3D map that puts
-          every building and facility at your fingertips.
-        </p>
-        <p>
-          Our goal is simple: <span>see your campus, know your campus</span>.
-        </p>
-      </div>
-    </div>
-  </section>
 
-  <div class="divider"></div>
-
-  <!-- ── FEATURES & TEAM PREVIEW ── -->
-  <section class="csu-features-team" id="features">
-    <div class="split">
-      <div class="features-col reveal">
-        <p class="eyebrow">What <span class="giya-baybayin">ᜄᜒᜌ</span> offers</p>
-        <h2>Everything you need to navigate CSU</h2>
-        <p class="subhead">Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it easy to find any
-          building, office, or facility on campus.</p>
-
-        <div class="cards">
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z" />
-                  <path d="M9 3v16" />
-                  <path d="M15 5v16" />
-                </svg>
-              </div>
-              <h3>Interactive 3D map</h3>
+        <div class="about-pillars">
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
             </div>
-            <p>Explore the campus in immersive 3D. Rotate, zoom, and navigate every corner of CSU.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <h3>Smart search</h3>
-            </div>
-            <p>Quickly find any building, office, or department with real-time search and filtering.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
-                  <circle cx="12" cy="9.5" r="2.3" />
-                </svg>
-              </div>
-              <h3>Building info</h3>
-            </div>
-            <p>Tap any building to see detailed information — hours, facilities, and more.</p>
-          </div>
-          <div class="card">
-            <div class="card-head">
-              <div class="icon-chip">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="7" y="2" width="10" height="20" rx="2" />
-                  <path d="M11 18h2" />
-                </svg>
-              </div>
-              <h3>Mobile friendly</h3>
-            </div>
-            <p>Access <span class="giya-baybayin">ᜄᜒᜌ</span> from any device. Optimized for phones, tablets, and
-              desktops.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="team-preview reveal">
-        <div class="top-copy">
-          <p class="eyebrow">Who built it</p>
-          <h2>Meet the team</h2>
-          <p class="subhead">Seven students who designed, built, and tested <span class="giya-baybayin">ᜄᜒᜌ</span>.
-            Hover or tap anyone in the lineup to see their story.</p>
-        </div>
-        <div class="bottom-block">
-          <div class="lineup-wrap" id="lineupWrap">
-            <div class="info-panel" id="infoPanel" role="dialog" aria-modal="false" aria-labelledby="infoName">
-              <button class="info-close" id="infoClose" aria-label="Close">&times;</button>
-              <p class="info-eyebrow">Team member</p>
-              <h3 class="info-name" id="infoName"></h3>
-              <p class="info-role" id="infoRole"></p>
-              <p class="info-stat" id="infoStat"></p>
-              <p class="info-fact" id="infoFact"></p>
-              <div class="info-tags" id="infoTags"></div>
-            </div>
-            <div class="lineup-stack">
-              <div class="lineup back-row" id="backRow"></div>
-              <div class="lineup front-row" id="frontRow"></div>
+            <div class="pillar-content">
+              <h4>A Name Rooted in Home</h4>
+              <span class="pillar-sub">Filipino &amp; Bisaya Heritage</span>
+              <p>The word GIYA comes from a language familiar to the people of Mindanao, giving the platform a name that
+                feels connected to the community it serves.</p>
             </div>
           </div>
 
-          <div class="team-highlight-bar">
-            <div class="stat-badge">
-              <span class="pulse-dot"></span>
-              <span class="stat-text"><strong>7 Minds</strong> Behind CSU Nav</span>
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20" />
+                <path d="M4 6h12l3 3-3 3H4z" />
+                <path d="M20 14H8l-3 3 3 3h12z" />
+              </svg>
             </div>
-            <div class="stat-badge">
-              <span class="stat-icon">🎓</span>
-              <span class="stat-text"><strong>100%</strong> Student Built</span>
+            <div class="pillar-content">
+              <h4>A Purpose to Guide</h4>
+              <span class="pillar-sub">From Meaning to Function</span>
+              <p>GIYA was named with one simple purpose in mind: to help people find their way around CSU with less
+                confusion and more confidence.</p>
             </div>
-            <div class="stat-badge">
-              <span class="stat-icon">⚡</span>
-              <span class="stat-text"><strong>60 FPS</strong> 3D Engine</span>
+          </div>
+
+          <div class="about-pillar-card">
+            <div class="pillar-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <div class="pillar-content">
+              <h4>A Digital Campus Companion</h4>
+              <span class="pillar-sub">Guidance Beyond a Traditional Map</span>
+              <p>By combining an interactive campus map with accessible building information, GIYA transforms the idea
+                of a simple map into a more helpful campus companion.</p>
             </div>
           </div>
         </div>
@@ -312,112 +444,143 @@
     </div>
   </section>
 
-  <!-- ── CTA ── -->
-  <div class="cta-band">
-    <h2 class="section-title reveal">Ready to explore CSU?</h2>
-    <p>
-      Open <span class="giya-baybayin">ᜄᜒᜌ</span> and discover every corner
-      of Caraga State University — in 3D, right from your browser.
-    </p>
-    <a href="#" class="cta-btn" id="cta-explore-map">
-      Open the Map →
-    </a>
-  </div>
+  <div class="divider-animated"></div>
+
+  <!-- ── FEATURES SECTION ── -->
+  <section class="csu-features" id="features">
+    <div class="features-inner reveal">
+      <div class="features-header">
+        <h2 class="section-title">Everything you need to navigate <em>CSU</em></h2>
+        <p class="section-subhead">
+          Built with students in mind, <span class="giya-baybayin">ᜄᜒᜌ</span> makes it effortless to locate every
+          building, office, and facility on campus.
+        </p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z" />
+                <path d="M9 3v16" />
+                <path d="M15 5v16" />
+              </svg>
+            </div>
+            <div>
+              <h3>Interactive 3D Map</h3>
+            </div>
+          </div>
+          <p>Explore the full campus model in immersive 3D. Rotate, pan, zoom, and inspect architecture with realistic
+            lighting.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+            </div>
+            <div>
+              <h3>Smart Instant Search</h3>
+            </div>
+          </div>
+          <p>Quickly pinpoint any building, college, administrative office, or department with smart instant filtering.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
+                <circle cx="12" cy="9.5" r="2.3" />
+              </svg>
+            </div>
+            <div>
+              <h3>Building Directory</h3>
+            </div>
+          </div>
+          <p>Click any landmark to access comprehensive directories — departments, faculties, office contacts, and
+            details.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="icon-chip">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="2" width="10" height="20" rx="2" />
+                <path d="M11 18h2" />
+              </svg>
+            </div>
+            <div>
+              <h3>Cross-Platform Ready</h3>
+            </div>
+          </div>
+          <p>Access seamlessly from any modern smartphone, tablet, or workstation without installing extra apps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider-animated"></div>
+
+  <!-- ── TEAM SECTION ── -->
+  <section class="csu-team" id="team">
+    <div class="team-inner reveal">
+      <div class="team-header">
+        <h2 class="section-title">Meet the <em>Team</em></h2>
+        <p class="section-subhead">
+          Seven students who designed, built, and tested <span class="giya-baybayin">ᜄᜒᜌ</span>. Hover or tap anyone in
+          the lineup to see their story.
+        </p>
+      </div>
+
+      <div class="team-content-wrap">
+        <div class="lineup-wrap" id="lineupWrap">
+          <div class="info-panel" id="infoPanel" role="dialog" aria-modal="false" aria-labelledby="infoName">
+            <button class="info-close" id="infoClose" aria-label="Close">&times;</button>
+            <p class="info-eyebrow">Team member</p>
+            <h3 class="info-name" id="infoName"></h3>
+            <p class="info-role" id="infoRole"></p>
+            <p class="info-stat" id="infoStat"></p>
+            <p class="info-fact" id="infoFact"></p>
+            <div class="info-tags" id="infoTags"></div>
+          </div>
+          <div class="lineup-stack">
+            <div class="lineup back-row" id="backRow"></div>
+            <div class="lineup front-row" id="frontRow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── FOOTER ── -->
-  <footer>
-    <div class="footer-top">
-      <!-- Brand column -->
-      <div>
-        <div class="footer-logo-wrap">
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <rect width="32" height="32" rx="8" fill="#009900" />
-            <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
-              stroke-width="1.5" />
-            <circle cx="16" cy="16" r="4" fill="#EDDD53" />
-          </svg>
-          <div>
-            <div class="footer-brand-name giya-baybayin">ᜄᜒᜌ</div>
-            <div class="footer-brand-sub">CSU SMART CAMPUS</div>
-          </div>
-        </div>
-        <p class="footer-desc">
-          The official interactive 3D campus navigation platform of Caraga
-          State University. Explore every building, office, and facility from
-          your browser.
+  <footer class="footer-modern">
+    <div class="footer-inner">
+      <!-- Left Column: Brand & Description -->
+      <div class="footer-left">
+
+        <p class="footer-brand-desc">
+          The official interactive 3D campus navigation platform of Caraga State University. Explore every building,
+          office, and facility from your browser.
         </p>
-        <div class="footer-social">
-          <a href="#" title="Facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-facebook">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-            </svg>
-          </a>
-          <a href="#" title="Twitter">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-twitter">
-              <path
-                d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-            </svg>
-          </a>
-          <a href="#" title="GitHub">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-github">
-              <path
-                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-              <path d="M9 18c-4.51 2-5-2-7-2" />
-            </svg>
-          </a>
+      </div>
+
+      <!-- Right Column: Student Initiative & Feedback -->
+      <div class="footer-right">
+
+        <div class="footer-copyright-modern">
+          &copy; 2026 <span class="footer-giya-tag">giya</span> &mdash; An internship project of
+          Caraga State University.
         </div>
-      </div>
-
-      <!-- Links columns -->
-      <div class="footer-col">
-        <div class="footer-col-title">Navigate</div>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#team">Team</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">Campus</div>
-        <ul>
-          <li><a href="#">Main Library</a></li>
-          <li><a href="#">Admin Building</a></li>
-          <li><a href="#">Engineering</a></li>
-          <li><a href="#">Student Center</a></li>
-          <li><a href="#">Gymnasium</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-title">University</div>
-        <ul>
-          <li>
-            <a href="https://csu.edu.ph" target="_blank">CSU Website</a>
-          </li>
-          <li><a href="#">Registrar</a></li>
-          <li><a href="#">Library</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="footer-copyright">
-        © 2024 <span class="giya-baybayin">ᜄᜒᜌ</span> – CSU Smart Campus. An internship project of Caraga State
-        University.
-      </div>
-      <div class="footer-badge">
-        <span></span>
-        System Online
       </div>
     </div>
   </footer>
@@ -426,53 +589,65 @@
   <div id="map-overlay">
     <!-- Inner container -->
     <div class="map-overlay-inner">
-      <!-- Search Container — floats top-left -->
-      <div class="map-search-container">
-        <div class="map-search-wrap">
-          <span class="map-search-icon mdi mdi-magnify"></span>
-          <input id="map-search" type="text" placeholder="Search…" />
-          <div id="search-dropdown"></div>
-        </div>
-        <button id="show-all-btn" class="show-all-btn" title="Toggle unclickable buildings and landmark labels">
-          <span class="mdi mdi-eye-outline"></span>
-          <span>Show All</span>
-        </button>
-      </div>
+      <!-- Unified Floating Top Bar (Option 1: Command Bar Left, Exit Right) -->
+      <header class="map-top-bar" aria-label="Map navigation and controls">
+        <!-- Top Left Command Group: Search + Show All + 3D/2D Mode -->
+        <div class="map-top-left">
+          <div class="map-search-wrap">
+            <span class="map-search-icon mdi mdi-magnify"></span>
+            <input id="map-search" type="text" placeholder="Search buildings, rooms, offices…"
+              aria-label="Search campus" autocomplete="off" />
+            <div id="search-dropdown"></div>
+          </div>
 
-      <!-- View Toggle + Close — floats top-right -->
-      <div class="map-controls-wrap">
-        <div class="view-toggle-segmented">
-          <button class="view-toggle-btn active" id="view-toggle-3d" title="3D View">
-            <span class="view-toggle-icon mdi mdi-webpack"></span>
-            <span class="view-toggle-text">3D</span>
+          <button id="show-all-btn" class="show-all-btn" title="Toggle unclickable buildings and landmark labels">
+            <span class="mdi mdi-eye-outline"></span>
+            <span class="show-all-text">Show All</span>
           </button>
-          <button class="view-toggle-btn" id="view-toggle-2d" title="2D View">
-            <span class="view-toggle-icon mdi mdi-map"></span>
-            <span class="view-toggle-text">2D</span>
+
+          <div class="view-toggle-segmented" role="group" aria-label="Map view mode">
+            <button class="view-toggle-btn active" id="view-toggle-3d" title="Switch to 3D Perspective View">
+              <span class="view-toggle-icon mdi mdi-cube-outline"></span>
+              <span class="view-toggle-text">3D</span>
+            </button>
+            <button class="view-toggle-btn" id="view-toggle-2d" title="Switch to 2D Top-Down View">
+              <span class="view-toggle-icon mdi mdi-map-outline"></span>
+              <span class="view-toggle-text">2D</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Top Right: Dedicated Exit -->
+        <div class="map-top-right">
+          <button id="map-close-btn" class="map-close-btn" aria-label="Close interactive map"
+            title="Close interactive map">
+            <span class="mdi mdi-close"></span>
           </button>
         </div>
-        <button id="map-close-btn" class="map-close-btn" aria-label="Close map" title="Close map">×</button>
-      </div>
+      </header>
 
       <!-- Map Body: canvas + info panel -->
-      <div style="
-            flex: 1;
-            display: flex;
-            overflow: hidden;
-            position: relative;
-            min-height: 0;
-          ">
+      <div class="map-body">
         <!-- ── Three.js 3D Canvas ── -->
-        <div id="map-canvas-wrap" style="flex:1;position:relative;overflow:hidden;background:#d6d2ca;">
+        <div id="map-canvas-wrap">
 
           <!-- WebGL canvas — Experience engine mounts here -->
-          <canvas class="experience-canvas" style="display:block;width:100%;height:100%;"></canvas>
+          <canvas class="experience-canvas"></canvas>
 
           <!-- Vertical Directory Sidebar (populated by JS after model loads) -->
           <div id="map-chips-bar"></div>
 
           <!-- 3D-projected pin markers -->
-          <div id="mapPins" style="position:absolute;inset:0;pointer-events:none;"></div>
+          <div id="mapPins"></div>
+
+          <!-- Floating Complex Buildings Card (Bottom Left) -->
+          <div id="caa-complex-card" class="caa-complex-card">
+            <div class="caa-card-header">
+              <span class="caa-card-icon mdi mdi-office-building-marker-outline" id="caa-card-icon"></span>
+              <span class="caa-card-title" id="caa-card-title">Complex</span>
+            </div>
+            <div class="caa-card-body" id="caa-card-body"></div>
+          </div>
 
           <!-- Mouse Control Hint Legend -->
           <div id="controls-hint-legend" class="controls-hint-card">
@@ -521,13 +696,15 @@
         </div>
 
         <!-- ── Building Info Panel ── -->
-        <div id="info-panel">
-          <button class="panel-close-btn" id="panel-close-btn">×</button>
-          <div class="panel-img" id="panel-img-bg" style="background:linear-gradient(135deg,#003300,#009900);">
+        <div id="info-panel" class="panel-hidden">
+          <button class="panel-close-btn" id="panel-close-btn" aria-label="Close building details">
+            <span class="mdi mdi-close"></span>
+          </button>
+          <div class="panel-img" id="panel-img-bg">
             <div class="panel-img-icon" id="panel-img-icon">🏛</div>
             <div class="panel-img-overlay">
               <div class="panel-img-logo" id="panel-icon"></div>
-              <div>
+              <div class="panel-header-text">
                 <div class="panel-name" id="panel-name">Select a Building</div>
               </div>
             </div>
@@ -536,19 +713,51 @@
             <div class="panel-label">Description</div>
             <p class="panel-desc" id="panel-desc">Click on any building pin or search for a building to see its details
               here.</p>
-            <div id="panel-depts-wrap" style="display:none;">
-              <div class="panel-label">Faculties &amp; Offices</div>
+            <div id="panel-depts-wrap">
+              <div class="panel-label">Rooms, Faculties &amp; Facilities</div>
               <ul class="panel-facilities" id="panel-depts"></ul>
             </div>
-            <div id="panel-contact-wrap" style="display:none;">
+            <div id="panel-contact-wrap">
               <div class="panel-label">Contact</div>
               <p id="panel-contact"></p>
             </div>
-            <!-- 3D Model Viewer button — shown only for buildings with a textured model -->
-            <div id="panel-view3d-wrap" style="display:none; margin-top:10px;">
-              <button id="panel-view3d-btn" class="panel-view3d-btn">
-                <span>🏛</span> View 3D Model
-              </button>
+            <!-- Action Buttons: Categorized Route Buttons & 3D Model Viewer -->
+            <div id="panel-actions-wrap" class="panel-actions-wrap">
+              <div id="panel-route-section" class="panel-route-section">
+                <div class="panel-label">Route Options</div>
+                <div id="panel-route-btns-wrap" class="route-btns-group">
+                  <button id="route-btn-nearest" class="route-category-btn route-nearest-btn"
+                    title="Highlight shortest / nearest route">
+                    <span class="route-btn-icon mdi mdi-navigation"></span>
+                    <div class="route-btn-label">
+                      <span class="route-title">Main Gate</span>
+                      <span class="route-sub">Route</span>
+                    </div>
+                  </button>
+                  <button id="route-btn-near" class="route-category-btn route-near-btn"
+                    title="Highlight secondary / near route">
+                    <span class="route-btn-icon mdi mdi-routes"></span>
+                    <div class="route-btn-label">
+                      <span class="route-title">Green Gate</span>
+                      <span class="route-sub">Route</span>
+                    </div>
+                  </button>
+                  <button id="route-btn-far" class="route-category-btn route-far-btn"
+                    title="Highlight perimeter / far route">
+                    <span class="route-btn-icon mdi mdi-map-marker-distance"></span>
+                    <div class="route-btn-label">
+                      <span class="route-title">Back Gate</span>
+                      <span class="route-sub">Route</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div id="panel-view3d-wrap">
+                <button id="panel-view3d-btn" class="panel-view3d-btn" title="Explore interactive 3D model">
+                  <span class="view3d-icon-wrap"><span class="mdi mdi-cube-scan"></span></span>
+                  <span class="view3d-text">View 3D Model</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

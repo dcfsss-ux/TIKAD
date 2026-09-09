@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ᜄᜒᜌ Admin — CSU Smart Campus Management</title>
+  <meta name="description"
+    content="Official Admin Panel for GIYA CSU Smart Campus — manage buildings, rooms, offices, facilities, and 3D models." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=DM+Serif+Display&family=Noto+Sans+Tagalog&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" />
+  <link rel="stylesheet" href="/src/styles/admin.css" />
+  <link rel="stylesheet" href="/src/styles/preloader.css" />
+</head>
+
+<body>
+
+  <!-- ── Balangay Preloader ───────────────────────────────────────────────── -->
+  <div id="balangay-preloader" class="balangay-preloader" aria-label="Loading" role="status">
+    <div class="balangay-sky-bg"></div>
+
+    <!-- Sun / Halo -->
+    <div class="balangay-sun-wrap">
+      <svg class="balangay-sun" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="adm-sunGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#fff7a1" />
+            <stop offset="40%" stop-color="#f9dc07" />
+            <stop offset="100%" stop-color="#ff9900" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="60" cy="60" r="28" fill="url(#adm-sunGrad)" />
+        <circle cx="60" cy="60" r="22" fill="#fff176" opacity="0.9" />
+        <circle cx="60" cy="60" r="16" fill="#ffffff" opacity="0.95" />
+      </svg>
+    </div>
+
+    <!-- Ocean SVG Stage -->
+    <div class="balangay-svg-stage">
+      <svg class="balangay-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="adm-oceanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#006600" />
+            <stop offset="100%" stop-color="#003300" />
+          </linearGradient>
+          <linearGradient id="adm-waveBackGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#007700" />
+            <stop offset="100%" stop-color="#004400" />
+          </linearGradient>
+          <linearGradient id="adm-waveMidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#005500" />
+            <stop offset="100%" stop-color="#003300" />
+          </linearGradient>
+          <linearGradient id="adm-hullGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ff9900" />
+            <stop offset="100%" stop-color="#5c3a1e" />
+          </linearGradient>
+          <linearGradient id="adm-goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f9dc07" />
+            <stop offset="100%" stop-color="#ff9900" />
+          </linearGradient>
+        </defs>
+
+        <!-- Ocean base -->
+        <rect x="-400" y="240" width="2000" height="120" fill="url(#adm-oceanGrad)" />
+
+        <!-- Background Wave Layer -->
+        <g class="balangay-wave-layer-back">
+          <path
+            d="M -400 258 Q -300 248 -200 258 T 0 258 T 200 258 T 400 258 T 600 258 T 800 258 T 1000 258 T 1200 258 T 1400 258 T 1600 258 L 1600 360 L -400 360 Z"
+            fill="url(#adm-waveBackGrad)" />
+        </g>
+
+        <!-- Vessel Group -->
+        <g class="balangay-vessel-group">
+          <!-- Wake Ripples -->
+          <g transform="translate(230, 265)">
+            <ellipse cx="0" cy="0" rx="24" ry="4" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7" class="balangay-wake-ripple-1" />
+            <ellipse cx="-15" cy="1" rx="32" ry="5" fill="none" stroke="#f9dc07" stroke-width="1.3" opacity="0.5" class="balangay-wake-ripple-2" />
+            <ellipse cx="-30" cy="2" rx="40" ry="6" fill="none" stroke="#ff9900" stroke-width="1" opacity="0.3" class="balangay-wake-ripple-3" />
+          </g>
+          <!-- Far Outrigger -->
+          <g opacity="0.7">
+            <path d="M 320 236 Q 360 216 410 230" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 440 238 Q 470 218 510 232" fill="none" stroke="#5c3a1e" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M 350 232 Q 450 220 540 230 Q 450 235 350 232 Z" fill="#946030" stroke="#2b1b0e" stroke-width="1" />
+          </g>
+          <!-- Mast & Pennant -->
+          <line x1="325" y1="245" x2="305" y2="150" stroke="#2b1b0e" stroke-width="3" stroke-linecap="round" />
+          <line x1="325" y1="245" x2="305" y2="150" stroke="#ff9900" stroke-width="1.2" />
+          <g class="balangay-pennant">
+            <polygon points="305,152 235,160 305,170" fill="#009900" stroke="#f9dc07" stroke-width="1.2" />
+            <polygon points="305,158 260,163 305,166" fill="#f9dc07" />
+          </g>
+          <!-- Hull -->
+          <path d="M 215 228 C 240 248 310 266 410 266 C 510 266 565 248 595 212 C 585 242 510 274 410 274 C 300 274 235 248 215 228 Z"
+            fill="url(#adm-hullGrad)" stroke="#2b1b0e" stroke-width="2" stroke-linejoin="round" />
+          <path d="M 215 228 C 260 246 340 254 415 254 C 490 254 555 242 595 212"
+            fill="none" stroke="#f9dc07" stroke-width="2.8" stroke-linecap="round" />
+          <path d="M 595 212 C 608 198 614 186 612 178 C 610 172 602 170 598 176 C 594 182 598 190 603 194"
+            fill="none" stroke="#f9dc07" stroke-width="3" stroke-linecap="round" />
+          <circle cx="608" cy="182" r="3.5" fill="#ff9900" stroke="#f9dc07" stroke-width="1" />
+          <path d="M 215 228 C 205 218 198 206 195 198 C 193 192 201 190 205 196 C 209 202 206 210 212 216"
+            fill="none" stroke="#f9dc07" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 226 238 C 275 254 345 260 415 260 C 485 260 540 252 575 230"
+            fill="none" stroke="rgba(255,153,0,0.65)" stroke-width="1.5" />
+          <!-- Rower -->
+          <g class="balangay-rower-torso">
+            <path d="M 368 245 L 374 218 L 388 220 L 385 245 Z" fill="#009900" stroke="#2b1b0e" stroke-width="1.4" stroke-linejoin="round" />
+            <rect x="377" y="212" width="5" height="6" fill="#d99f6b" />
+            <circle cx="380" cy="206" r="7.5" fill="#d99f6b" stroke="#2b1b0e" stroke-width="1.2" />
+            <path d="M 372 205 C 375 200 385 200 388 204 L 388 208 C 385 204 375 204 372 208 Z" fill="#f9dc07" stroke="#ff9900" stroke-width="1" />
+            <path d="M 372 205 Q 365 203 362 208" fill="none" stroke="#f9dc07" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M 374 222 L 366 230 L 382 233" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M 386 222 L 396 232 L 388 238" fill="none" stroke="#d99f6b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+          </g>
+          <!-- Paddle -->
+          <g class="balangay-paddle-assembly">
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#946030" stroke-width="3.2" stroke-linecap="round" />
+            <line x1="382" y1="215" x2="360" y2="298" stroke="#f9dc07" stroke-width="1" />
+            <path d="M 364 268 C 372 280 368 296 358 306 C 352 296 354 280 360 268 Z"
+              fill="url(#adm-goldGrad)" stroke="#ff9900" stroke-width="1.5" stroke-linejoin="round" />
+          </g>
+          <!-- Paddle Splash -->
+          <g class="balangay-paddle-splash">
+            <circle cx="352" cy="266" r="2.5" fill="#ffffff" />
+            <circle cx="368" cy="264" r="2" fill="#f9dc07" />
+            <circle cx="346" cy="272" r="1.8" fill="#ffffff" />
+          </g>
+          <!-- Front Outrigger (Katig) -->
+          <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round" />
+          <path d="M 325 252 Q 365 272 405 282" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+          <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#946030" stroke-width="3" stroke-linecap="round" />
+          <path d="M 455 254 Q 485 274 525 284" fill="none" stroke="#f9dc07" stroke-width="1.2" />
+          <path d="M 360 284 C 420 278 510 278 570 284 C 510 290 420 290 360 284 Z" fill="#f9dc07" stroke="#ff9900" stroke-width="1.8" />
+        </g>
+
+        <!-- Mid Wave -->
+        <g class="balangay-wave-layer-mid">
+          <path
+            d="M -400 270 Q -320 258 -240 270 T -80 270 T 80 270 T 240 270 T 400 270 T 560 270 T 720 270 T 880 270 T 1040 270 T 1200 270 T 1360 270 T 1520 270 T 1680 270 L 1680 360 L -400 360 Z"
+            fill="url(#adm-waveMidGrad)" opacity="0.85" />
+          <path
+            d="M -400 270 Q -320 258 -240 270 M -80 270 Q 0 258 80 270 M 240 270 Q 320 258 400 270 M 560 270 Q 640 258 720 270 M 880 270 Q 960 258 1040 270"
+            fill="none" stroke="#f9dc07" stroke-width="1.8" stroke-linecap="round" opacity="0.75" />
+        </g>
+
+        <!-- Front Wave -->
+        <g class="balangay-wave-layer-front">
+          <path
+            d="M -400 286 Q -350 276 -300 286 T -200 286 T -100 286 T 0 286 T 100 286 T 200 286 T 300 286 T 400 286 T 500 286 T 600 286 T 700 286 T 800 286 T 900 286 T 1000 286 T 1100 286 T 1200 286 T 1300 286 T 1400 286 T 1500 286 T 1600 286 L 1600 360 L -400 360 Z"
+            fill="rgba(0, 51, 0, 0.95)" />
+          <path
+            d="M -400 286 Q -350 276 -300 286 M -200 286 Q -150 276 -100 286 M 0 286 Q 50 276 100 286 M 200 286 Q 250 276 300 286 M 400 286 Q 450 276 500 286 M 600 286 Q 650 276 700 286 M 800 286 Q 850 276 900 286 M 1000 286 Q 1050 276 1100 286"
+            fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.9" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Info Box -->
+    <div class="balangay-info-box">
+      <div class="balangay-title-row">
+        <div class="balangay-loading-title" id="adm-preloader-title">
+          <span>Navigating to Admin</span>
+        </div>
+        <span class="balangay-dots">
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+          <span class="balangay-dot">.</span>
+        </span>
+      </div>
+      <div class="balangay-progress-wrap">
+        <div class="balangay-progress-track">
+          <div class="balangay-progress-bar" id="adm-preloader-bar" style="width:0%"></div>
+        </div>
+        <span class="balangay-progress-pct" id="adm-preloader-pct">0%</span>
+      </div>
+      <div class="balangay-values-pills">
+        <span class="balangay-pill balangay-pill-green">Competence</span>
+        <span class="balangay-pill balangay-pill-gold">Service</span>
+        <span class="balangay-pill balangay-pill-orange">Uprightness</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Login Screen ────────────────────────────────────────────────────── -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <svg width="46" height="46" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="flex-shrink:0; filter: drop-shadow(0 0 14px rgba(34,197,94,0.45));">
+          <rect width="32" height="32" rx="8" fill="#009900" />
+          <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
+            stroke-width="1.5" />
+          <circle cx="16" cy="16" r="4" fill="#EDDD53" />
+          <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <div class="login-brand-text">
+          <h1><span class="giya-baybayin" style="font-size:26px">ᜄᜒᜌ</span> GIYA Admin</h1>
+          <p>CSU SMART CAMPUS PLATFORM</p>
+        </div>
+      </div>
+
+      <h2>Admin Sign In</h2>
+      <p class="subtitle">Enter your authenticated credentials to manage campus data & 3D models.</p>
+
+      <div id="login-error" class="login-error"></div>
+
+      <form id="login-form" autocomplete="on">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input id="login-email" type="email" placeholder="admin@csu.edu.ph" autocomplete="username" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          Sign In to Dashboard
+        </button>
+      </form>
+
+      <p style="margin-top:22px;font-size:0.75rem;color:var(--text-muted);text-align:center">
+        Admin accounts are managed via CSU Supabase Authentication.<br />
+        Protected with Row-Level Security policies.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Admin App Shell ──────────────────────────────────────────────────── -->
+  <div id="admin-app">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <a class="topbar-logo" href="/" title="Back to CSU Smart Campus">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="flex-shrink:0;">
+          <rect width="32" height="32" rx="8" fill="#009900" />
+          <path d="M16 6L26 12V20L16 26L6 20V12L16 6Z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.6)"
+            stroke-width="1.5" />
+          <circle cx="16" cy="16" r="4" fill="#EDDD53" />
+          <path d="M16 12V16M16 16L19 18" stroke="#003300" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <div>
+          <span class="giya-baybayin" style="font-size: 18px; font-weight: 700; line-height: 1;">ᜄᜒᜌ</span>
+          <span style="font-size: 14px; font-weight: 700; margin-left: 4px;">GIYA</span>
+        </div>
+      </a>
+      <span class="topbar-badge">ADMIN</span>
+
+      <nav class="topbar-breadcrumb" aria-label="Breadcrumb">
+        <span>Buildings</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <strong id="breadcrumb-name">Select a building</strong>
+      </nav>
+
+      <div class="topbar-actions">
+        <div class="user-chip">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <span id="user-chip-email"
+            style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="logout-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </header>
+
+    <!-- Body -->
+    <div class="app-body">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input id="sidebar-search" type="search" placeholder="Search campus buildings…" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="sidebar-list" id="sidebar-list" role="listbox" aria-label="Buildings">
+          <!-- Populated by JS with Lucide SVG icons -->
+        </div>
+
+        <div class="sidebar-footer">
+          <a href="/" class="btn btn-secondary btn-full btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+              <line x1="9" y1="3" x2="9" y2="18" />
+              <line x1="15" y1="6" x2="15" y2="21" />
+            </svg>
+            Back to Live Map
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+
+        <!-- Empty state (no building selected) -->
+        <div class="empty-state" id="empty-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+            <path d="M9 22v-4h6v4" />
+            <path d="M8 6h.01" />
+            <path d="M16 6h.01" />
+            <path d="M8 10h.01" />
+            <path d="M16 10h.01" />
+            <path d="M8 14h.01" />
+            <path d="M16 14h.01" />
+          </svg>
+          <p>Select a campus building from the directory to start editing</p>
+        </div>
+
+        <!-- Editor Pane (shown when a building is selected) -->
+        <div id="editor-pane" class="hidden" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+
+          <!-- Tab Navigation (Lucide Icons) -->
+          <nav class="tab-nav" role="tablist" aria-label="Editor tabs">
+            <button class="tab-btn active" data-tab="info" role="tab" aria-selected="true" id="tab-info">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              Overview & Info
+            </button>
+            <button class="tab-btn" data-tab="rooms" role="tab" aria-selected="false" id="tab-rooms">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 4h3a2 2 0 0 1 2 2v14" />
+                <path d="M2 20h20" />
+                <path d="M13 20V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16" />
+                <circle cx="10" cy="12" r="1" />
+              </svg>
+              Rooms
+            </button>
+            <button class="tab-btn" data-tab="offices" role="tab" aria-selected="false" id="tab-offices">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+              Offices
+            </button>
+            <button class="tab-btn" data-tab="facilities" role="tab" aria-selected="false" id="tab-facilities">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+              </svg>
+              Facilities
+            </button>
+            <button class="tab-btn" data-tab="model" role="tab" aria-selected="false" id="tab-model">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+              </svg>
+              3D Model (.GLB)
+            </button>
+            <button class="tab-btn" data-tab="hero" role="tab" aria-selected="false" id="tab-hero">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+              Hero Showcase
+            </button>
+          </nav>
+
+          <!-- Tab Panels -->
+          <div id="panel-info" class="tab-panel active" role="tabpanel" aria-labelledby="tab-info"></div>
+          <div id="panel-rooms" class="tab-panel" role="tabpanel" aria-labelledby="tab-rooms"></div>
+          <div id="panel-offices" class="tab-panel" role="tabpanel" aria-labelledby="tab-offices"></div>
+          <div id="panel-facilities" class="tab-panel" role="tabpanel" aria-labelledby="tab-facilities"></div>
+          <div id="panel-model" class="tab-panel" role="tabpanel" aria-labelledby="tab-model"></div>
+          <div id="panel-hero" class="tab-panel" role="tabpanel" aria-labelledby="tab-hero"></div>
+
+        </div><!-- /editor-pane -->
+      </main>
+
+    </div><!-- /app-body -->
+  </div><!-- /admin-app -->
+
+  <!-- Toast container (populated by JS) -->
+  <div id="toast-container"></div>
+
+  <script type="module" src="/src/js/admin.js"></script>
+</body>
+
+</html>

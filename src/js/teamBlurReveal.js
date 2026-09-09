@@ -93,7 +93,13 @@ export function initTeamBlurReveal() {
     }
 
     infoPanel.classList.add('open');
-    if (infoClose) infoClose.focus();
+    if (window.innerWidth <= 860) {
+      setTimeout(() => {
+        infoPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
+    } else if (infoClose) {
+      infoClose.focus();
+    }
   }
 
   function closeSelection() {
