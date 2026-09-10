@@ -32,11 +32,7 @@
 }
 
 /* JS-toggled elements — hidden by default, shown via JS */
-#caa-complex-card,
-#panel-depts-wrap,
-#panel-contact-wrap,
-#panel-route-section,
-#panel-view3d-wrap {
+#caa-complex-card {
   display: none;
 }
 
