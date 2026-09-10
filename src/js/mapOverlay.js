@@ -400,7 +400,7 @@ const BUILDING_DATA = {
     contact: { phone: "(085) 342-5253", email: "chedcaraga@ched.gov.ph" },
     interactive: true,
     supabaseId: null,
-    supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -', 'CHED Complex'],
+    supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -'],
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
   },
   "carabao_center": {
@@ -445,7 +445,7 @@ const BUILDING_DATA = {
   // ── NON-INTERACTIVE LANDMARKS & COMPLEX MEMBERS ──
   "bbc_cafeteria": { glbName: "BBC CAFETERIA", name: "BBC Cafeteria", shortName: "BBC Cafeteria", emoji: "☕", hidePin: true, isKalinawComplexMember: true, desc: "Campus cafeteria providing meals and refreshments for students, faculty, and guests.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
   "boffo_canteen": { glbName: "BOFFO CANTEEN", name: "Boffo Canteen", shortName: "Boffo Canteen", emoji: "🍽️", hidePin: true, isKalinawComplexMember: true, desc: "University canteen serving hot meals, snacks, and beverages.", gradient: "linear-gradient(135deg, #2b453a 0%, #4c7764 100%)" },
-  "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", emoji: "🍽️", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education canteen serving hot meals, snacks, and refreshments.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
+  "ced_canteen": { glbName: "CED CANTEEN", name: "CED Canteen", shortName: "CED Canteen", emoji: "🍽️", hidePin: true, isCEDComplexMember: true, desc: "College of Education canteen serving hot meals, snacks, and refreshments.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "caa_canteen": { glbName: "CAA CANTEEN", name: "CAA Canteen", shortName: "CAA Canteen", emoji: "🍽️", hidePin: true, isCAAComplexMember: true, desc: "CAA dining hall and cafeteria serving students and research personnel.", depts: [{ name: "CAA Canteen Dining Area", sub: "Floor 1", icon: "🍽️" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "overpass": { glbName: "OVERPASS", name: "Campus Overpass", shortName: "Overpass", interactive: false },
   "guard_house": { glbName: "GUARD HOUSE", name: "Guard House", shortName: "Guard House", interactive: false },
@@ -480,7 +480,6 @@ const BUILDING_DATA = {
     glbName: "ALUMNI OFFICE -",
     name: "Alumni Center", shortName: "Alumni Center", emoji: "🎓",
     hidePin: true,
-    isCHEDComplexMember: true,
     desc: "CSU Alumni Center coordinating graduate affairs, alumni network events, and institutional development.",
     supabaseId: 17,
     supabaseNames: ['Alumni Center', 'Alumni Office'],
@@ -527,8 +526,8 @@ const BUILDING_DATA = {
   "tissue_culture_lab": { name: "Tissue Culture Laboratory", shortName: "Tissue Culture Lab", emoji: "🧫", hidePin: true, isCAAComplexMember: true, desc: "Biotechnology laboratory dedicated to plant tissue culture micropropagation.", depts: [{ name: "Micropropagation Unit", sub: "Floor 1", icon: "🧫" }], gradient: "linear-gradient(135deg, #384218 0%, #687a33 100%)" },
   "vermi_house": { glbName: "VERMI HOUSE", name: "Vermi House", shortName: "Vermi House", emoji: "🪱", hidePin: true, isNativeChickenComplexMember: true, desc: "Vermiculture processing facility producing organic vermicast fertilizer and organic compost.", gradient: "linear-gradient(135deg, #1a2a4a 0%, #2a4a8a 100%)" },
   "cas_canteen": { name: "CAS Canteen", shortName: "CAS Canteen", interactive: false },
-  "ced_lsg_office": { glbName: "CED LSG OFFICE -", name: "CED LSG", shortName: "CED LSG", emoji: "👥", hidePin: true, isCHEDComplexMember: true, isCEDComplexMember: true, desc: "College of Education Local Student Government (CED LSG) student council headquarters.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
-  "ttlo": { glbName: "TTLO -", name: "TTLO", shortName: "TTLO", emoji: "💡", hidePin: true, isCHEDComplexMember: true, desc: "Technology Transfer and Licensing Office (TTLO) commercializing research innovations and intellectual properties.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
+  "ced_lsg_office": { glbName: "CED LSG OFFICE -", name: "CED LSG", shortName: "CED LSG", emoji: "👥", hidePin: true, isCEDComplexMember: true, desc: "College of Education Local Student Government (CED LSG) student council headquarters.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
+  "ttlo": { glbName: "TTLO -", name: "TTLO", shortName: "TTLO", emoji: "💡", hidePin: true, desc: "Technology Transfer and Licensing Office (TTLO) commercializing research innovations and intellectual properties.", gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)" },
   "caa": { name: "CAA Complex", shortName: "CAA Complex", hidePin: true, isCAAComplexMember: true },
   "basta_didto_tumoy": { name: "Campus Extension Grounds", shortName: "Grounds Ext.", interactive: false },
   "parking_space_1": { glbName: "Parking Space 1", name: "Parking Space 1", shortName: "P", interactive: false },
