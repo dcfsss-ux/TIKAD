@@ -399,7 +399,6 @@ const BUILDING_DATA = {
     depts: [{ name: "CHED Caraga Regional Office", sub: "Floor 1", icon: "🏛" }],
     contact: { phone: "(085) 342-5253", email: "chedcaraga@ched.gov.ph" },
     interactive: true,
-    isCHEDComplexMember: true,
     supabaseId: null,
     supabaseNames: ['CHED-CARAGA', 'CHED-LGU Building', 'CHED LGU', 'CHED-LGU', 'CHED', 'CHED - LGU', 'ched_lgu', 'ched_lgu -', 'CHED Complex'],
     gradient: "linear-gradient(135deg, #002244 0%, #003a7a 100%)"
@@ -898,18 +897,7 @@ const COMPLEX_CONFIGS = {
       { key: 'ced_restroom', name: 'CED Restroom', icon: 'mdi-restroom' }
     ]
   },
-  ched: {
-    title: "CHED Complex",
-    icon: "mdi-school-outline",
-    mainKey: 'ched_lgu',
-    items: [
-      { key: 'ched_lgu', name: 'CHED', icon: 'mdi-bank-outline' },
-      { key: 'alumni_office', name: 'Alumni Center', icon: 'mdi-school-outline' },
-      { key: 'ttlo', name: 'TTLO', icon: 'mdi-lightbulb-outline' },
-      { key: 'ced_lsg_office', name: 'CED LSG', icon: 'mdi-account-group-outline' },
-      { key: 'ced_canteen', name: 'CED Canteen', icon: 'mdi-silverware-fork-knife' }
-    ]
-  },
+
   old_cas: {
     title: "Old CAS Complex",
     icon: "mdi-home-city-outline",
@@ -966,7 +954,7 @@ function _getComplexTypeForBuilding(key, data) {
   if (data?.isCAAComplexMember || key === 'caa_building' || key === 'caa') return 'caa';
   if (data?.isKalinawComplexMember || key === 'kalinaw') return 'kalinaw';
   if (data?.isCEDComplexMember || key === 'ced_building' || key === 'ced') return 'ced';
-  if (data?.isCHEDComplexMember || key === 'ched_lgu' || key === 'ched') return 'ched';
+
   if (data?.isOldCASComplexMember || key === 'old_cas') return 'old_cas';
   if (data?.isVillaresComplexMember || key === 'Villares' || key === 'villares') return 'villares';
   if (data?.isCarabaoCenterComplexMember || key === 'carabao_center') return 'carabao_center';
